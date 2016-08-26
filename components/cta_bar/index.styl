@@ -1,0 +1,59 @@
+@import '../stylus_lib'
+
+.cta-bar
+  z-index z-cta
+  position fixed
+  right 0
+  bottom -1px
+  left 0
+  padding 15px 0px 20px 0px
+  background-color black
+  color white
+  text-align center
+  transform translateY(100%)
+  transition transform 0.5s
+  > *
+    opacity 0
+    transition 1s
+  &[data-state='in']
+    transform translateY(0%)
+    > *
+      opacity 1
+.cta-bar-defer
+  display inline-block
+  float right
+  > a
+    color gray-dark-color
+    garamond-size('s-body')
+.cta-bar-email
+  width 100%
+.cta-bar-header
+  float left
+  display inline-block
+  text-align left
+  > h2
+    garamond-size('s-body')
+.cta-bar-email-form
+  display inline-block
+  width 100%
+  margin-top 15px
+  > button
+    display block
+    width 100%
+.cta-bar-email-input
+  display none
+  > input
+    height 36px
+    width calc(100% - 50px)
+    float left
+    background-color white
+    border none
+  svg
+    height 36px
+    margin-left 10px
+    float right
+.cta-bar-thanks
+  width 100%
+  display none
+.cta-bar-container
+  margin 0 20px

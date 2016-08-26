@@ -1,0 +1,14 @@
+.article-section.article-section-artworks( data-ids= artworks.ids )
+  for artwork in artworks.artworks
+    .artwork-columns-artwork
+      a( href='/artwork/' + artwork.slug )
+        img( src=artwork.image data-id=artwork.id )
+      .artwork-columns-artwork-details
+        if artwork.artist
+          p= artwork.artist.name
+        p
+          if artwork.title
+            em= artwork.title
+            if artwork.date
+              | ,&nbsp
+              = artwork.date

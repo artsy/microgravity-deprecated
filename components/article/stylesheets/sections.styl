@@ -1,0 +1,183 @@
+caption-styling()
+  margin 10px 0
+  garamond-size('m-caption', true)
+  line-height 1.2
+  color light-gray-text-color
+
+.article-section-container
+  margin 20px
+  overflow hidden
+  .article-section
+    margin 0px
+    width 100%
+
+.article-section-text
+  garamond-size('l-body', true)
+  line-height 1.3
+  p
+    margin 40px 0
+    a:not(.is-jump-link,.artist-follow)
+      fine-faux-underline()
+    &:first-child
+      margin-top 0
+    &:last-child
+      margin-bottom 0
+    a.is-jump-link
+      cursor text
+  h3
+    avant-garde()
+    font-size 13px
+  h2
+    font-size 24px
+  ul li
+    list-style disc inside
+  ol li
+    list-style decimal inside
+
+.article-section-image
+  > img
+    display block
+    max-width 100%
+    height auto
+    margin auto
+  > figcaption
+    caption-styling()
+    margin 10px 20px
+
+.article-section-artworks
+  position relative
+  min-height 100px
+  > .loading-spinner
+    position absolute
+    width 25px
+    height 6px
+    top 50%
+    left 50%
+    margin 0
+    margin-top -(@height / 2)
+    margin-left -(@width / 2)
+
+.article-section-video
+  iframe
+  object
+    max-width 100%
+    height auto
+    margin auto
+    width 100%
+
+.carousel--bottom-nav .carousel-figures-clip.carousel-figures-clip--article
+  overflow hidden
+
+.article-carousel-figure
+  width 50%
+  margin 0 !important
+  vertical-align top
+  padding 0 15px
+
+  > img
+    width 100%
+    height auto
+  > figcaption
+    caption-styling()
+    margin 5px 0
+    white-space normal
+
+.article-section-callout
+  margin 0px
+  padding 20px 0px
+  border-top 1px solid light-gray-border-color
+  border-bottom 1px solid light-gray-border-color
+  width 100%
+  display block
+  img, .article-section-callout-text
+    display inline-block
+  img
+    vertical-align top
+    max-width 81px
+    margin-right 20px
+  .article-section-callout-title
+    garamond-size('l-body', true)
+    line-height 131%
+  .article-section-callout-link
+    avant-garde-size('s-headline', true)
+    text-decoration none
+  .article-section-callout-text
+    vertical-align middle
+    width calc(100% - 101px)
+    &.article-section-callout-no-image
+      width 100%
+    &.article-section-callout-pullquote
+      width 100%
+      .article-section-callout-title
+        garamond-size('s-headline', true)
+
+.article-section-embed
+  .article-embed-container
+    width 100%
+
+.article-section-embed
+  margin auto
+  iframe
+    margin auto
+    width 100%
+
+.article-section-container[data-layout="overflow_fillwidth"]
+  margin 20px 0px
+  .artwork-columns-artwork-details
+    margin 10px 20px 10px 20px
+
+.article-section-container[data-section-type="image"]
+  margin 20px 0px
+
+.article-section-container[data-section-type="video"]
+  position relative
+
+.article-section-toc
+  margin auto
+  max-width body-width
+  .article-section-toc-header
+    avant-garde-size('body', true)
+    border-bottom 1px solid gray-color
+    padding-bottom 20px
+  .article-section-toc-links
+    padding 20px 0px
+    border-bottom 1px solid gray-color
+    clearfix()
+  .article-section-toc-link
+    padding 0px 20px 5px 20px
+    width 50%
+    float left
+  .article-section-toc-link:nth-child(2n)
+    padding-right 0px
+  .article-section-toc-link:nth-child(2n + 1)
+    padding-left 0px
+  a:not(.gradient-blurb-read-more)
+    text-decoration none
+    garamond-size('s-body', true)
+  .gradient-blurb-read-more-container
+    width 100%
+    height 40px
+    display block
+    position absolute
+    bottom 0
+    left 0
+    z-index 1
+    &:before
+      content ''
+      position absolute
+      bottom 50%
+      left 0
+      right 0
+      border-bottom 1px solid light-gray-border-color
+  .gradient-blurb-read-more
+    position absolute
+    display block
+    left calc(50% - 85px)
+    padding 11px 52px
+    text-align center
+    avant-garde-size('body',true)
+    border 1px solid light-gray-border-color
+    background-color white
+
+.article-section-container[data-section-type="image_set"]
+  visibility hidden

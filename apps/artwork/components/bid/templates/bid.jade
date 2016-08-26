@@ -1,0 +1,23 @@
+.artwork-auction-bid-module__bid-status
+  .artwork-auction-bid-module__bid-status-title= artwork.auction.sale_artwork.counts.bidder_positions > 0 ? 'Current Bid:' : 'Starting Bid:'
+  .artwork-auction-bid-module__bid-status-amount
+    = artwork.auction.sale_artwork.current_bid.amount
+.artwork-auction-bid-module__bid-status__count-user-status
+  .artwork-auction-bid-module__bid-status-count
+    if artwork.auction.sale_artwork.counts.bidder_positions > 0
+      | #{artwork.auction.sale_artwork.counts.bidder_positions} Bids,&nbsp;
+    if artwork.auction.sale_artwork.reserve_status == 'reserve_met'
+      span Reserve met
+    else if artwork.auction.sale_artwork.reserve_status == 'reserve_not_met'
+      span Reserve not met
+    else
+      span No reserve
+  if bidder && bidder.bidder_positions.length > 0 && typeof window !== 'undefined'
+    if _.find(bidder.bidder_positions, { is_winning: true })
+      .artwork-auction-bid-module__bid-status__users-bid-status.highest-bid
+        .user-bid-status-text Highest Bid
+        .bidder-status-arrow
+    else
+      .artwork-auction-bid-module__bid-status__users-bid-status.outbid
+        .user-bid-status-text Outbid
+        .bidder-status-arrow

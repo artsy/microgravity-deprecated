@@ -1,0 +1,6 @@
+extends ../../../components/layout/templates/main
+
+block content
+  include header
+  #artist-biography-page.main-side-margin
+    != artist.mdToHtml('blurb')

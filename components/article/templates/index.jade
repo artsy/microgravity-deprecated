@@ -1,0 +1,82 @@
+if article.get('hero_section') && article.get('hero_section').type === 'fullscreen'
+  include fullscreen
+.article-container( class=(article.get('hero_section') && article.get('hero_section').type === 'fullscreen' ? 'article-fullscreen-content' : '') data-id=article.get('id') )
+  if superArticle
+    include super_article_sticky_header
+  article.article
+    .main-side-margin
+      if featuredSection
+        .article-section-header= featuredSection.get('title')
+      if article.get('hero_section') && article.get('hero_section').type === 'video'
+        .article-large-format-video
+          - video = article.get('hero_section')
+          include sections/video
+      if article.get('hero_section') && article.get('hero_section').type === 'image'
+        .article-large-format-image
+         img( src=article.get('hero_section').url)
+
+      h1.article-headline
+        = article.get('title')
+
+      .article-subheader
+        include byline
+
+      .article-lead-paragraph
+        if article.get('lead_paragraph') && article.get('lead_paragraph').length > 11
+          != article.get('lead_paragraph')
+
+    for section, i in article.get('sections')
+      section.article-section-container( data-layout=section.layout, data-section-type=section.type )
+        case section.type
+          when 'slideshow'
+            include sections/slideshow
+          when 'text'
+            - text = section
+            include sections/text
+          when 'image'
+            - image = section
+            include sections/image
+          when 'artworks'
+            - artworks = section
+            include sections/artworks
+          when 'video'
+            - video = section
+            include sections/video
+          when 'callout'
+            if section.article.length > 0
+              .article-section-callout-container( data-id=section.article )
+                //- Rendered on client
+            else if section.text
+              include sections/callout
+          when 'embed'
+            .article-section-embed( data-id=section.url )
+              .article-embed-container
+                include sections/embed
+          when 'toc'
+            - toc = section
+            .article-section-toc
+              include sections/toc
+          when 'image_set'
+            if section.images.length > 0
+              .article-section-image-set( data-index= i )
+                include sections/image_set
+
+.article-footer-container
+  if superArticle
+    include super_article_footer
+  else if !sd.INFINITE_SCROLL
+    footer.article-footer
+      .article-footer-next
+        if article.get('section_ids').length
+          h2 More From #{featuredSection.get('title')}
+          for article in featuredSectionArticles.models
+            include ../../article_figure/template
+        else
+          h2 What to Read Next
+          for article in footerArticles.models
+            include ../../article_figure/template
+        a.avant-garde-box-button( href='/articles' ) Show More
+  else if !lushSignup
+    .main-layout-container
+      .articles-featured-articles.article-related-widget( data-id = article.get('id') )
+        //- Rendered on client

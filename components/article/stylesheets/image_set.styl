@@ -1,0 +1,100 @@
+.article-section-image-set
+  margin auto
+  width 100%
+  display block
+  cursor pointer
+  &__remaining
+    avant-garde-size('s-headline',true)
+    height 75px
+    border 1px solid gray-lighter-color
+    vertical-align top
+    padding 5px
+    min-width 80px
+    width auto
+    overflow hidden
+  &__icon-container
+    margin-top 15px
+    text-align center
+  &__icon
+    width  32px
+    vertical-align middle
+    position relative
+    svg
+      width 32px
+  &__icon
+    &::after
+      content attr(data-total)
+      left 8px
+      top 13px
+      position absolute
+  &__icon.is-double-digit
+    &::after
+      left 5px
+  &__text
+    margin-left 20px
+  &__text, &__icon
+    display inline-block
+
+.image-set-modal
+  height 100vh
+  width 100vw
+  position fixed
+  z-index z-modal-top
+  background-color white
+  top 0px
+
+  // Artist + Follow
+  &__artist-name
+    garamond-size('s-headline',true)
+    text-decoration none
+    faux-underline()
+
+  // Image + Metadata
+  &__container
+    height 100vh
+    width 100vw
+    display inline-block
+  &__artist
+    height 110px
+    width 100%
+    position relative
+  &__artist-name
+    position absolute
+    bottom 0
+    margin-bottom 20px
+  &__image
+    max-width 100vw
+    max-height 60vh
+    margin auto
+    display block
+  &__title
+    font-style italic
+  &__title, &__date, &__caption
+    display inline-block
+  &__title-container, &__artist-name
+    margin-top 20px
+  &__title-container, &__artist-name, &__partner, &__link
+    margin-left 20px
+    margin-right 20px
+  &__title-container, &__link, &__partner
+    color gray-dark-color
+    garamond-size('l-caption',true)
+  &__caption
+    max-width 90%
+  &__link
+    fine-faux-underline()
+    text-decoration none
+  &__pagination
+    color black
+    float right
+    avant-garde-size('s-headline',true)
+  &__close
+    right 0
+    top 0
+    margin-top 35px
+    padding 20px
+    position fixed
+    z-index z-modal-close
+    color gray-dark-color
+    .icon-close
+      font-size 25px

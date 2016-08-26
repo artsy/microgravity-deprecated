@@ -1,0 +1,9 @@
+.article-section-image-set__images
+  for item in section.images.slice(0,3)
+    - var image = resize( (item.image || item.url || ''), {height: 150} )
+    img(src=image)
+.article-section-image-set__remaining
+  .article-section-image-set__icon-container
+    .article-section-image-set__icon( data-total=section.images.length class= section.images.length > 9 ? 'is-double-digit' : '')
+      include ../../../../public/images/image-set.svg
+    .article-section-image-set__text Enter Slideshow

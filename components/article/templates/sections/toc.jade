@@ -1,0 +1,5 @@
+.article-section-toc-header Table Of Contents
+.article-section-toc-links
+  each link in toc.links
+    .article-section-toc-link
+      a(href="##{link.value}")= link.name
