@@ -13,11 +13,12 @@ Meta
 * __CI:__ [Semaphore](https://semaphoreapp.com/artsy/microgravity/); merged PRs to artsy/microgravity#master are automatically deployed to staging; production is manually deployed from semaphore
 * __Point People:__ [@craigspaeth](https://github.com/craigspaeth), [@broskoski](https://github.com/broskoski), [@kanaabe](https://github.com/kanaabe)
 
-[![Build Status](https://semaphoreci.com/api/v1/projects/85438675-8a5b-4e53-89b3-b1f28e243f93/380246/badge.png)](https://semaphoreci.com/artsy/microgravity)
+[![Build Status](https://semaphoreci.com/api/v1/artsy-it/microgravity/branches/master/badge.svg)](https://semaphoreci.com/artsy-it/microgravity)
+
 History
 -------
 
-Force was [open-sourced in 2014](http://artsy.github.io/blog/2014/09/05/we-open-sourced-our-isomorphic-javascript-website) and was an early successful implementation of [an isomorphic JavaScript application, rendering both the server and client side](http://artsy.github.io/blog/2013/11/30/rendering-on-the-server-and-client-in-node-dot-js). It is developed in the open since August 2016.
+Microgravity was started in 2013 and open-sourced in 2016. It provided the test bed for Artsy's [isomorphic JavaScript applications, rendering both the server and client side](http://artsy.github.io/blog/2013/11/30/rendering-on-the-server-and-client-in-node-dot-js).
 
 Set-Up
 ------
