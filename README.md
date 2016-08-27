@@ -33,7 +33,7 @@ You can find more documentation in [this repository's /doc directory](/doc).
 Thanks
 ------
 
-**Copyright**: 2012-2016, Artsy. Thanks to all [our contributors](/docs/thanks.md).
+**Copyright**: 2012-2016, Artsy. Thanks to all [our contributors](/doc/thanks.md).
 
 License
 -------
