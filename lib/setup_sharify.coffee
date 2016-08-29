@@ -42,3 +42,4 @@ sharify.data = _.pick config,
   'EMAIL_SIGNUP_IMAGES_ID'
   'PREDICTION_URL'
   'MAX_POLLS_FOR_MAX_BIDS'
+  'CRITEO_ACCOUNT_NUMBER'

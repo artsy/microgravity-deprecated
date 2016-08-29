@@ -63,6 +63,7 @@ module.exports =
   SAILTHRU_MASTER_LIST: 'Master List'
   MAX_POLLS_FOR_MAX_BIDS: 20
   ARTSY_EDITORIAL_CHANNEL: '5759e3efb5989e6f98f77993'
+  CRITEO_ACCOUNT_NUMBER: 'ArtsyUS;7766801;7766802;28539'
 
 # Override any values with env variables if they exist.
 # You can set JSON-y values for env variables as well such as "true" or
