@@ -9,6 +9,7 @@ Auction = require '../../../models/sale.coffee'
 CurrentUser = require '../../../models/current_user.coffee'
 mediator = require '../../../lib/mediator.coffee'
 accounting = require 'accounting'
+analyticsHooks = require '../../../lib/analytics_hooks.coffee'
 
 module.exports.BidPageView = class BidPageView extends Backbone.View
 
@@ -70,6 +71,7 @@ module.exports.BidPageView = class BidPageView extends Backbone.View
       success: (bidderPosition) =>
         if bidderPosition.has('processed_at')
           if bidderPosition.get('active')
+            analyticsHooks.trigger('confirm:bid', bidderPosition)
             options.success()
           else
             @onError "You've been outbid, increase your bid"
