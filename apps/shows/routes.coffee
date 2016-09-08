@@ -26,6 +26,7 @@ PartnerShows = require '../../collections/partner_shows'
     status: status
     sort: '-start_at'
     size: 18
+    at_a_fair: false
 
   upcoming = new PartnerShows
   upcoming.comparator = (show) -> Date.parse(show.get('start_at'))
