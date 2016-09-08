@@ -33,6 +33,9 @@ module.exports = class SaleArtwork extends Backbone.Model
     bids = "#{count} bid"
     bids += if count is 1 then '' else 's'
 
+  formatBidCount: ->
+    if @bidCount() is '0 bids' then '' else "(#{@bidCount()})"
+
   estimate: ->
     _.compact([@get('display_low_estimate_dollars'), @get('display_high_estimate_dollars')]).join('–') or
     @get 'display_estimate_dollars'

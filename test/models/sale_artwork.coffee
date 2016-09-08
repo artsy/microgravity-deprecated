@@ -60,6 +60,22 @@ describe 'SaleArtwork', ->
       @saleArtwork.unset 'highest_bid_amount_cents'
       @saleArtwork.bidCount().should.equal '0 bids'
 
+  describe '#formatBidCount', ->
+
+    it 'returns an empty string if there are no bids because of no highest_bid_amount_cents', ->
+      @saleArtwork.set bidder_positions_count: 6
+      @saleArtwork.unset 'highest_bid_amount_cents'
+      @saleArtwork.formatBidCount().should.equal ''
+
+    it 'returns an empty string if there are no bids', ->
+      @saleArtwork.unset 'bidder_positions_count'
+      @saleArtwork.formatBidCount().should.equal ''
+
+    it 'returns the original count in parentheses if it exists', ->
+      @saleArtwork.set bidder_positions_count: 6
+      @saleArtwork.set highest_bid_amount_cents: 100
+      @saleArtwork.formatBidCount().should.equal '(6 bids)'
+
   describe '#formatBidsAndReserve', ->
     describe 'with no bids', ->
       it 'returns This work has a reserve if there is a reserve', ->
