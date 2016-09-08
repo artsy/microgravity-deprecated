@@ -1,39 +1,28 @@
 bootstrap = require '../../components/layout/bootstrap.coffee'
-$searchBox = null
-track = require('../../lib/analytics.coffee').track
-track_links = require('../../lib/analytics.coffee').track_links
-CurrentUser = require '../../models/current_user.coffee'
-module.exports.CURRENT_USER = require('sharify').data.CURRENT_USER
+_ = require 'underscore'
+Backbone = require 'backbone'
+sd = require('sharify').data
+Artwork = require '../../models/artwork.coffee'
 
-user = null
-query = null
-clearSearch = (e) ->
-  $searchBox.val('')
-  $searchBox.focus() unless $(e.target) is $searchBox
-  $('#main-header-search-box-cancel').remove()
-  false
+resolvedImage = -> require('./templates/image.jade') arguments...
+
+module.exports.SearchResultsView = class SearchResultsView extends Backbone.View
+
+  el: '#search-page'
+
+  initialize: (options) ->
+    if options.results
+      for result in options.results
+        if result.display_model is 'artwork'
+          @refreshRenderArtworks result
+
+  refreshRenderArtworks: (result) ->
+    artwork = new Artwork(id: result.id)
+    artwork.fetch
+      success: ->
+        @$(".search-result[data-id='#{result.id}'] .search-result-thumbnail-fallback").html resolvedImage(result: artwork)
 
 module.exports.init = ->
   bootstrap()
-  user = new CurrentUser(module.exports.CURRENT_USER)
-
-  $searchBox = $('#main-header-search-box')
-  query = $searchBox.val()
-
-  track.funnel 'Searched from header, with results', { query: query }
-
-  $searchBox.focus clearSearch
-
-  track_links '#search-page-result-groups a', 'Selected item from search', onTrackLinks
-
-module.exports.onTrackLinks = onTrackLinks = (el) ->
-  selected = $(el).attr('href')?.split('/').pop()
-  group = $(el).closest('ul')?.prev('.search-page-result-header').text()
-  {
-    query: query,
-    label: "#{group}:#{selected}"
-    category: 'UI Interactions'
-    page: window?.location.pathname
-    noninteraction: false
-    user: user?.get('id')
-  }
+  new SearchResultsView
+    results: sd.RESULTS

@@ -3,6 +3,7 @@ _s = require 'underscore.string'
 sd = require('sharify').data
 Backbone = require 'backbone'
 moment = require 'moment'
+{ crop, fill } = require '../components/resizer/index.coffee'
 
 module.exports = class GooogleSearchResult extends Backbone.Model
 
@@ -10,6 +11,7 @@ module.exports = class GooogleSearchResult extends Backbone.Model
 
   initialize: (options) ->
     @set
+      id: @getId()
       display: @formatTitle(@get('title'))
       image_url: @imageUrl()
       display_model: @displayModel()
@@ -18,13 +20,22 @@ module.exports = class GooogleSearchResult extends Backbone.Model
     @set
       about: @about(@get('snippet'))
 
+  # Gets the id out of the url
+  getId: ->
+    id = @href().split('?')[0]
+    if id.split('/').length > 2
+      id = id.split('/')[2]
+    id
+
   href: ->
     @get('link')
       .replace(/http(s?):\/\/(w{3}\.)?artsy.net/, '')
       .replace('#!', '')
 
   imageUrl: ->
-    @get('pagemap')?.cse_thumbnail?[0].src or @get('pagemap')?.cse_image?[0].src
+    return "" if @get('display_model') is 'artwork'
+    src = @get('pagemap')?.cse_thumbnail?[0].src or @get('pagemap')?.cse_image?[0].src
+    crop src, width: 100, height: 100
 
   ogType: ->
     return @get('ogType') if @get('ogType')

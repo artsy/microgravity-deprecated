@@ -18,7 +18,7 @@ describe 'GoogleSearchResult', ->
       })
       result.get('about').should.equal 'cool post snippet'
       result.get('display').should.equal 'Post Title'
-      result.get('image_url').should.equal 'imgurl'
+      result.get('image_url').should.equal 'https://i.embed.ly/1/display/crop?url=imgurl&width=100&height=100&quality=95'
       result.get('location').should.equal '/post/cool-post'
       result.get('display_model').should.equal 'article'
 
@@ -32,7 +32,7 @@ describe 'GoogleSearchResult', ->
           cse_thumbnail: [{ src: 'imgurl' }]
       })
       result.get('display').should.equal 'Gene Title'
-      result.get('image_url').should.equal 'imgurl'
+      result.get('image_url').should.equal 'https://i.embed.ly/1/display/crop?url=imgurl&width=100&height=100&quality=95'
       result.get('location').should.equal '/gene/cool-gene'
       result.get('display_model').should.equal 'category'
 
@@ -47,7 +47,7 @@ describe 'GoogleSearchResult', ->
       })
       result.get('about').should.equal 'show description'
       result.get('display').should.equal 'Show Title'
-      result.get('image_url').should.equal 'imgurl'
+      result.get('image_url').should.equal 'https://i.embed.ly/1/display/crop?url=imgurl&width=100&height=100&quality=95'
       result.get('location').should.equal '/show/cool-show'
       result.get('display_model').should.equal 'show'
 
@@ -61,7 +61,7 @@ describe 'GoogleSearchResult', ->
           cse_thumbnail: [{ src: 'imgurl' }]
       })
       result.get('display').should.equal 'Artwork Title, Artist'
-      result.get('image_url').should.equal 'imgurl'
+      result.get('image_url').should.equal 'https://i.embed.ly/1/display/crop?url=imgurl&width=100&height=100&quality=95'
       result.get('location').should.equal '/artwork/cool-artwork'
       result.get('display_model').should.equal 'artwork'
 
@@ -75,7 +75,7 @@ describe 'GoogleSearchResult', ->
           cse_thumbnail: [{ src: 'imgurl' }]
       })
       result.get('display').should.equal 'Artist Name'
-      result.get('image_url').should.equal 'imgurl'
+      result.get('image_url').should.equal 'https://i.embed.ly/1/display/crop?url=imgurl&width=100&height=100&quality=95'
       result.get('location').should.equal '/artist/cool-artist'
       result.get('display_model').should.equal 'artist'
 
