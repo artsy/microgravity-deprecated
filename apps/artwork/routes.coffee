@@ -3,12 +3,6 @@ qs = require 'qs'
 metaphysics = require '../../lib/metaphysics'
 { METAPHYSICS_ENDPOINT, CURRENT_USER } = require('sharify').data
 
-userQuery = (user) ->
-  if user
-    require './components/bid/query/me.coffee'
-  else
-    ''
-
 query = (user) -> """
   query artwork($id: String!) {
     artwork(id: $id) {
@@ -89,7 +83,6 @@ query = (user) -> """
       #{require('./components/highlights/query.coffee')}
       #{require('./components/tabs/query.coffee')}
     }
-    #{userQuery(user)}
   }
 """
 
@@ -104,8 +97,6 @@ query = (user) -> """
     .then (data) ->
       res.locals.artwork = data.artwork
       res.locals.sd.ARTWORK = data.artwork
-      res.locals.me = data.me
-      res.locals.sd.ME = data.me
       res.locals.sd.SEADRAGON_URL = res.locals.asset('/assets/openseadragon.js')
       res.render 'index'
     .catch next

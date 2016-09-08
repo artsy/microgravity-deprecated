@@ -7,11 +7,8 @@ template = -> require('./templates/bid.jade') arguments...
 query = """
   query artwork($id: String!, $sale_id: String!) {
     me {
-      bidder_status(artwork_id: $id, sale_id: $sale_id) {
+      lot_standing(artwork_id: $id, sale_id: $sale_id) {
         is_highest_bidder
-      }
-      bidder_positions(artwork_id: $id) {
-        is_winning
       }
     }
     artwork(id: $id) {
