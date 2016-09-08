@@ -41,7 +41,7 @@ describe '#bid', ->
   it 'handles empty bidder status from MP', (done) ->
     @metaphysics.returns Promise.resolve
       artwork: sale_artwork: bid_increments: [100, 200]
-      me: bidder_status: most_recent_bid: max_bid: cents: 100
+      me: lot_standing: most_recent_bid: max_bid: cents: 100
     routes.bid @req, @res, done
     Backbone.sync.args[0][2].success fabricate 'artwork'
     Backbone.sync.args[1][2].success [fabricate 'sale', is_auction: true]

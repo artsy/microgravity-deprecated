@@ -92,7 +92,7 @@ metaphysics = require '../../lib/metaphysics'
         }
       }
       me {
-        bidder_status(
+        lot_standing(
           artwork_id: "#{req.params.artworkId}"
           sale_id: "#{req.params.id}"
         ) {
@@ -106,7 +106,7 @@ metaphysics = require '../../lib/metaphysics'
     } """
   .then ({ artwork, me }) ->
     res.locals.bidIncrements = artwork.sale_artwork.bid_increments
-    res.locals.myLastMaxBid = me?.bidder_status?.most_recent_bid.max_bid.cents
+    res.locals.myLastMaxBid = me?.lot_standing?.most_recent_bid.max_bid.cents
     render()
   .catch next
 

@@ -61,7 +61,7 @@ describe 'Artwork bid templates', ->
 
     beforeEach ->
       @artwork.auction.is_open = true
-      @me =  { id: 'my unique id', bidder_positions: [{is_winning: true}] }
+      @me =  { id: 'my unique id', lot_standing: { is_highest_bidder: true } }
 
       @html = render('index')(
         artwork: @artwork
@@ -87,23 +87,8 @@ describe 'Artwork bid templates', ->
       @$('.artwork-auction-bid-module__bid-status__users-bid-status').hasClass('highest-bid').should.equal true
       @$('.artwork-auction-bid-module__bid-status__users-bid-status').hasClass('outbid').should.equal false
 
-    it 'displays user bidder status - highest bid if multiple bidder positions', ->
-      @me.bidder_positions = [{is_winning: false}, {is_winning: true}, {is_winning: false}]
-      @html = render('index')(
-        artwork: @artwork
-        me: @me
-        sd: {}
-        asset: (->)
-        _: _
-      )
-
-      @$ = cheerio.load(@html)
-
-      @$('.artwork-auction-bid-module__bid-status__users-bid-status').hasClass('highest-bid').should.equal true
-      @$('.artwork-auction-bid-module__bid-status__users-bid-status').hasClass('outbid').should.equal false
-
     it 'displays user bidder status - outbid', ->
-      me =  { id: 'my unique id', bidder_positions: [{is_winning: false}] }
+      me =  { id: 'my unique id', lot_standing: { is_highest_bidder: false } }
 
       @html = render('index')(
         artwork: @artwork
@@ -118,23 +103,8 @@ describe 'Artwork bid templates', ->
       @$('.artwork-auction-bid-module__bid-status__users-bid-status').hasClass('outbid').should.equal true
       @$('.artwork-auction-bid-module__bid-status__users-bid-status').hasClass('highest-bid').should.equal false
 
-    it 'displays user bidder status - outbid bid if multiple bidder positions', ->
-      @me.bidder_positions = [{is_winning: false}, {is_winning: false}, {is_winning: false}]
-      @html = render('index')(
-        artwork: @artwork
-        me: @me
-        sd: {}
-        asset: (->)
-        _: _
-      )
-
-      @$ = cheerio.load(@html)
-
-      @$('.artwork-auction-bid-module__bid-status__users-bid-status').hasClass('highest-bid').should.equal false
-      @$('.artwork-auction-bid-module__bid-status__users-bid-status').hasClass('outbid').should.equal true
-
     it 'displays correct bidding amount label with bids', ->
-      me =  { id: 'my unique id', bidder_positions: [{is_winning: false}] }
+      me =  { id: 'my unique id', lot_standing: { is_highest_bidder: false } }
 
       @html = render('index')(
         artwork: @artwork
@@ -152,7 +122,7 @@ describe 'Artwork bid templates', ->
 
     beforeEach ->
       @artwork.auction.is_open = true
-      @me =  { id: 'my unique id', bidder_positions: [] }
+      @me =  { id: 'my unique id',lot_standing: null }
 
       @html = render('index')(
         artwork: @artwork
@@ -189,7 +159,7 @@ describe 'Artwork bid templates', ->
     describe 'bidder with no bidder positions', ->
       beforeEach ->
         @artwork.auction.is_open = true
-        @me =  { id: 'my unique id', bidder_positions: [ {is_winning: true} ] }
+        @me =  { id: 'my unique id', lot_standing: { is_highest_bidder: true } }
 
         @html = render('index')(
           artwork: @artwork
@@ -209,7 +179,7 @@ describe 'Artwork bid templates', ->
   describe 'bidder with no bidder positions', ->
     beforeEach ->
       @artwork.auction.is_open = true
-      @me =  { id: 'my unique id', bidder_positions: [ {is_winning: false} ] }
+      @me =  { id: 'my unique id', lot_standing: { is_highest_bidder: false } }
 
       @html = render('index')(
         artwork: @artwork

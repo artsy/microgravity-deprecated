@@ -12,8 +12,8 @@
       span Reserve not met
     else
       span No reserve
-  if bidder && bidder.bidder_positions.length > 0 && typeof window !== 'undefined'
-    if _.find(bidder.bidder_positions, { is_winning: true })
+  if bidder && bidder.lot_standing && typeof window !== 'undefined'
+    if bidder.lot_standing.is_highest_bidder
       .artwork-auction-bid-module__bid-status__users-bid-status.highest-bid
         .user-bid-status-text Highest Bid
         .bidder-status-arrow
