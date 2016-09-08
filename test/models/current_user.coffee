@@ -94,10 +94,6 @@ describe 'CurrentUser', ->
           done()
         Backbone.sync.args[0][2].success [bidder]
 
-  describe '#highestBidderFor', ->
-
-    it 'checks if the user is the highest bidder for an artwork in an auction'
-
   describe '#placeBid', ->
 
     it 'creates a new bid position given the right params'

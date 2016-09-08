@@ -43,24 +43,6 @@ module.exports = class CurrentUser extends Backbone.Model
         options.success(false) if xhr.responseText?.match 'A user is required'
         options.error? arguments...
 
-  # Checks whether a user is the highest bidder for a given SaleArtwork.
-  #
-  # @param {String} saleArtwork
-  # @param {Object} options Provide `success` and `error` callbacks, successes with true or false
-
-  highestBidderFor: (saleArtwork, options = {}) ->
-    return options.success? false unless saleArtwork.get('highest_bid')
-    new Backbone.Collection().fetch
-      url: "#{API_URL}/api/v1/me/bidder_positions"
-      data:
-        sale_id: saleArtwork.get('sale').id
-        artwork_id: saleArtwork.get('artwork').id
-      success: (bidderPositions) ->
-        options.success? (bidderPositions.select((bp) ->
-          saleArtwork.get('highest_bid').id is bp.get('highest_bid')?.id
-        ).length > 0), bidderPositions.length > 0
-      error: options.error
-
   # Checks whether a user has favorited an artwork.
   #
   # @param {String} artworkId
