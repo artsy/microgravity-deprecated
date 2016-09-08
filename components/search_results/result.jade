@@ -1,6 +1,7 @@
 a.search-result(
   href= result.href()
   class= result.publishedClass && result.publishedClass()
+  data-id= result.get('id')
 )
   .search-result-thumbnail
     .search-result-thumbnail-fallback
@@ -8,7 +9,7 @@ a.search-result(
         src= result.imageUrl()
         width='50'
         height='50'
-        alt= result.get('display')
+        alt= result.get('title')
         onerror='this.style.display="none";'
       )
 
