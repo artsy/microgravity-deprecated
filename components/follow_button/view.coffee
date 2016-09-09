@@ -30,6 +30,7 @@ module.exports = class FollowButtonView extends Backbone.View
 
     if @isLoggedIn
       if @collection.isFollowing @followId
+        console.log('unfollow')
         @collection.unfollow @followId
         analyticsHooks.trigger 'followable:unfollowed', {
           entity_id: @_id,
@@ -40,6 +41,7 @@ module.exports = class FollowButtonView extends Backbone.View
         }
       else
         @collection.follow @followId
+        console.log('follow')
         analyticsHooks.trigger 'followable:followed', {
           entity_id: @_id,
           entity_slug: @followId,

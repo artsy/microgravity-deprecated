@@ -32,7 +32,7 @@ module.exports = class ImageSetView extends Backbone.View
     @artists = []
     $('.artist-follow').each (i, artist) =>
       @artists.push $(artist).data('id')
-    @followButtons = @artists.map (id) =>
+    @followButtons = _.uniq(@artists).map (id) =>
       new FollowButtonView
         collection: @followArtists
         el: $(".artist-follow[data-id='#{id}']")
