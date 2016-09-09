@@ -30,8 +30,15 @@ module.exports = class SaleArtwork extends Backbone.Model
   bidCount: ->
     count = @get('bidder_positions_count') or 0
     count = 0 unless @get('highest_bid_amount_cents')
+    count
+
+  bidCountLabel: ->
+    count = @bidCount()
     bids = "#{count} bid"
     bids += if count is 1 then '' else 's'
+
+  formatBidCount: ->
+    if @bidCount() is 0 then '' else "(#{@bidCountLabel()})"
 
   estimate: ->
     _.compact([@get('display_low_estimate_dollars'), @get('display_high_estimate_dollars')]).join('–') or
@@ -44,9 +51,9 @@ module.exports = class SaleArtwork extends Backbone.Model
       'Estimate'
 
   formatBidsAndReserve: ->
-    bid = @bidCount()
-    bid = '' if bid is '0 bids'
+    count = @bidCount()
+    label = if count is 0 then '' else @bidCountLabel()
     reserve = @reserveFormat[@get('reserve_status')]
-    reserve = "This work has a reserve" if reserve? and not bid
-    bidAndReserve = _.compact([bid, reserve]).join(', ')
+    reserve = "This work has a reserve" if reserve? and not label
+    bidAndReserve = _.compact([label, reserve]).join(', ')
     if bidAndReserve then "(#{bidAndReserve})" else ''

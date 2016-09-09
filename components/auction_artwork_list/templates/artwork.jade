@@ -39,7 +39,7 @@ a.auction-artwork-list-item( href= auction.isAuctionPromo() ? ('/auction-artwork
                 = artwork.related().saleArtwork.currentBid()
           unless auction.isClosed()
             .aali-bid-count
-              | (#{artwork.related().saleArtwork.bidCount()})
+              | #{artwork.related().saleArtwork.formatBidCount()}
 
           if artwork.get('acquireable') && artwork.saleMessage()
             .aali-buy-now
