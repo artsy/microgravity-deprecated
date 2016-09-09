@@ -18,7 +18,6 @@ module.exports = class ImageSetView extends Backbone.View
     @followArtists = new FollowArtists []
     @render()
     @setupFollowButtons()
-    console.log('setupFollowButtons')
 
   render: ->
     $('body').prepend template
