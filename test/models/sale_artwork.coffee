@@ -35,30 +35,30 @@ describe 'SaleArtwork', ->
       @saleArtwork.set display_minimum_next_bid_dollars: '$10'
       @saleArtwork.minBid().should.equal '$10'
 
-  describe '#bidCount', ->
+  describe '#bidCountLabel', ->
     it 'returns bid count in plural form if there are 0 bids', ->
       @saleArtwork.set bidder_positions_count: 0
       @saleArtwork.set highest_bid_amount_cents: 100
-      @saleArtwork.bidCount().should.equal '0 bids'
+      @saleArtwork.bidCountLabel().should.equal '0 bids'
 
     it 'returns bid count in singular form if 1', ->
       @saleArtwork.set bidder_positions_count: 1
       @saleArtwork.set highest_bid_amount_cents: 100
-      @saleArtwork.bidCount().should.equal '1 bid'
+      @saleArtwork.bidCountLabel().should.equal '1 bid'
 
     it 'returns bid count in plural form if greater than 1', ->
       @saleArtwork.set bidder_positions_count: 6
       @saleArtwork.set highest_bid_amount_cents: 100
-      @saleArtwork.bidCount().should.equal '6 bids'
+      @saleArtwork.bidCountLabel().should.equal '6 bids'
 
     it 'returns a blank string if attribute not present', ->
       @saleArtwork.unset 'bidder_positions_count'
-      @saleArtwork.bidCount().should.equal '0 bids'
+      @saleArtwork.bidCountLabel().should.equal '0 bids'
 
     it 'returns a blank string if highest_bid_amount_cents attribute not present', ->
       @saleArtwork.set bidder_positions_count: 6
       @saleArtwork.unset 'highest_bid_amount_cents'
-      @saleArtwork.bidCount().should.equal '0 bids'
+      @saleArtwork.bidCountLabel().should.equal '0 bids'
 
   describe '#formatBidCount', ->
 
