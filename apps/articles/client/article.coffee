@@ -119,8 +119,9 @@ module.exports = class ArticleIndexView extends Backbone.View
         error: -> @$el('.articles-promoted').hide()
         success: (sale) ->
           $('.article-section-header').hide()
+          saleName = sale.get('name').split(': ')[0]
           $('#article-body-container').addClass('promoted').prepend promotedTemplate
-            name: sale.get('name')
+            name: saleName
             href: sale.href()
             type: 'Auction'
 
