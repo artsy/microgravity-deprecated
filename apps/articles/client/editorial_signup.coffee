@@ -4,6 +4,7 @@ Backbone = require 'backbone'
 editorialSignupLushTemplate = -> require('../templates/editorial_signup_lush.jade') arguments...
 Cycle = require '../../../components/cycle/index.coffee'
 { resize } = require '../../../components/resizer/index.coffee'
+analyticsHooks = require '../../../lib/analytics_hooks.coffee'
 
 module.exports = class EditorialSignupView extends Backbone.View
 

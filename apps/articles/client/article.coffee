@@ -76,6 +76,7 @@ module.exports = class ArticleIndexView extends Backbone.View
       for article in articles
         # Setup and append article template
         article = new Article article
+
         $("#article-body-container").append articleTemplate
           article: article
           sd: sd
@@ -118,9 +119,9 @@ module.exports = class ArticleIndexView extends Backbone.View
         error: -> @$el('.articles-promoted').hide()
         success: (sale) ->
           $('.article-section-header').hide()
-          saleName = sale.get('name').split(': ')[0]
+          # saleName = sale.get('name').split(': ')[0]
           $('#article-body-container').addClass('promoted').prepend promotedTemplate
-            name: saleName
+            name: sale.get('name')
             href: sale.href()
             type: 'Auction'
 

@@ -14,6 +14,8 @@ describe 'EditorialSignupView', ->
       Backbone.$ = $
       @$el = $('<div><div class="article-container" data-id="123"</div></div>')
       @EditorialSignupView = benv.requireWithJadeify resolve(__dirname, '../../client/editorial_signup'), ['editorialSignupLushTemplate']
+      @analyticsHooks = { trigger: sinon.stub() }
+      @EditorialSignupView.__set__ 'analyticsHooks', @analyticsHooks
       @cycleImages = sinon.stub @EditorialSignupView::, 'cycleImages'
       sinon.stub @EditorialSignupView::, 'trackSignup'
       @view = new @EditorialSignupView el: @$el
