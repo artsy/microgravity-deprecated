@@ -170,3 +170,15 @@ describe 'Sale', ->
 
     it 'corrects the state', ->
       @sale.get('auction_state').should.equal 'closed'
+
+  describe '#sortableDate', ->
+    it 'returns the live_start_at if it exists', ->
+      @sale.set
+        end_at: moment().add 2, 'days'
+        live_start_at: moment().add 1, 'days'
+      @sale.sortableDate().should.eql @sale.get('live_start_at')
+
+    it 'returns the end_at if no live_start_at exists', ->
+      @sale.set
+        end_at: moment().add 2, 'days'
+      @sale.sortableDate().should.eql @sale.get('end_at')

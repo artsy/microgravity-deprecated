@@ -112,6 +112,9 @@ module.exports = class Sale extends Backbone.Model
   isAuctionPromoInquirable: ->
     @isAuctionPromo() and @isPreview()
 
+  sortableDate: ->
+    if @get('live_start_at')? then @get('live_start_at') else @get('end_at')
+
   # Feature support:
   fetchArtworks: ->
     @related().saleArtworks.fetchUntilEnd arguments...
