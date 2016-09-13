@@ -71,7 +71,6 @@ describe 'ArticleIndexView', ->
       $('.article-fixed-share').html().should.containEql 'https://www.facebook.com/sharer/sharer.php?u=undefined/article/undefined'
       $('.article-fixed-share').html().should.containEql 'mailto:?subject=Top Ten Booths at miart 2014 @artsy&amp;body=Check out Top Ten Booths at miart 2014 @artsy on Artsy: undefined/article/undefined'
 
-
   describe '#initialize infinite scroll articles', ->
 
     before (done) ->

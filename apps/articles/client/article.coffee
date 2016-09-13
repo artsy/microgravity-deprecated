@@ -16,7 +16,6 @@ articleTemplate = -> require('../../../components/article/templates/index.jade')
 fixedShareTemplate = -> require('../templates/fixed_share.jade') arguments...
 promotedTemplate = -> require('../templates/promoted_content.jade') arguments...
 
-
 require '../../../node_modules/waypoints/lib/jquery.waypoints.js'
 
 module.exports = class ArticleIndexView extends Backbone.View
@@ -118,12 +117,10 @@ module.exports = class ArticleIndexView extends Backbone.View
         error: -> @$el('.articles-promoted').hide()
         success: (sale) ->
           $('.article-section-header').hide()
-          # saleName = sale.get('name').split(': ')[0]
           $('#article-body-container').addClass('promoted').prepend promotedTemplate
             name: sale.get('name')
             href: sale.href()
             type: 'Auction'
-
 
 module.exports.init = ->
   new ArticleIndexView el: $('body')
