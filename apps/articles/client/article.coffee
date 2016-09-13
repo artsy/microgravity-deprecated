@@ -76,7 +76,6 @@ module.exports = class ArticleIndexView extends Backbone.View
       for article in articles
         # Setup and append article template
         article = new Article article
-
         $("#article-body-container").append articleTemplate
           article: article
           sd: sd
