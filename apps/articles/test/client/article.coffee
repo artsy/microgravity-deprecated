@@ -117,6 +117,7 @@ describe 'ArticleIndexView', ->
 
       Backbone.sync.args[0][2].success fabricate 'partner'
       Backbone.sync.args[4][2].success fabricate 'partner_profile'
+      $('.articles-promoted').attr('href').should.equal '/getty'
       $('.articles-promoted__name').text().should.equal 'Gagosian Gallery'
 
   describe 'promoted content auction', ->
@@ -133,5 +134,5 @@ describe 'ArticleIndexView', ->
     it 'displays promoted content banner for auction', ->
 
       Backbone.sync.args[5][2].success fabricate 'sale'
+      $('.articles-promoted').attr('href').should.equal '/sale/whtney-art-party'
       $('.articles-promoted__name').text().should.equal 'Whitney Art Party'
-
