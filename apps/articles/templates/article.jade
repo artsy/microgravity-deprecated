@@ -3,6 +3,9 @@ extends ../../../components/layout/templates/main
 append locals
   - assetPackage = 'articles'
 
+block head
+  include ../meta/article
+
 block content
 
   #article-body-container
