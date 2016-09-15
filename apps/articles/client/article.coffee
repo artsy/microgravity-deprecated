@@ -115,8 +115,8 @@ module.exports = class ArticleIndexView extends Backbone.View
 
   renderPromotedTemplate: (name, href) ->
     console.log 'promoted template'
-    $('.article-section-header').hide()
-    $('#article-body-container').addClass('promoted').prepend promotedTemplate
+    @$('.article-section-header').hide()
+    @$('#article-body-container').addClass('promoted').prepend promotedTemplate
       name: name
       href: href
 
