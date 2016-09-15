@@ -9,8 +9,12 @@ embed = require 'embed-video'
 moment = require 'moment'
 mediator = require '../../../lib/mediator.coffee'
 EditorialSignupView = require './editorial_signup.coffee'
+Sale = require '../../../models/sale.coffee'
+Partner = require '../../../models/partner.coffee'
+Profile = require '../../../models/profile.coffee'
 articleTemplate = -> require('../../../components/article/templates/index.jade') arguments...
 fixedShareTemplate = -> require('../templates/fixed_share.jade') arguments...
+promotedTemplate = -> require('../templates/promoted_content.jade') arguments...
 
 require '../../../node_modules/waypoints/lib/jquery.waypoints.js'
 
@@ -42,6 +46,8 @@ module.exports = class ArticleIndexView extends Backbone.View
     @updateFixedShare @article.fullHref(), @article.shareDescription()
 
     @setupInfiniteScroll() if sd.INFINITE_SCROLL
+    @setupPromotedContent() if @article.get('channel_id') is sd.PC_ARTSY_CHANNEL or
+      @article.get('channel_id') is sd.PC_AUCTION_CHANNEL
 
   setupInfiniteScroll: ->
     @listenTo @collection, 'sync', @render
@@ -94,6 +100,24 @@ module.exports = class ArticleIndexView extends Backbone.View
     $('.js--article-fixed-share').html fixedShareTemplate
       url: url
       description: description
+
+  setupPromotedContent: =>
+    if @article.get('channel_id') is sd.PC_ARTSY_CHANNEL
+      new Partner(id: @article.get('partner_ids')?[0]).fetch
+        success: (partner) =>
+          new Profile(id: partner.get('default_profile_id')).fetch
+            success: (profile) =>
+              @renderPromotedTemplate( partner.get('name'), profile.href() )
+    else if @article.get('channel_id') is sd.PC_AUCTION_CHANNEL
+      new Sale(id: @article.get('auction_ids')?[0]).fetch
+        success: (sale) =>
+          @renderPromotedTemplate( sale.get('name'), sale.href() )
+
+  renderPromotedTemplate: (name, href) ->
+    @$('.article-section-header').hide()
+    @$('#article-body-container').addClass('promoted').prepend promotedTemplate
+      name: name
+      href: href
 
 module.exports.init = ->
   new ArticleIndexView el: $('body')
