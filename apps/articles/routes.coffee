@@ -21,7 +21,8 @@ sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU
         success: (data) ->
           res.locals.sd.ARTICLE = article
           res.locals.sd.RELATED_ARTICLES = data.relatedArticles?.toJSON()
-
+          if article.get('partner_channel_id')
+            return next()
           email = res.locals.sd.CURRENT_USER?.email
           subscribedToGI email, article.get('section_ids')?[0], (cb) ->
             res.locals.sd.MAILCHIMP_SUBSCRIBED = cb

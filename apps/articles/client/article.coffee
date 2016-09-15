@@ -15,7 +15,6 @@ Profile = require '../../../models/profile.coffee'
 articleTemplate = -> require('../../../components/article/templates/index.jade') arguments...
 fixedShareTemplate = -> require('../templates/fixed_share.jade') arguments...
 promotedTemplate = -> require('../templates/promoted_content.jade') arguments...
-partnerBreadcrumbTemplate = -> require('../templates/partner_breadcrumb.jade') arguments...
 
 require '../../../node_modules/waypoints/lib/jquery.waypoints.js'
 
@@ -49,7 +48,6 @@ module.exports = class ArticleIndexView extends Backbone.View
     @setupInfiniteScroll() if sd.INFINITE_SCROLL
     @setupPromotedContent() if @article.get('channel_id') is sd.PC_ARTSY_CHANNEL or
       @article.get('channel_id') is sd.PC_AUCTION_CHANNEL
-    @setupPartnerBreadcrumb() if @article.get('partner_channel_id')
 
   setupInfiniteScroll: ->
     @listenTo @collection, 'sync', @render
@@ -102,15 +100,6 @@ module.exports = class ArticleIndexView extends Backbone.View
     $('.js--article-fixed-share').html fixedShareTemplate
       url: url
       description: description
-
-  setupPartnerBreadcrumb: =>
-    new Partner(id: @article.get('partner_ids')?[0]).fetch
-      success: (partner) ->
-        new Profile(id: partner.get('default_profile_id')).fetch
-          success: (profile) ->
-            $('#article-body-container').addClass('partner').prepend partnerBreadcrumbTemplate
-              name: partner.get('name')
-              href: profile.href()
 
   setupPromotedContent: =>
     if @article.get('channel_id') is sd.PC_ARTSY_CHANNEL

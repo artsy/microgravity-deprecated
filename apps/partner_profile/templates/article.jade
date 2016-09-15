@@ -3,22 +3,9 @@ extends ../../../components/layout/templates/main
 append locals
   - assetPackage = 'articles'
 
-block head
-  include ../meta/article
-
 block content
-
-  include ../../../components/article/templates/partner_breadcrumb
-
   #article-body-container
     include ../../../components/article/templates/index
-
-  if featuredSection && featuredSection.get('slug') == 'gallery-insights-magazine'
-    .articles-insights-section
-      include gallery_insights_form
-
-  if sd.INFINITE_SCROLL
-    #article-loading: .loading-spinner
 
   .article-fixed-share.js--article-fixed-share
     //- Rendered on client
