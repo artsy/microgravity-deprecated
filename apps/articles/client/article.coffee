@@ -112,7 +112,6 @@ module.exports = class ArticleIndexView extends Backbone.View
               $('#article-body-container').addClass('promoted').prepend promotedTemplate
                 name: partner.get('name')
                 href: profile.href()
-
     else if @article.get('channel_id') is sd.PC_AUCTION_CHANNEL
       new Sale(id: @article.get('auction_ids')?[0]).fetch
         error: -> @$el('.articles-promoted').hide()
@@ -123,11 +122,6 @@ module.exports = class ArticleIndexView extends Backbone.View
             href: sale.href()
             type: 'Auction'
 
-  renderPromotedTemplate: (name, href, type) ->
-    $('#article-body-container').addClass('promoted').prepend promotedTemplate
-      name: name
-      href: href
-      type: type
 
 module.exports.init = ->
   new ArticleIndexView el: $('body')
