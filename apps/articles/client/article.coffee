@@ -104,24 +104,21 @@ module.exports = class ArticleIndexView extends Backbone.View
   setupPromotedContent: =>
     if @article.get('channel_id') is sd.PC_ARTSY_CHANNEL
       new Partner(id: @article.get('partner_ids')?[0]).fetch
-        error: => $('.articles-promoted').hide()
-        success: (partner) ->
+        success: (partner) =>
           new Profile(id: partner.get('default_profile_id')).fetch
-            error: => $('.articles-promoted').hide()
-            success: (profile) ->
-              $('#article-body-container').addClass('promoted').prepend promotedTemplate
-                name: partner.get('name')
-                href: profile.href()
+            success: (profile) =>
+              @renderPromotedTemplate( partner.get('name'), profile.href() )
     else if @article.get('channel_id') is sd.PC_AUCTION_CHANNEL
       new Sale(id: @article.get('auction_ids')?[0]).fetch
-        error: -> @$el('.articles-promoted').hide()
-        success: (sale) ->
-          $('.article-section-header').hide()
-          $('#article-body-container').addClass('promoted').prepend promotedTemplate
-            name: sale.get('name')
-            href: sale.href()
-            type: 'Auction'
+        success: (sale) =>
+          @renderPromotedTemplate( sale.get('name'), sale.href() )
 
+  renderPromotedTemplate: (name, href) ->
+    console.log 'promoted template'
+    $('.article-section-header').hide()
+    $('#article-body-container').addClass('promoted').prepend promotedTemplate
+      name: name
+      href: href
 
 module.exports.init = ->
   new ArticleIndexView el: $('body')
