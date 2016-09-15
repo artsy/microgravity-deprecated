@@ -78,7 +78,7 @@ module.exports = class ArticleView extends Backbone.View
       success: (partner) ->
         new Profile(id: partner.get('default_profile_id')).fetch
           success: (profile) ->
-            $('#article-body-container').addClass('partner').prepend partnerBreadcrumbTemplate
+            @$('#article-body-container').addClass('partner').prepend partnerBreadcrumbTemplate
               name: partner.get('name')
               href: profile.href()
 
