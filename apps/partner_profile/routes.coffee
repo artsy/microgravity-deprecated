@@ -68,7 +68,8 @@ partnerFromProfile = (req) ->
   article = new Article id: req.params.articleId
   article.fetch
     cache: true
-    error: -> next()
+    error: (article, err) ->
+      if (err.status is 404 or err.status is 401) then next() else res.backboneError(err, next)
     success: =>
       article.fetchRelated
         success: (data) ->
