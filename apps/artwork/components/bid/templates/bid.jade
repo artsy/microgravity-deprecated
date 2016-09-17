@@ -5,13 +5,14 @@
 .artwork-auction-bid-module__bid-status__count-user-status
   .artwork-auction-bid-module__bid-status-count
     if artwork.auction.sale_artwork.counts.bidder_positions > 0
-      | #{artwork.auction.sale_artwork.counts.bidder_positions} Bids,&nbsp;
+      | #{artwork.auction.sale_artwork.counts.bidder_positions} Bids
     if artwork.auction.sale_artwork.reserve_status == 'reserve_met'
-      span Reserve met
+      span , Reserve met
     else if artwork.auction.sale_artwork.reserve_status == 'reserve_not_met'
-      span Reserve not met
-    else
-      span No reserve
+      span , Reserve not met
+    //- TODO: https://github.com/artsy/auctions/issues/124
+    //- else
+    //-   span No reserve
   if bidder && bidder.lot_standing && typeof window !== 'undefined'
     if bidder.lot_standing.is_highest_bidder
       .artwork-auction-bid-module__bid-status__users-bid-status.highest-bid
