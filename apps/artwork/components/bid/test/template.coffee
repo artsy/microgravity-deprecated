@@ -46,7 +46,7 @@ describe 'Artwork bid templates', ->
 
       @$ = cheerio.load(@html)
 
-    it 'display artwork current bid, bid counts, reserve status', ->
+    xit 'display artwork current bid, bid counts, reserve status', ->
       @$('.artwork-auction-bid-module__bid-status-amount').text().should.equal '$7,000'
       @$('.artwork-auction-bid-module__bid-status-count').text().should.containEql '3 Bids, Reserve not met'
 
@@ -242,5 +242,5 @@ describe 'Artwork bid templates', ->
       @$('.artwork-auction-bid-module__bid-status-title').text().should.equal 'Starting Bid:'
 
 
-    it 'do not display number of bids', ->
+    xit 'do not display number of bids', ->
       @$('.artwork-auction-bid-module__bid-status-count').text().should.equal 'Reserve not met'
