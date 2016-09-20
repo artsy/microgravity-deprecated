@@ -2,26 +2,57 @@
 
 .cta-bar.editorial-signup
   padding 0
+  background none transparent
+  background linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.25))
+  display flex
+  align-items flex-end
+  min-height 35vh
   .vam-outer
     background-color white
     color black
     padding 10px 20px
     margin 10px
+    width 100%
+    border 1px solid #E5E5E5
     .cta-bar-header-editorial
+      margin 10px 0 15px 0
       > h2
         garamond-size('s-headline')
         text-align left
+        line-height 1.25
+    .cta-bar-defer a
+      font-size 22px
+      color #ccc
+      text-decoration none
     .cta-bar-form-editorial
+      position relative
+      .bordered-input
+        border-width 1px
+        font-size 18px
+        line-height 1.5em
       > button
-        padding 10px
+        padding 9px
         height 30px
-        width 90px
         border-radius 2px
-        background-color black
-        left -100px
+        position absolute
+        top 10px
+        right 10px
         avant-garde-size('s-headline', true)
         line-height 1em
+      .subscribed
+        position absolute
+        top 0
+        left 0
+        right 0
+        bottom 0
+        background-color #ccc
         color white
+        avant-garde-size('s-headline', true)
+        display none
+        justify-content center
+        align-items center
+      .subscribed.active
+        display flex
 .cta-bar.email
   background-color black
   color white

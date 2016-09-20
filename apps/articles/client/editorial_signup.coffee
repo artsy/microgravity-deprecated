@@ -59,14 +59,14 @@ module.exports = class EditorialSignupView extends Backbone.View
       @canViewCTAPopup() and
       qs.parse(location.search.replace(/^\?/, '')).utm_source isnt 'sailthru'
         @setupCTAWaypoints()
-    # @fetchSignupImages (images) =>
-    #   @$(".article-container[data-id=#{sd.ARTICLE.id}]").append editorialSignupLushTemplate
-    #     email: sd.CURRENT_USER?.email or ''
-    #     images: images
-    #     resize: resize
-    #     isSignup: @eligibleToSignUp()
-    #     page: 'article'
-    #   @cycleImages() if images
+    @fetchSignupImages (images) =>
+      @$(".article-container[data-id=#{sd.ARTICLE.id}]").append editorialSignupLushTemplate
+        email: sd.CURRENT_USER?.email or ''
+        images: images
+        resize: resize
+        isSignup: @eligibleToSignUp()
+        page: 'article'
+      @cycleImages() if images
 
   setupAEMagazinePage: ->
     # Show the lush CTA after the 3rd article
@@ -104,8 +104,11 @@ module.exports = class EditorialSignupView extends Backbone.View
         @$(e.currentTarget).removeClass 'is-loading'
       success: (res) =>
         @$(e.currentTarget).removeClass 'is-loading'
-        @$('.articles-es-cta__container').fadeOut =>
-          @$('.articles-es-cta__social').fadeIn()
+        if @inAEArticlePage() and @canViewCTAPopup()
+          @$(e.currentTarget).siblings('.subscribed').addClass('active').fadeIn()
+        else
+          @$('.articles-es-cta__container').fadeOut =>
+            @$('.articles-es-cta__social').fadeIn()
 
         @trackSignup @email
 
