@@ -60,6 +60,7 @@ module.exports = class EditorialSignupView extends Backbone.View
       @eligibleToSignUp() and
       qs.parse(location.search.replace(/^\?/, '')).utm_source isnt 'sailthru'
         @setupCTAWaypoints()
+        @trackImpression @ctaBarView.email
     @fetchSignupImages (images) =>
       @$(".article-container[data-id=#{sd.ARTICLE.id}]").append editorialSignupLushTemplate
         email: sd.CURRENT_USER?.email or ''
@@ -118,3 +119,8 @@ module.exports = class EditorialSignupView extends Backbone.View
 
   trackSignup: (email) ->
     analyticsHooks.trigger('submit:editorial-signup', type: @getType(), email: email)
+
+  trackImpression: (email) ->
+    setTimeout( =>
+      analyticsHooks.trigger('impressions:editorial-signup', type: @getType(), email: email)
+    ,2000)

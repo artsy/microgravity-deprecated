@@ -3,8 +3,6 @@ benv = require 'benv'
 sinon = require 'sinon'
 Backbone = require 'backbone'
 { resolve } = require 'path'
-cookies = require '../../../../components/cookies/index.coffee'
-
 
 describe 'EditorialSignupView', ->
 
@@ -41,29 +39,6 @@ describe 'EditorialSignupView', ->
         CURRENT_PATH: '/articles'
       @view.eligibleToSignUp().should.be.ok()
 
-  describe '#canViewCTAPopup', ->
-
-    it 'increments the recently-viewed-articles cookie by 1', ->
-
-      @EditorialSignupView.__set__ 'sd',
-        ARTICLE: { channel_id: '123', id: '123' }
-        ARTSY_EDITORIAL_CHANNEL: '123'
-        SUBSCRIBED_TO_EDITORIAL: false
-      cookies.set('recently-viewed-articles', 1)
-      # @view.initialize()
-      # console.log @$el.html()
-
-  describe '#setupAEArticlePage', ->
-
-      it 'displays the editorial popup if canViewCTAPopup is true', ->
-
-      # @EditorialSignupView.__set__ 'sd',
-      #   ARTICLE: { channel_id: '123', id: '123' }
-      #   ARTSY_EDITORIAL_CHANNEL: '123'
-      #   SUBSCRIBED_TO_EDITORIAL: false
-      # # @view.initialize()
-      # console.log @$el.html()
-
   describe '#onSubscribe', ->
 
     it 'removes the form when successful', ->
@@ -95,3 +70,27 @@ describe 'EditorialSignupView', ->
       $subscribe = $('<div></div>')
       @view.onSubscribe({currentTarget: $subscribe})
       $($subscribe).hasClass('loading-spinner').should.be.false()
+
+  describe '#canViewCTAPopup', ->
+
+    it 'returns false with no recently-viewed-articles cookie', ->
+
+      @EditorialSignupView.__set__ 'sd',
+        ARTICLE: { channel_id: '123', id: '123' }
+        ARTSY_EDITORIAL_CHANNEL: '123'
+        SUBSCRIBED_TO_EDITORIAL: false
+      @EditorialSignupView.__set__ 'cookies',
+        set: (@setStub = sinon.stub()),
+        get: (@getStub = sinon.stub())
+      @view.canViewCTAPopup().should.be.false()
+
+    it 'returns true when recently-viewed-articles cookie', ->
+
+      @EditorialSignupView.__set__ 'sd',
+        ARTICLE: { channel_id: '123', id: '123' }
+        ARTSY_EDITORIAL_CHANNEL: '123'
+        SUBSCRIBED_TO_EDITORIAL: false
+      @EditorialSignupView.__set__ 'cookies',
+        set: (@setStub = sinon.stub()),
+        get: (@getStub = sinon.stub().returns('4'))
+      @view.canViewCTAPopup().should.be.true()
