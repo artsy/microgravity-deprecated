@@ -8,6 +8,7 @@ Cycle = require '../../../components/cycle/index.coffee'
 CTABarView = require '../../../components/cta_bar/view.coffee'
 mediator = require '../../../lib/mediator.coffee'
 cookies = require '../../../components/cookies/index.coffee'
+analyticsHooks = require '../../../lib/analytics_hooks.coffee'
 
 module.exports = class EditorialSignupView extends Backbone.View
 
@@ -47,7 +48,6 @@ module.exports = class EditorialSignupView extends Backbone.View
     @$el.append @ctaBarView.render().$el
     @ctaBarView.transitionIn()
 
-
   setupAEArticlePage: ->
     @ctaBarView = new CTABarView
       mode: 'editorial-signup'
@@ -57,6 +57,7 @@ module.exports = class EditorialSignupView extends Backbone.View
       expires: 2592000
     if not @ctaBarView.previouslyDismissed() and
       @canViewCTAPopup() and
+      @eligibleToSignUp() and
       qs.parse(location.search.replace(/^\?/, '')).utm_source isnt 'sailthru'
         @setupCTAWaypoints()
     @fetchSignupImages (images) =>
@@ -85,7 +86,7 @@ module.exports = class EditorialSignupView extends Backbone.View
   canViewCTAPopup: ->
     if viewedArticles = cookies.get('recently-viewed-articles')
       cookies.set('recently-viewed-articles', ( parseInt(viewedArticles) + 1) )
-      return parseInt(viewedArticles) > 2
+      return parseInt(viewedArticles) > 2 # shows after 4 articles
     else
       cookies.set('recently-viewed-articles', 1, { expires: 2592000 }) #30 days
       return false

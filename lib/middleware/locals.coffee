@@ -8,7 +8,6 @@ _ = require 'underscore'
 uuid = require 'node-uuid'
 artsyXapp = require 'artsy-xapp'
 { parse } = require 'url'
-Referrer = require 'referer-parser'
 
 module.exports = (req, res, next) ->
   ua = req.headers?['user-agent']
@@ -19,8 +18,6 @@ module.exports = (req, res, next) ->
   res.locals.htmlClass = if ua?.match(/Artsy-Mobile/) then 'layout-artsy-mobile-app' else ''
   res.locals.htmlClass += ' layout-logged-in' if req.user?
   res.locals.sd.ARTSY_XAPP_TOKEN = artsyXapp.token
-  res.locals.sd.REFERRER = referrer = req.get 'Referrer'
-  res.locals.sd.MEDIUM = new Referrer(referrer).medium if referrer
 
   # Attach libraries to locals
   res.locals._ = _
