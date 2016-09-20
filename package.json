@@ -46,6 +46,7 @@
     "places": "git://github.com/artsy/places.git",
     "qs": "^5.2.0",
     "redis": "^2.2.3",
+    "referer-parser": "0.0.3",
     "sailthru-client": "^2.1.0",
     "serve-favicon": "^2.3.0",
     "sharify": "^0.1.6",

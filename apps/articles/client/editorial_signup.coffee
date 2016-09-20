@@ -1,9 +1,13 @@
 _ = require 'underscore'
+qs = require 'querystring'
 sd = require('sharify').data
 Backbone = require 'backbone'
 editorialSignupLushTemplate = -> require('../templates/editorial_signup_lush.jade') arguments...
 Cycle = require '../../../components/cycle/index.coffee'
 { resize } = require '../../../components/resizer/index.coffee'
+CTABarView = require '../../../components/cta_bar/view.coffee'
+mediator = require '../../../lib/mediator.coffee'
+cookies = require '../../../components/cookies/index.coffee'
 
 module.exports = class EditorialSignupView extends Backbone.View
 
@@ -39,15 +43,30 @@ module.exports = class EditorialSignupView extends Backbone.View
       error: ->
         cb null
 
+  setupCTAWaypoints: =>
+    @$el.append @ctaBarView.render().$el
+    @ctaBarView.transitionIn()
+
+
   setupAEArticlePage: ->
-    @fetchSignupImages (images) =>
-      @$(".article-container[data-id=#{sd.ARTICLE.id}]").append editorialSignupLushTemplate
-        email: sd.CURRENT_USER?.email or ''
-        images: images
-        resize: resize
-        isSignup: @eligibleToSignUp()
-        page: 'article'
-      @cycleImages() if images
+    @ctaBarView = new CTABarView
+      mode: 'editorial-signup'
+      name: 'dismissed-editorial-signup'
+      persist: true
+      email: sd.CURRENT_USER?.email or ''
+      expires: 2592000
+    if not @ctaBarView.previouslyDismissed() and
+      @canViewCTAPopup() and
+      qs.parse(location.search.replace(/^\?/, '')).utm_source isnt 'sailthru'
+        @setupCTAWaypoints()
+    # @fetchSignupImages (images) =>
+    #   @$(".article-container[data-id=#{sd.ARTICLE.id}]").append editorialSignupLushTemplate
+    #     email: sd.CURRENT_USER?.email or ''
+    #     images: images
+    #     resize: resize
+    #     isSignup: @eligibleToSignUp()
+    #     page: 'article'
+    #   @cycleImages() if images
 
   setupAEMagazinePage: ->
     # Show the lush CTA after the 3rd article
@@ -62,6 +81,14 @@ module.exports = class EditorialSignupView extends Backbone.View
           page: 'magazine'
         .css('border-bottom', 'none')
       @cycleImages() if images
+
+  canViewCTAPopup: ->
+    if viewedArticles = cookies.get('recently-viewed-articles')
+      cookies.set('recently-viewed-articles', ( parseInt(viewedArticles) + 1) )
+      return parseInt(viewedArticles) > 2
+    else
+      cookies.set('recently-viewed-articles', 1, { expires: 2592000 }) #30 days
+      return false
 
   onSubscribe: (e) ->
     @$(e.currentTarget).addClass 'is-loading'

@@ -1,5 +1,30 @@
 @import '../stylus_lib'
 
+.cta-bar.editorial-signup
+  padding 0
+  .vam-outer
+    background-color white
+    color black
+    padding 10px 20px
+    margin 10px
+    .cta-bar-header-editorial
+      > h2
+        garamond-size('s-headline')
+        text-align left
+    .cta-bar-form-editorial
+      > button
+        padding 10px
+        height 30px
+        width 90px
+        border-radius 2px
+        background-color black
+        left -100px
+        avant-garde-size('s-headline', true)
+        line-height 1em
+        color white
+.cta-bar.email
+  background-color black
+  color white
 .cta-bar
   z-index z-cta
   position fixed
@@ -7,8 +32,6 @@
   bottom -1px
   left 0
   padding 15px 0px 20px 0px
-  background-color black
-  color white
   text-align center
   transform translateY(100%)
   transition transform 0.5s
