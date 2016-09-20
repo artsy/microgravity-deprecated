@@ -90,11 +90,14 @@ if(location.pathname.match('/article/') || location.pathname.match('/articles'))
 
         // Related Article
         }else if(classList.contains('article-footer-next')){
+          var articleId = $(this).closest('.article-footer-container').siblings('.article-container').data('id')
+          var related = $(this).find('.article-item-link')
           return {
             article_id: articleId,
             destination_path: null,
             impression_type: 'related_article',
-            context_type: 'article_fixed'
+            context_type: 'article_fixed',
+            id: 'related_articles:' + trackRelatedIds(related)
           }
 
         }else{
@@ -132,6 +135,14 @@ if(location.pathname.match('/article/') || location.pathname.match('/articles'))
         trackImpression({ message: 'Article Impression', context: item });
       });
     }
+  }
+
+  var trackRelatedIds = function(related) {
+    var ids = [];
+    related.map(function(i, link) {
+      ids.push($(link).data('id'));
+    });
+    return ids;
   }
 
   var trackImpression = function(item) {
