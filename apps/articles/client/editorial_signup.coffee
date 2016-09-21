@@ -122,5 +122,5 @@ module.exports = class EditorialSignupView extends Backbone.View
 
   trackImpression: (email) ->
     setTimeout( =>
-      analyticsHooks.trigger('impressions:editorial-signup', type: @getType(), email: email)
+      analyticsHooks.trigger('impressions:editorial-signup', articleId: sd.ARTICLE.id, type: @getType(), email: email)
     ,2000)

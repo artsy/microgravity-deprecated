@@ -74,16 +74,15 @@ if(location.pathname.match('/article/')){
 
   analyticsHooks.on('impressions:editorial-signup', function(options){
     analytics.track('Viewed popup for editorial email', {
-      article_id: $(this).closest('.article-container').data('id'),
+      article_id: options.articleId,
       context_type: options.type,
       user_email: options.email
     });
   });
 
   analyticsHooks.on('click:editorial-signup', function(options){
-    console.log('click editoirl signup')
     analytics.track('Clicked article impression', {
-      article_id: null,
+      article_id: $(this).closest('.article-container').data('id'),
       context_type: options.type,
       impression_type: 'newsletter_signup',
       destination_path: null
