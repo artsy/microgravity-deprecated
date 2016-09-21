@@ -6,7 +6,6 @@ editorialSignupLushTemplate = -> require('../templates/editorial_signup_lush.jad
 Cycle = require '../../../components/cycle/index.coffee'
 { resize } = require '../../../components/resizer/index.coffee'
 CTABarView = require '../../../components/cta_bar/view.coffee'
-mediator = require '../../../lib/mediator.coffee'
 cookies = require '../../../components/cookies/index.coffee'
 analyticsHooks = require '../../../lib/analytics_hooks.coffee'
 
