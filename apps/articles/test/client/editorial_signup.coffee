@@ -84,6 +84,16 @@ describe 'EditorialSignupView', ->
         get: (@getStub = sinon.stub())
       @view.canViewCTAPopup().should.be.false()
 
+    it 'returns false when already subscribed', ->
+     @EditorialSignupView.__set__ 'sd',
+        ARTICLE: { channel_id: '123', id: '123' }
+        ARTSY_EDITORIAL_CHANNEL: '123'
+        SUBSCRIBED_TO_EDITORIAL: true
+      @EditorialSignupView.__set__ 'cookies',
+        set: (@setStub = sinon.stub()),
+        get: (@getStub = sinon.stub().returns('4'))
+      @view.canViewCTAPopup().should.be.false()
+
     it 'returns true when recently-viewed-articles cookie', ->
 
       @EditorialSignupView.__set__ 'sd',
@@ -94,3 +104,24 @@ describe 'EditorialSignupView', ->
         set: (@setStub = sinon.stub()),
         get: (@getStub = sinon.stub().returns('4'))
       @view.canViewCTAPopup().should.be.true()
+
+    it 'returns false when source is sailthru', ->
+      @EditorialSignupView.__set__ 'sd',
+        ARTICLE: { channel_id: '123', id: '123' }
+        ARTSY_EDITORIAL_CHANNEL: '123'
+        SUBSCRIBED_TO_EDITORIAL: false
+      @EditorialSignupView.__set__ 'qs',
+        parse: sinon.stub().returns({utm_source: 'sailthru'})
+      # @EditorialSignupView.window.location = 'sailthru'
+      # console.log @EditorialSignupView.window.location.search
+      # @EditorialSignupView.__set__ 'cookies',
+      #   set: (@setStub = sinon.stub()),
+      #   get: (@getStub = sinon.stub().returns('4'))
+      @view.canViewCTAPopup().should.be.false()
+
+
+
+  # describe '#setupAEArticlePage', ->
+
+  #   it 'shows CTABarView popup if ' ->
+
