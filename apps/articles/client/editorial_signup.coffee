@@ -82,16 +82,13 @@ module.exports = class EditorialSignupView extends Backbone.View
 
   canViewCTAPopup: ->
     if @eligibleToSignUp() and
-      qs.parse(@getLocation().replace(/^\?/, '')).utm_source isnt 'sailthru'
+      qs.parse(location.search.replace(/^\?/, '')).utm_source isnt 'sailthru'
         viewedArticles = cookies.get('recently-viewed-articles')
         cookies.set('recently-viewed-articles', ( parseInt(viewedArticles) + 1) )
         return parseInt(viewedArticles) > 2 # shows after 4 articles
     else
       cookies.set('recently-viewed-articles', 1, { expires: 2592000 }) #30 days
       return false
-
-  getLocation: ->
-    return location.search
 
   onSubscribe: (e) ->
     @$(e.currentTarget).addClass 'is-loading'
