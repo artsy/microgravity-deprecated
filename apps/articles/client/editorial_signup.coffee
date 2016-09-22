@@ -114,12 +114,13 @@ module.exports = class EditorialSignupView extends Backbone.View
         @trackSignup @email
 
   getType: ->
-    if @inAEMagazinePage() then 'magazine_fixed' else 'article_fixed'
+    if @inAEMagazinePage() then 'magazine_fixed' else
+      if @canViewCTAPopup() then 'article_popup' else 'article_fixed'
 
   trackSignup: (email) ->
     analyticsHooks.trigger('submit:editorial-signup', type: @getType(), email: email)
 
   trackImpression: (email) ->
     setTimeout( =>
-      analyticsHooks.trigger('impressions:editorial-signup', articleId: sd.ARTICLE.id, type: @getType(), email: email)
+      analyticsHooks.trigger('impressions:editorial-signup', article_id: sd.ARTICLE.id, type: @getType(), email: email)
     ,2000)

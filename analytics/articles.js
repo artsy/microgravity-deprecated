@@ -72,11 +72,12 @@ if(location.pathname.match('/article/')){
     });
   });
 
-  analyticsHooks.on('impressions:editorial-signup', function(options){
-    analytics.track('Viewed popup for editorial email', {
-      article_id: options.articleId,
-      context_type: options.type,
-      user_email: options.email
+  analyticsHooks.on('impression:editorial-signup', function(options){
+    analytics.track('Article Impression', {
+        article_id: options.article_id,
+        context_type: options.type,
+        impression_type: 'newsletter_signup',
+        user_email: options.email
     });
   });
 
