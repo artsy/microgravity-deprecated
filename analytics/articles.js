@@ -81,6 +81,15 @@ if(location.pathname.match('/article/')){
     });
   });
 
+  analyticsHooks.on('impression:editorial-signup', function(options){
+    analytics.track('Article Impression', {
+        article_id: options.article_id,
+        context_type: options.type,
+        impression_type: 'newsletter_signup',
+        user_email: options.email
+    });
+  });
+
   analyticsHooks.on('click:editorial-signup', function(options){
     analytics.track('Clicked article impression', {
       article_id: $(this).closest('.article-container').data('id'),

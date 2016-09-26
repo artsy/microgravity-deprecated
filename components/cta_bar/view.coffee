@@ -18,16 +18,17 @@ module.exports = class CTABarView extends Backbone.View
     name: 'cta_bar'
     mode: 'email'
     persist: true
+    expires: 31536000
 
   initialize: (options = {}) ->
-    { @headline, @mode, @name, @persist, @modalOptions, @email } = _.defaults options, @defaults
+    { @headline, @mode, @name, @persist, @modalOptions, @email, @expires } = _.defaults options, @defaults
 
   previouslyDismissed: ->
     @persist and Cookies.get(@name)?
 
   logDimissal: ->
     if @persist
-      Cookies.set @name, 1, expires: 31536000
+      Cookies.set @name, 1, expires: @expires
 
   __transition__: (state, cb) ->
     _.defer =>
@@ -42,6 +43,7 @@ module.exports = class CTABarView extends Backbone.View
     @__transition__ 'out', cb
 
   render: ->
+    @$el.addClass(@mode)
     @$el.html template
       headline: @headline
       mode: @mode

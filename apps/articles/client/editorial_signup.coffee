@@ -1,9 +1,13 @@
 _ = require 'underscore'
+qs = require 'querystring'
 sd = require('sharify').data
 Backbone = require 'backbone'
 editorialSignupLushTemplate = -> require('../templates/editorial_signup_lush.jade') arguments...
 Cycle = require '../../../components/cycle/index.coffee'
 { resize } = require '../../../components/resizer/index.coffee'
+CTABarView = require '../../../components/cta_bar/view.coffee'
+cookies = require '../../../components/cookies/index.coffee'
+analyticsHooks = require '../../../lib/analytics_hooks.coffee'
 
 module.exports = class EditorialSignupView extends Backbone.View
 
@@ -39,7 +43,20 @@ module.exports = class EditorialSignupView extends Backbone.View
       error: ->
         cb null
 
+  setupCTAWaypoints: =>
+    @$el.append @ctaBarView.render().$el
+    @ctaBarView.transitionIn()
+
   setupAEArticlePage: ->
+    @ctaBarView = new CTABarView
+      mode: 'editorial-signup'
+      name: 'dismissed-editorial-signup'
+      persist: true
+      email: sd.CURRENT_USER?.email or ''
+      expires: 2592000
+    if not @ctaBarView.previouslyDismissed() and @canViewCTAPopup()
+      @setupCTAWaypoints()
+      @trackImpression @ctaBarView.email
     @fetchSignupImages (images) =>
       @$(".article-container[data-id=#{sd.ARTICLE.id}]").append editorialSignupLushTemplate
         email: sd.CURRENT_USER?.email or ''
@@ -63,6 +80,16 @@ module.exports = class EditorialSignupView extends Backbone.View
         .css('border-bottom', 'none')
       @cycleImages() if images
 
+  canViewCTAPopup: ->
+    if @eligibleToSignUp() and
+      qs.parse(location.search.replace(/^\?/, '')).utm_source isnt 'sailthru'
+        viewedArticles = cookies.get('recently-viewed-articles')
+        cookies.set('recently-viewed-articles', ( parseInt(viewedArticles) + 1) )
+        return parseInt(viewedArticles) > 2 # shows after 4 articles
+    else
+      cookies.set('recently-viewed-articles', 1, { expires: 2592000 }) #30 days
+      return false
+
   onSubscribe: (e) ->
     @$(e.currentTarget).addClass 'is-loading'
     @email = @$(e.currentTarget).prev('input').val()
@@ -77,13 +104,22 @@ module.exports = class EditorialSignupView extends Backbone.View
         @$(e.currentTarget).removeClass 'is-loading'
       success: (res) =>
         @$(e.currentTarget).removeClass 'is-loading'
-        @$('.articles-es-cta__container').fadeOut =>
-          @$('.articles-es-cta__social').fadeIn()
+        if @inAEArticlePage() and @canViewCTAPopup()
+          @$(e.currentTarget).siblings('.subscribed').addClass('active').fadeIn()
+        else
+          @$('.articles-es-cta__container').fadeOut =>
+            @$('.articles-es-cta__social').fadeIn()
 
         @trackSignup @email
 
   getType: ->
-    if @inAEMagazinePage() then 'magazine_fixed' else 'article_fixed'
+    if @inAEMagazinePage() then 'magazine_fixed' else
+      if @canViewCTAPopup() then 'article_popup' else 'article_fixed'
 
   trackSignup: (email) ->
     analyticsHooks.trigger('submit:editorial-signup', type: @getType(), email: email)
+
+  trackImpression: (email) ->
+    setTimeout( =>
+      analyticsHooks.trigger('impression:editorial-signup', article_id: sd.ARTICLE.id, type: @getType(), email: email)
+    ,2000)
