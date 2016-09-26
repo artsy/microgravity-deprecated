@@ -57,6 +57,15 @@ if(location.pathname.match('/article/') || location.pathname.match('/articles'))
             context_type: 'toc',
             id: 'toc:' + articleId
           }
+        }else if(classList.contains('article-sa-related')){
+          var articleId = $(this).closest('.article-container').data('id')
+          return {
+            article_id: articleId,
+            destination_path: null,
+            impression_type: 'article_fixed',
+            context_type: 'toc',
+            id: 'toc:' + articleId
+          }
 
         // Artist Follow
         }else if(classList.contains('artist-follow')){
@@ -73,10 +82,22 @@ if(location.pathname.match('/article/') || location.pathname.match('/articles'))
         }else if(classList.contains('article-section-callout')){
           return {
             article_id: articleId,
-            destination_path: $(this)[0].href,
+            destination_path: $(this)[0].href.replace(/^.*\/\/[^\/]+/, ''),
             impression_type: 'article_callout',
             context_type: 'article_fixed',
-            id: 'article_callout:' + articleId + ':' + $(this)[0].href
+            id: 'article_callout:' + articleId + ':' + $(this)[0].href.replace(/^.*\/\/[^\/]+/, '')
+          }
+
+        // Related Article
+        }else if(classList.contains('article-footer-next')){
+          var articleId = $(this).closest('.article-footer-container').siblings('.article-container').data('id')
+          var related = $(this).find('.article-item-link')
+          return {
+            article_id: articleId,
+            destination_path: null,
+            impression_type: 'related_article',
+            context_type: 'article_fixed',
+            id: 'related_articles:' + trackRelatedIds(related)
           }
 
         }else{
@@ -98,7 +119,15 @@ if(location.pathname.match('/article/') || location.pathname.match('/articles'))
 
   var trackImpressions = function() {
     // Find signups, cta, share buttons, artist follow, toc, and image sets
-    var items = $('.articles-es-cta, .article-section-image-set, .article-section-toc, .artist-follow, .article-section-callout');
+    var itemSelectors = '.articles-es-cta,' +
+                        '.article-section-image-set,' +
+                        '.article-section-toc,' +
+                        '.article-sa-related,'+
+                        '.artist-follow,'+
+                        '.article-section-callout,'+
+                        '.article-footer-next'
+
+    var items = $(itemSelectors);
 
     var visibleItems = findVisibleItems(items);
     if (visibleItems.length > 0) {
@@ -106,6 +135,14 @@ if(location.pathname.match('/article/') || location.pathname.match('/articles'))
         trackImpression({ message: 'Article Impression', context: item });
       });
     }
+  }
+
+  var trackRelatedIds = function(related) {
+    var ids = [];
+    related.map(function(i, link) {
+      ids.push($(link).data('id'));
+    });
+    return ids;
   }
 
   var trackImpression = function(item) {

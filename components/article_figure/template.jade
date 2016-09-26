@@ -2,7 +2,7 @@
 - imgUrl = article.cropUrlFor('thumbnail_image', { width: 640, height: Math.round(640 / 1.7), quality: 90 })
 
 .article-item
-  a.article-item-link( href= article.href() )
+  a.article-item-link( href= article.href() data-id = article.get('id') )
     img.article-item-image(
       src="#{imgUrl}"
       alt= article.get('thumbnail_title')
