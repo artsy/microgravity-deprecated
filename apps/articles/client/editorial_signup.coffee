@@ -54,12 +54,9 @@ module.exports = class EditorialSignupView extends Backbone.View
       persist: true
       email: sd.CURRENT_USER?.email or ''
       expires: 2592000
-    if not @ctaBarView.previouslyDismissed() and
-      @canViewCTAPopup() and
-      @eligibleToSignUp() and
-      qs.parse(location.search.replace(/^\?/, '')).utm_source isnt 'sailthru'
-        @setupCTAWaypoints()
-        @trackImpression @ctaBarView.email
+    if not @ctaBarView.previouslyDismissed() and @canViewCTAPopup()
+      @setupCTAWaypoints()
+      @trackImpression @ctaBarView.email
     @fetchSignupImages (images) =>
       @$(".article-container[data-id=#{sd.ARTICLE.id}]").append editorialSignupLushTemplate
         email: sd.CURRENT_USER?.email or ''
@@ -84,9 +81,11 @@ module.exports = class EditorialSignupView extends Backbone.View
       @cycleImages() if images
 
   canViewCTAPopup: ->
-    if viewedArticles = cookies.get('recently-viewed-articles')
-      cookies.set('recently-viewed-articles', ( parseInt(viewedArticles) + 1) )
-      return parseInt(viewedArticles) > 2 # shows after 4 articles
+    if @eligibleToSignUp() and
+      qs.parse(location.search.replace(/^\?/, '')).utm_source isnt 'sailthru'
+        viewedArticles = cookies.get('recently-viewed-articles')
+        cookies.set('recently-viewed-articles', ( parseInt(viewedArticles) + 1) )
+        return parseInt(viewedArticles) > 2 # shows after 4 articles
     else
       cookies.set('recently-viewed-articles', 1, { expires: 2592000 }) #30 days
       return false
@@ -114,12 +113,13 @@ module.exports = class EditorialSignupView extends Backbone.View
         @trackSignup @email
 
   getType: ->
-    if @inAEMagazinePage() then 'magazine_fixed' else 'article_fixed'
+    if @inAEMagazinePage() then 'magazine_fixed' else
+      if @canViewCTAPopup() then 'article_popup' else 'article_fixed'
 
   trackSignup: (email) ->
     analyticsHooks.trigger('submit:editorial-signup', type: @getType(), email: email)
 
   trackImpression: (email) ->
     setTimeout( =>
-      analyticsHooks.trigger('impressions:editorial-signup', articleId: sd.ARTICLE.id, type: @getType(), email: email)
+      analyticsHooks.trigger('impression:editorial-signup', article_id: sd.ARTICLE.id, type: @getType(), email: email)
     ,2000)
