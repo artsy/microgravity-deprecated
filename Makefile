@@ -26,7 +26,7 @@ ss:
 
 # Start the server pointing to staging with cache
 ssc:
-	OPENREDIS_URL=http://localhost:6379 APPLICATION_NAME=microgravity-production API_URL=https://stagingapi.artsy.net POSITRON_URL=http://writer.artsy.net make s
+	OPENREDIS_URL=http://localhost:6379 APPLICATION_NAME=microgravity-production API_URL=https://stagingapi.artsy.net POSITRON_URL=http://writer.artsy.net ARTSY_URL=https://staging.artsy.net make s
 
 # Start the server pointing to production
 sp:
