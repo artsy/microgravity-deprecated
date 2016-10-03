@@ -11,3 +11,6 @@ app.set 'view engine', 'jade'
 
 app.get '/gallery-partnerships', routes.index
 app.get /^\/gallery-partnerships\/((?!edit$).)+$/, routes.index
+
+# Randomly redirect this link for a marketing A/B testing
+app.get '/partnership-opportunities', routes.mktoABTest
