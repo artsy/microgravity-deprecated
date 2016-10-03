@@ -84,10 +84,13 @@ module.exports = class EditorialSignupView extends Backbone.View
     if @eligibleToSignUp() and
       qs.parse(location.search.replace(/^\?/, '')).utm_source isnt 'sailthru'
         viewedArticles = cookies.get('recently-viewed-articles')
-        cookies.set('recently-viewed-articles', ( parseInt(viewedArticles) + 1) )
-        return parseInt(viewedArticles) > 2 # shows after 4 articles
+        if viewedArticles
+          cookies.set('recently-viewed-articles', ( parseInt(viewedArticles) + 1) )
+          return parseInt(viewedArticles) > 2 # shows after 4 articles
+        else
+          cookies.set('recently-viewed-articles', 1, { expires: 2592000 }) #30 days
+          return false
     else
-      cookies.set('recently-viewed-articles', 1, { expires: 2592000 }) #30 days
       return false
 
   onSubscribe: (e) ->
