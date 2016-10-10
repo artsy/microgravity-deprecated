@@ -53,7 +53,7 @@ module.exports =
   API_REQUEST_TIMEOUT: 5000
   FORCE_URL: 'https://www.artsy.net'
   PREDICTION_URL: 'https://live.artsy.net'
-  METAPHYSICS_ENDPOINT: 'https://metaphysics-production.artsy.net'
+  METAPHYSICS_ENDPOINT: 'http://localhost:5001'
   DISABLE_IMAGE_PROXY: false
   IMAGE_PROXY: 'GEMINI'
   GEMINI_CLOUDFRONT_URL: 'https://d7hftxdivxxvm.cloudfront.net'

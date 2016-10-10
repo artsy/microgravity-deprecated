@@ -36,14 +36,11 @@ module.exports = """
         }
       }
     }
-    exhibition_history: shows {
+    exhibition_highlights(size: 16) {
       kind
-      year: start_at(format: "YYYY")
       name
+      start_at
       href
-      images {
-        url
-      }
       partner {
         ... on ExternalPartner {
           name
@@ -51,9 +48,6 @@ module.exports = """
         ... on Partner {
           name
         }
-      }
-      location {
-        city
       }
     }
   }
