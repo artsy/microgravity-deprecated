@@ -2,7 +2,7 @@ mixin showItem(show, trailingText)
   .artwork-artist-module__content__exhibition-highlights__item
     .artwork-artist-module__content__exhibition-highlights__item__date= helpers.date(show.start_at).year()
     .artwork-artist-module__content__exhibition-highlights__item__text
-      = show.name
+      a(href=show.href)= show.name
       if trailingText
         | #{!!show.name ? ', ' : ''}#{trailingText}
 
@@ -52,8 +52,7 @@ if artists.length
               .aama-tab-content.js-aama-content(data-id="biography-#{artist.id}")!= artist.biography
 
         .artwork-artist-module__accordion
-          .aama-content.chevron-nav-list
-            if artist.exhibition_highlights && artist.exhibition_highlights.length <= 15
-              include exhibition
-            else if artist.exhibition_highlights && artist.exhibition_highlights.length > 15
-              include highlights
+          if artist.exhibition_highlights && artist.exhibition_highlights.length <= 15
+            include exhibition
+          else if artist.exhibition_highlights && artist.exhibition_highlights.length > 15
+            include highlights

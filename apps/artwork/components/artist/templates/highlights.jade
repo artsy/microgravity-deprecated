@@ -1,4 +1,5 @@
-a.aama-highlights-title.js-aama-accordion-link(data-id="shows-#{artist.id}") Exhibition Highlights On Artsy
+.aama-content.chevron-nav-list
+  a.aama-highlights-title.js-aama-accordion-link(data-id="shows-#{artist.id}") Exhibition Highlights On Artsy
 
 .aama-tab-content.js-aama-content(data-id="shows-#{artist.id}")
   for show in helpers.sortExhibitions(artist.exhibition_highlights.slice(0,5))
