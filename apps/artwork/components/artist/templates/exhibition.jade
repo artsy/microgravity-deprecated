@@ -4,19 +4,16 @@ a.aama-highlights-title.js-aama-accordion-link(data-id="shows-#{artist.id}") Exh
 
 .aama-tab-content.js-aama-content(data-id="shows-#{artist.id}")
   if shows.solo && shows.solo.length
-    .artwork-artist-header-cell-section
-      h2 Solo Shows on Artsy
-      for show in helpers.sortExhibitions(shows.solo)
-        +showItem(show, show.partner.name)
+    h2 Solo Shows on Artsy
+    for show in helpers.sortExhibitions(shows.solo)
+      +showItem(show, show.partner.name)
 
   if shows.group && shows.group.length
-    .artwork-artist-header-cell-section
-      h2 Group Shows on Artsy
-      for show in helpers.sortExhibitions(shows.group)
-        +showItem(show, show.partner.name)
+    h2 Group Shows on Artsy
+    for show in helpers.sortExhibitions(shows.group)
+      +showItem(show, show.partner.name)
 
   if shows.fair && shows.fair.length
-    .artwork-artist-header-cell-section
-      h2 Fair History on Artsy
-      for show in helpers.sortExhibitions(shows.fair)
-        +showItem(show, show.partner.name)
+    h2 Fair History on Artsy
+    for show in helpers.sortExhibitions(shows.fair)
+      +showItem(show, show.partner.name)

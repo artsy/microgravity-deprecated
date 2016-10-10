@@ -1,4 +1,5 @@
 { groupBy, sortBy } = require 'underscore'
+moment = require 'moment'
 
 module.exports =
   groupBy: groupBy

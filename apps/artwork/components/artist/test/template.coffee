@@ -6,6 +6,7 @@ fs = require 'fs'
 Backbone = require 'backbone'
 { fabricate } = require 'antigravity'
 artists = require './fixture.coffee'
+Helpers = require '../../../helpers.coffee'
 
 render = (templateName) ->
   filename = path.resolve __dirname, "../templates/#{templateName}.jade"
@@ -26,6 +27,7 @@ describe 'Artwork artist templates -', ->
         artwork: @artwork
         sd: {}
         asset: (->)
+        helpers: Helpers
         _: _
       )
 
@@ -49,6 +51,10 @@ describe 'Artwork artist templates -', ->
 
     it 'should display artists - plural', ->
       @$('.artwork-artist-module__section-title').text().should.equal 'About the Artists'
+
+    it 'displays exhibition history', ->
+      @$('.artwork-artist-module__content__exhibition-highlights__item__date').first().text().should.equal '2016'
+      @$('.artwork-artist-module__content__exhibition-highlights__item__text').last().text().should.equal 'A Warhol Show, The Goog'
 
   describe 'artist with one artwork', ->
     beforeEach ->
