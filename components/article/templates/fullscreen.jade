@@ -2,7 +2,7 @@
   if article.get('hero_section').background_url
     .article-fullscreen-container
       .article-fullscreen-overlay
-      video.article-fullscreen-video-player( src=article.get('hero_section').background_url, autoplay=true, controls=false, loop=true)
+      video.article-fullscreen-video-player( src=article.get('hero_section').background_url, autoplay=true, controls=false, loop=true, muted=true, playsinline=true)
   else if article.get('hero_section').background_image_url
     .article-fullscreen-container
       .article-fullscreen-overlay
