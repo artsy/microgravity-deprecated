@@ -26,7 +26,8 @@ block content
         if currentFairs
           for fair in currentFairs
             .current-art-fairs
-              .current-art-fairs__image(style="background-image: url(#{fair.image.url})")
+              a(href=fair.href)
+                .current-art-fairs__image(style="background-image: url(#{fair.image.url})")
               include fair-details
 
       .avant-garde-tabs-list(data-list="upcoming" class= currentFairs && currentFairs.length ? '' : 'avant-garde-tabs-list--active')
