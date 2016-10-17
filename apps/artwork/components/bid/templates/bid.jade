@@ -1,3 +1,4 @@
+include ./bid_status_message.jade
 .artwork-auction-bid-module__bid-status
   .artwork-auction-bid-module__bid-status-title= artwork.auction.sale_artwork.counts.bidder_positions > 0 ? 'Current Bid:' : 'Starting Bid:'
   .artwork-auction-bid-module__bid-status-amount
@@ -8,17 +9,10 @@
       | #{artwork.auction.sale_artwork.counts.bidder_positions} Bids
     if artwork.auction.sale_artwork.reserve_status == 'reserve_met'
       span , Reserve met
-    else if artwork.auction.sale_artwork.reserve_status == 'reserve_not_met'
+    else if reserveNotMet
       span , Reserve not met
     //- TODO: https://github.com/artsy/auctions/issues/124
     //- else
     //-   span No reserve
   if bidder && bidder.lot_standing && typeof window !== 'undefined'
-    if bidder.lot_standing.is_highest_bidder
-      .artwork-auction-bid-module__bid-status__users-bid-status.highest-bid
-        .user-bid-status-text Highest Bid
-        .bidder-status-arrow
-    else
-      .artwork-auction-bid-module__bid-status__users-bid-status.outbid
-        .user-bid-status-text Outbid
-        .bidder-status-arrow
+    +bidStatusMessage(bidder.lot_standing, artwork.auction.sale_artwork)
