@@ -107,7 +107,7 @@ module.exports = class ArticleView extends Backbone.View
       $(value).find('.article-section-image-set__images').fillwidthLite({
         targetHeight: 150
         apply: (img, i, gutterSize) ->
-          img.$el.width(img.width).css({ 'margin-right' : '5px' })
+          img.$el.width(img.width)
         gutterSize: 5
         done: -> $(value).css('visibility','visible')
       })
