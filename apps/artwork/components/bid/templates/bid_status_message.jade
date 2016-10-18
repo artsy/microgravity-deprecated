@@ -10,7 +10,7 @@ mixin bidStatusMessage(lotStanding, saleArtwork)
     else
       if leadingBidder && reserveNotMet
         .bid-status-message__is-winning-reserve-not-met
-          p Highest Bidder, Reserve not met
+          p Highest Bidder
             i.bid-status-message__arrow-up
               include ../../../public/icons/bid-status-arrow.svg
       else
@@ -18,5 +18,3 @@ mixin bidStatusMessage(lotStanding, saleArtwork)
           p Outbid
             i.bid-status-message__arrow-down
               include ../../../public/icons/bid-status-arrow.svg
-      .bid-status-message__increase-bid
-        | Increase your max bid to win the lot

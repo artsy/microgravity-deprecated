@@ -56,6 +56,55 @@ describe 'Artwork bid templates', ->
     it 'displays an enabled bid button', ->
       @$('.auction-avant-garde-black-button').should.not.containEql 'disabled'
       @$('.auction-avant-garde-black-button').text().should.equal 'Bid'
+    describe 'bid-status-count formatting', ->
+      it 'displays singular "1 Bid" for one bid', ->
+        @artwork.auction.sale_artwork.counts.bidder_positions = 1
+        @html = render('index')(
+          artwork: @artwork
+          me: @me
+          sd: {}
+          asset: (->)
+          _: _
+        )
+        @$ = cheerio.load(@html)
+        @$('.artwork-auction-bid-module__bid-status-count').text().should.containEql '1 Bid'
+
+      it 'displays plural "x Bids" for plural bids', ->
+        @artwork.auction.sale_artwork.counts.bidder_positions = 7
+        @html = render('index')(
+          artwork: @artwork
+          me: @me
+          sd: {}
+          asset: (->)
+          _: _
+        )
+        @$ = cheerio.load(@html)
+        @$('.artwork-auction-bid-module__bid-status-count').text().should.containEql '7 Bids'
+
+      it 'displays reserve status correctly with bids', ->
+        @artwork.auction.sale_artwork.counts.bidder_positions = 1
+        @html = render('index')(
+          artwork: @artwork
+          me: @me
+          sd: {}
+          asset: (->)
+          _: _
+        )
+        @$ = cheerio.load(@html)
+        @$('.artwork-auction-bid-module__bid-status-count').text().should.containEql ', Reserve not met'
+      
+      it 'displays reserve status correctly with no bids - reserve message only', ->
+        @artwork.auction.sale_artwork.counts.bidder_positions = 0
+        @artwork.auction.sale_artwork.reserve_status = 'reserve_met'
+        @html = render('index')(
+          artwork: @artwork
+          me: @me
+          sd: {}
+          asset: (->)
+          _: _
+        )
+        @$ = cheerio.load(@html)
+        @$('.artwork-auction-bid-module__bid-status-count').text().should.equal 'Reserve met'
 
   describe 'bidder with bidder positions', ->
 
@@ -84,7 +133,6 @@ describe 'Artwork bid templates', ->
       )
       @$ = cheerio.load(@html)
       @$('.bid-status-message p').text().should.match /^Highest Bidder\n/
-      @$('.bid-status-message__increase-bid').should.not.exist
 
     it 'displays user bidder status - leading bidder & reserve not met', ->
       @artwork.auction.sale_artwork.reserve_status = 'no.'
@@ -98,8 +146,7 @@ describe 'Artwork bid templates', ->
         _: _
       )
       @$ = cheerio.load(@html)
-      @$('.bid-status-message p').text().should.containEql 'Highest Bidder, Reserve not met'
-      @$('.bid-status-message__increase-bid').text().should.equal 'Increase your max bid to win the lot'
+      @$('.bid-status-message__is-winning-reserve-not-met').text().should.containEql 'Highest Bidder'
 
     it 'displays user bidder status - outbid, reserve not met', ->
       me =  { id: 'my unique id', lot_standing: { is_leading_bidder: false } }
@@ -112,7 +159,6 @@ describe 'Artwork bid templates', ->
       )
       @$ = cheerio.load(@html)
       @$('.bid-status-message p').text().should.containEql 'Outbid'
-      @$('.bid-status-message__increase-bid').text().should.equal 'Increase your max bid to win the lot'
 
     it 'displays user bidder status - outbid, reserve does not apply', ->
       me =  { id: 'my unique id', lot_standing: { is_leading_bidder: false } }
@@ -125,7 +171,6 @@ describe 'Artwork bid templates', ->
       )
       @$ = cheerio.load(@html)
       @$('.bid-status-message p').text().should.containEql 'Outbid'
-      @$('.bid-status-message__increase-bid').text().should.equal 'Increase your max bid to win the lot'
 
     it 'displays correct bidding amount label with bids', ->
       me =  { id: 'my unique id', lot_standing: { is_leading_bidder: false } }
@@ -218,5 +263,5 @@ describe 'Artwork bid templates', ->
       @$('.artwork-auction-bid-module__bid-status-title').text().should.equal 'Starting Bid:'
 
 
-    xit 'do not display number of bids', ->
+    it 'do not display number of bids', ->
       @$('.artwork-auction-bid-module__bid-status-count').text().should.equal 'Reserve not met'
