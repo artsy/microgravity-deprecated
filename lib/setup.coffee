@@ -61,7 +61,7 @@ module.exports = (app) ->
   app.use sharify
   app.use ensureSSL
   app.use hsts unless app.get('env') is 'test'
-  app.use helmet.xframe('deny') unless app.get('env') is 'test'
+  app.use helmet.frameguard() unless app.get('env') is 'test'
   app.use bucketAssets()
 
   # Setup Artsy XAPP & Passport middleware for authentication along with the
