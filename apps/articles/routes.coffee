@@ -53,10 +53,12 @@ sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU
 
 @section = (req, res, next) ->
   new Section(id: req.params.slug).fetch
+    cache: true
     error: -> next()
     success: (section) ->
       return next() unless req.params.slug is section.get('slug')
       new Articles().fetch
+        cache: true
         data: section_id: section.get('id'), published: true, limit: 100, sort: '-published_at'
         error: res.backboneError
         success: (articles) ->
@@ -68,14 +70,16 @@ sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU
 
 @articles = (req, res, next) ->
   Q.allSettled([
-    (sections = new Sections).fetch(data: featured: true)
-    (articles = new Articles).fetch(
+    (sections = new Sections).fetch
+      data: featured: true
+      cache: true
+    (articles = new Articles).fetch
+      cache: true
       data:
         published: true
         limit: 10
         sort: '-published_at'
         featured: true
-    )
   ]).fail(next).then =>
     email = res.locals.sd.CURRENT_USER?.email
     subscribedToEditorial email, (err, subscribed) ->

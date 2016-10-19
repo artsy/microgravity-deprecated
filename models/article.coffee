@@ -49,7 +49,7 @@ module.exports = class Article extends Backbone.Model
     calloutArticles = new Articles()
     superArticle = false
     if @get('section_ids')?.length
-      dfds.push (section = new Section(id: @get('section_ids')[0])).fetch()
+      dfds.push (section = new Section(id: @get('section_ids')[0])).fetch(cache: true)
       dfds.push (sectionArticles = new Articles).fetch
         cache: true
         data: section_id: @get('section_ids')[0], published: true
@@ -69,6 +69,7 @@ module.exports = class Article extends Backbone.Model
     else
        # Check if the article is IN a super article
       dfds.push (foo = new Articles()).fetch
+        cache: true
         data:
           super_article_for: @get('id')
           published: true
@@ -80,6 +81,7 @@ module.exports = class Article extends Backbone.Model
       for sec in @get('sections') when sec.type is 'callout'
         if sec.article
           dfds.push new Article(id: sec.article).fetch
+            cache: true
             success: (article) ->
               calloutArticles.add(article)
 
@@ -105,6 +107,7 @@ module.exports = class Article extends Backbone.Model
   fetchRelatedArticles: (relatedArticles) ->
     for id in @get('super_article').related_articles
       new Article(id: id).fetch
+        cache: true
         success: (article) =>
           relatedArticles.add article
 
