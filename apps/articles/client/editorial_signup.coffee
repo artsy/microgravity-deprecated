@@ -48,12 +48,7 @@ module.exports = class EditorialSignupView extends Backbone.View
     @ctaBarView.transitionIn()
 
   setupAEArticlePage: ->
-    @ctaBarView = new CTABarView
-      mode: 'editorial-signup'
-      name: 'dismissed-editorial-signup'
-      persist: true
-      email: sd.CURRENT_USER?.email or ''
-      expires: 2592000
+    @initCTABarView()
     if not @ctaBarView.previouslyDismissed() and @canViewCTAPopup()
       @setupCTAWaypoints()
       @trackImpression @ctaBarView.email
@@ -67,6 +62,10 @@ module.exports = class EditorialSignupView extends Backbone.View
       @cycleImages() if images
 
   setupAEMagazinePage: ->
+    @initCTABarView()
+    if not @ctaBarView.previouslyDismissed() and @eligibleToSignUp()
+      @setupCTAWaypoints()
+      @trackImpression @ctaBarView.email
     # Show the lush CTA after the 3rd article
     @fetchSignupImages (images) =>
       @$('.article-item')
@@ -79,6 +78,14 @@ module.exports = class EditorialSignupView extends Backbone.View
           page: 'magazine'
         .css('border-bottom', 'none')
       @cycleImages() if images
+
+  initCTABarView: ->
+    @ctaBarView = new CTABarView
+      mode: 'editorial-signup'
+      name: 'dismissed-editorial-signup'
+      persist: true
+      email: sd.CURRENT_USER?.email or ''
+      expires: 2592000
 
   canViewCTAPopup: ->
     if @eligibleToSignUp() and
@@ -124,5 +131,5 @@ module.exports = class EditorialSignupView extends Backbone.View
 
   trackImpression: (email) ->
     setTimeout( =>
-      analyticsHooks.trigger('impression:editorial-signup', article_id: sd.ARTICLE.id, type: @getType(), email: email)
+      analyticsHooks.trigger('impression:editorial-signup', article_id: sd.ARTICLE?.id, type: @getType(), email: email)
     ,2000)

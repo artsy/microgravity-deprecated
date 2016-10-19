@@ -16,6 +16,11 @@ describe 'EditorialSignupView', ->
       @EditorialSignupView = benv.requireWithJadeify resolve(__dirname, '../../client/editorial_signup'), ['editorialSignupLushTemplate']
       @cycleImages = sinon.stub @EditorialSignupView::, 'cycleImages'
       sinon.stub @EditorialSignupView::, 'trackSignup'
+      @ctaBarView = sinon.stub().returns
+        render: sinon.stub().returns { $el: '<div class="cta-bar-magazine"></div>' }
+        previouslyDismissed: sinon.stub()
+        transitionIn: sinon.stub()
+      @EditorialSignupView.__set__ 'CTABarView', @ctaBarView
       @view = new @EditorialSignupView el: @$el
       done()
 
@@ -116,3 +121,11 @@ describe 'EditorialSignupView', ->
         parse: sinon.stub().returns({utm_source: 'sailthru'})
       @view.canViewCTAPopup().should.be.false()
 
+  describe '#setupAEMagazinePage', ->
+
+    it 'sets up modal for /articles', ->
+      @EditorialSignupView.__set__ 'sd',
+        SUBSCRIBED_TO_EDITORIAL: false
+        CURRENT_PATH: '/articles'
+      @view.setupAEMagazinePage()
+      @view.$el.html().should.containEql 'cta-bar-magazine'
