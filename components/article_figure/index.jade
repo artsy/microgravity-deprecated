@@ -1,0 +1,28 @@
+- author = article.author
+- imgUrl = crop(article.thumbnail_image, { width: 640, height: Math.round(640 / 1.7), quality: 90 })
+
+.article-item
+  a.article-item-link( href= '/article/' + article.slug data-id = article.id )
+    img.article-item-image(
+      src="#{imgUrl}"
+      alt= article.thumbnail_title
+      onerror='this.style.display="none";'
+    )
+
+    h3.article-item-title
+      = article.thumbnail_title
+
+  .article-item-footer
+    .article-item-author-section
+      if !(article.contributing_authors.length && article.channel_id === sd.ARTSY_EDITORIAL_CHANNEL && sd.CURRENT_PATH === '/articles')
+        .article-item-author
+          .article-item-author-name
+            = article.author ? article.author.name : ''
+
+      //- .article-item-contributing
+      //-   include contributing_authors
+
+    .article-share-section
+      - url = sd && (sd.APP_URL + '/article/' + article.slug)
+      - description = (article.share_description || article.thumbnail_title) + ' @Artsy'
+      include share

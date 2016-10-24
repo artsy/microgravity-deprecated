@@ -8,15 +8,6 @@ block head
 
 block content
   #articles-page.main-side-margin
-    if featuredSection
-      a( href=featuredSection.get('slug') )
-        .articles-section-notice-header
-          .articles-section-notice-header-thumbnail
-            img( src=featuredSection.get('thumbnail_url') )
-          .articles-section-notice-header-thumbnail-text
-            h3 Featured Coverage
-            h4= featuredSection.get('title')
-          .icon-chevron-small-right
     .articles-feed.js-articles-feed
       include articles_feed
     .avant-garde-box-button.is-show-more-button.is-hidden Show More
