@@ -1,4 +1,21 @@
 Artist = require '../../models/artist'
+metaphysics = require '../../lib/metaphysics'
+
+query = """
+  query artist($id: String!) {
+    artist(id: $id) {
+      name
+      id
+      hometown
+      years
+      biography_blurb(format: HTML) {
+        text
+        credit
+      }
+    }
+  }
+
+"""
 
 module.exports.index = (req, res, next) ->
   artist = new Artist id: req.params.id
@@ -11,13 +28,11 @@ module.exports.index = (req, res, next) ->
     error: res.backboneError
 
 module.exports.biography = (req, res, next) ->
-  artist = new Artist id: req.params.id
-  artist.fetch
-    cache: true
-    success: ->
-      res.locals.sd.ARTIST = artist.toJSON()
-      res.render 'biography', artist: artist
-    error: res.backboneError
+   metaphysics query: query, variables: req.params, req: req
+    .then (data) ->
+      res.locals.sd.ARTIST = data.artist
+      res.render 'biography', artist: data.artist
+    .catch next
 
 module.exports.auctionResults = (req, res, next) ->
   artist = new Artist id: req.params.id
