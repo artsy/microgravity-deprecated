@@ -22,9 +22,10 @@ module.exports.index = (req, res, next) ->
   artist.fetch
     cache: true
     success: ->
-      res.locals.sd.ARTIST = artist.toJSON()
-      showAuctionLink = artist.get('display_auction_link')
-      res.render 'page', artist: artist, sort: req.query?.sort, showAuctionLink: showAuctionLink
+      artist.maybeFetchAndSetFeaturedBio =>
+        res.locals.sd.ARTIST = artist.toJSON()
+        showAuctionLink = artist.get('display_auction_link')
+        res.render 'page', artist: artist, sort: req.query?.sort, showAuctionLink: showAuctionLink
     error: res.backboneError
 
 module.exports.biography = (req, res, next) ->

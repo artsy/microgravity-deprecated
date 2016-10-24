@@ -18,6 +18,25 @@ describe 'Artist', ->
       @artist.set image_url: 'foo/bar/:version.jpg'
       @artist.imageUrl().should.equal 'foo/bar/medium.jpg'
 
+  describe '#maybeFetchAndSetFeaturedBio', ->
+
+    it 'calls the callback and doesnt change the blurb if there is a blurb', ->
+      @artist.set(blurb: 'original blurb')
+      cb = sinon.stub()
+      @artist.maybeFetchAndSetFeaturedBio cb
+      Backbone.sync.args.length.should.equal 0
+      @artist.get('blurb').should.equal 'original blurb'
+      cb.called.should.be.ok()
+
+    it 'sets the featured partner bio and calls the callback if there is no blurb', ->
+      @artist.unset 'blurb'
+      cb = sinon.stub()
+      @artist.maybeFetchAndSetFeaturedBio cb
+      Backbone.sync.args[0][2].success [{ biography: 'featured blurb' }]
+      Backbone.sync.args[0][1].url.should.containEql 'partner_artists?size=1&featured=true'
+      cb.called.should.be.ok()
+      @artist.get('blurb').should.equal 'featured blurb'
+
   describe '#fetchArtworks', ->
 
     it 'fetches the artists artworks', (done) ->
