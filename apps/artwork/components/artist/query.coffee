@@ -21,7 +21,12 @@ module.exports = """
       }
     }
     bio
-    biography: blurb(format: HTML)
+    blurb(format: HTML)
+    biography_blurb(format: HTML, partner_bio: true) {
+      text
+      credit
+      partner_id
+    }
     articles {
       title
       href

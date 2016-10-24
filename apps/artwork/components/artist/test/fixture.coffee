@@ -45,7 +45,12 @@ module.exports =
         }
       ],
       bio: 'Born 1970, New York, New York, and based in Paris'
-      biography: "This is Picasso's bio.",
+      blurb: "This is Picasso's bio.",
+      biography_blurb: {
+        text: 'Picasso was a cat.'
+        credit: 'Submitted by Catty Partner.'
+        partner_id: 'catty-partner'
+      }
       exhibition_highlights: [
         {
           href: "/show/retrospective"
