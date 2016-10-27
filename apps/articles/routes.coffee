@@ -1,4 +1,5 @@
 _ = require 'underscore'
+{ toSentence } = require 'underscore.string'
 Q = require 'bluebird-q'
 { MAILCHIMP_KEY, SAILTHRU_KEY, SAILTHRU_SECRET, SAILTHRU_MASTER_LIST } = require '../../config'
 sd = require('sharify').data
@@ -70,28 +71,27 @@ sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU
 
 @articles = (req, res, next) ->
   query = """
-  {
-    articles(published: true, limit: 30, sort: "-published_at", featured: true ) {
-      slug
-      thumbnail_title
-      thumbnail_image
-      tier
-      published_at
-      channel_id
-      author{
-        name
-      }
-      contributing_authors{
-        name
+    {
+      articles(published: true, limit: 30, sort: "-published_at", featured: true ) {
+        slug
+        thumbnail_title
+        thumbnail_image
+        tier
+        published_at
+        channel_id
+        author{
+          name
+        }
+        contributing_authors{
+          name
+        }
       }
     }
-  }
   """
-  request.post('http://localhost:3005' + '/api/graphql')
+  request.post(sd.POSITRON_URL + '/api/graphql')
     .send(
       query: query
     ).end (err, response) ->
-      console.log err
       return next() if err
       articles = response.body.data.articles
       email = res.locals.sd.CURRENT_USER?.email
@@ -100,6 +100,8 @@ sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU
         res.locals.sd.ARTICLES = articles
         res.render 'articles',
           articles: articles
+          toSentence: toSentence
+          pluck: _.pluck
 
 @form = (req, res, next) ->
   request.post('https://us1.api.mailchimp.com/2.0/lists/subscribe')

@@ -1,6 +1,7 @@
 _ = require 'underscore'
 sinon = require 'sinon'
-routes = require '../routes'
+rewire = require 'rewire'
+routes = rewire '../routes'
 Backbone = require 'backbone'
 fixtures = require '../../../test/helpers/fixtures'
 moment = require 'moment'
@@ -34,7 +35,7 @@ describe 'Article routes', ->
         @res.render.args[0][1].article.id.should.equal 'foobar'
         done()
 
-    it.only 'fetches and render super articles', (done) ->
+    it 'fetches and render super articles', (done) ->
       article = _.extend _.clone(fixtures.article), id: 'foobar', is_super_article: true, super_article: related_articles: ['related-1']
       relatedArticle = _.extend _.clone(fixtures.article), id: 'related-1'
       routes.article @req, @res, @next
@@ -71,26 +72,20 @@ describe 'Article routes', ->
 describe "#articles", ->
 
   beforeEach ->
-    sinon.stub Backbone, 'sync'
+    sinon.stub(request, 'end').yields([null, body: data: articles: [fixtures.article]])
     @req = { params: {} }
     @res = { render: sinon.stub(), locals: { sd: {} }, redirect: sinon.stub() }
     @next = sinon.stub()
+    @requestMain = routes.__get__ 'request'
+    @request = {}
+    @request.post = sinon.stub().returns @request
+    @request.send = sinon.stub().returns @request
+    @request.end = sinon.stub().returns @request
+    routes.__set__ 'request', @request
 
   afterEach ->
-    Backbone.sync.restore()
+    routes.__set__ 'request', @requestMain
 
-  it 'gets the running section and renders the proper template', (done) ->
+  it 'fetches a collection of articles and renders the list', (done) ->
     routes.articles @req, @res, @next
-    section = _.extend(_.clone(fixtures.section), {
-      title: 'Foo Bar'
-      start_at: moment().subtract(1, 'days')
-      end_at: moment().add(1, 'days')
-    })
-
-    Backbone.sync.args[0][2].success results: [section]
-    Backbone.sync.args[1][2].success()
-
-    _.defer => _.defer =>
-      @res.render.args[0][0].should.equal 'articles'
-      @res.render.args[0][1].featuredSection.get('title').should.equal 'Foo Bar'
-      done()
+    console.log @res.render.args
