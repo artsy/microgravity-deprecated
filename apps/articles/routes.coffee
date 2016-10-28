@@ -100,8 +100,6 @@ sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU
         res.locals.sd.ARTICLES = articles
         res.render 'articles',
           articles: articles
-          toSentence: toSentence
-          pluck: _.pluck
 
 @form = (req, res, next) ->
   request.post('https://us1.api.mailchimp.com/2.0/lists/subscribe')
