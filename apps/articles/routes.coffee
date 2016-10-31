@@ -93,7 +93,7 @@ sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU
       query: query
     ).end (err, response) ->
       return next() if err
-      articles = response.body.data.articles
+      articles = response.body.data?.articles
       email = res.locals.sd.CURRENT_USER?.email
       subscribedToEditorial email, (err, subscribed) ->
         res.locals.sd.SUBSCRIBED_TO_EDITORIAL = subscribed

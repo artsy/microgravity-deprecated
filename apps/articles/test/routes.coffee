@@ -7,6 +7,7 @@ fixtures = require '../../../test/helpers/fixtures'
 moment = require 'moment'
 Articles = require '../../../collections/articles'
 Article = require '../../../models/article'
+request = require 'superagent'
 
 describe 'Article routes', ->
   beforeEach ->
@@ -17,6 +18,7 @@ describe 'Article routes', ->
         sd: {}
     @next = sinon.stub()
     sinon.stub Backbone, 'sync'
+    routes.__set__ 'sailthru', apiGet: sinon.stub().yields('error')
 
   afterEach ->
     Backbone.sync.restore()
@@ -72,20 +74,20 @@ describe 'Article routes', ->
 describe "#articles", ->
 
   beforeEach ->
-    sinon.stub(request, 'end').yields([null, body: data: articles: [fixtures.article]])
+    routes.__set__ 'sailthru', apiGet: sinon.stub().yields('error')
+    sinon.stub request, 'post'
+      .returns
+        send: sinon.stub().returns
+          end: sinon.stub().yields(null, body: data: articles: [fixtures.article])
     @req = { params: {} }
     @res = { render: sinon.stub(), locals: { sd: {} }, redirect: sinon.stub() }
     @next = sinon.stub()
-    @requestMain = routes.__get__ 'request'
-    @request = {}
-    @request.post = sinon.stub().returns @request
-    @request.send = sinon.stub().returns @request
-    @request.end = sinon.stub().returns @request
-    routes.__set__ 'request', @request
 
   afterEach ->
-    routes.__set__ 'request', @requestMain
+    request.post.restore()
 
   it 'fetches a collection of articles and renders the list', (done) ->
     routes.articles @req, @res, @next
-    console.log @res.render.args
+    @res.render.args[0][0].should.equal 'articles'
+    @res.render.args[0][1].articles[0].thumbnail_title.should.containEql 'Top Ten Booths at miart 2014'
+    done()
