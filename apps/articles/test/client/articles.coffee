@@ -11,12 +11,13 @@ request = require 'superagent'
 
 describe 'MagazineView', ->
 
-  beforeEach (done) ->
+  before (done) ->
     benv.setup =>
       benv.expose
         $: benv.require 'jquery'
         sd: ARTSY_EDITORIAL_CHANNEL: '123'
       Backbone.$ = $
+      $.onInfiniteScroll = sinon.stub()
 
       @articles = [
         {
@@ -65,14 +66,20 @@ describe 'MagazineView', ->
         }
       ]
 
-      benv.render path.resolve(__dirname, '../../templates/articles.jade'),
-        sd: {}
-        asset: (->)
-        articles: @articles
-        crop: ->
-        toSentence: ->
-        pluck: ->
+      done()
 
+  after ->
+    benv.teardown()
+
+  beforeEach ->
+    benv.render path.resolve(__dirname, '../../templates/articles.jade'),
+      sd: {}
+      asset: (->)
+      articles: @articles
+      crop: ->
+      toSentence: ->
+      pluck: ->
+    , =>
       filename = path.resolve(__dirname, '../../client/articles.coffee')
       { MagazineView } = module = benv.requireWithJadeify filename, ['articleTemplate']
       sinon.stub request, 'post'
@@ -85,11 +92,8 @@ describe 'MagazineView', ->
         collection: @articles
         offset: 0
 
-      done()
-
   afterEach ->
     request.post.restore()
-    benv.teardown()
 
   describe '#initialize', ->
 
