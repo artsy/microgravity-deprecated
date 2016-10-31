@@ -41,7 +41,7 @@ module.exports.MagazineView = class MagazineView extends Backbone.View
         query: query
       ).end (err, response) =>
         articles = response.body.data?.articles
-        if articles.length
+        if articles?.length
           @collection = articles
           @onSync()
         else
