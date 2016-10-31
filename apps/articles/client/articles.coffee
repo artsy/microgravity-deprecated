@@ -46,13 +46,13 @@ module.exports.MagazineView = class MagazineView extends Backbone.View
           @onSync()
         else
           @finishedScrolling = true
-          @hideSpinner()
+          @$('.loading-spinner').hide()
           $('html').removeClass 'infinite-scroll-is-active'
         @$spinner.hide()
 
   startInfiniteScroll: ->
-    @hideShowMoreButton()
-    @showSpinner()
+    @$('.is-show-more-button').addClass('is-hidden')
+    @$('.loading-spinner').show()
     $('html').addClass 'infinite-scroll-is-active'
     @onInfiniteScroll()
     @throttledInfinite = _.throttle @onInfiniteScroll, 2000, { trailing: false }
@@ -70,12 +70,6 @@ module.exports.MagazineView = class MagazineView extends Backbone.View
       @$('#articles-feed-empty-message').hide()
     else
       @$('#articles-feed-empty-message').show()
-
-  hideShowMoreButton: -> @$('.is-show-more-button').addClass('is-hidden')
-
-  showSpinner: -> @$('.loading-spinner').show()
-
-  hideSpinner: -> @$('.loading-spinner').hide()
 
 module.exports.init = ->
   bootstrap()
