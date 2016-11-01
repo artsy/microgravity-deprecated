@@ -1,4 +1,5 @@
 _ = require 'underscore'
+{ toSentence } = require 'underscore.string'
 Q = require 'bluebird-q'
 { MAILCHIMP_KEY, SAILTHRU_KEY, SAILTHRU_SECRET, SAILTHRU_MASTER_LIST } = require '../../config'
 sd = require('sharify').data
@@ -69,27 +70,36 @@ sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU
             res.render 'section', featuredSection: section, articles: articles
 
 @articles = (req, res, next) ->
-  Q.allSettled([
-    (sections = new Sections).fetch
-      data: featured: true
-      cache: true
-    (articles = new Articles).fetch
-      cache: true
-      data:
-        published: true
-        limit: 10
-        sort: '-published_at'
-        featured: true
-  ]).fail(next).then =>
-    email = res.locals.sd.CURRENT_USER?.email
-    subscribedToEditorial email, (err, subscribed) ->
-      res.locals.sd.SUBSCRIBED_TO_EDITORIAL = subscribed
-
-      res.locals.sd.ARTICLES = articles.toJSON()
-      section = sections.running()[0]
-      res.render 'articles',
-        featuredSection: section
-        articles: articles.models
+  query = """
+    {
+      articles(published: true, limit: 30, sort: "-published_at", featured: true ) {
+        slug
+        thumbnail_title
+        thumbnail_image
+        tier
+        published_at
+        channel_id
+        author{
+          name
+        }
+        contributing_authors{
+          name
+        }
+      }
+    }
+  """
+  request.post(sd.POSITRON_URL + '/api/graphql')
+    .send(
+      query: query
+    ).end (err, response) ->
+      return next() if err
+      articles = response.body.data?.articles
+      email = res.locals.sd.CURRENT_USER?.email
+      subscribedToEditorial email, (err, subscribed) ->
+        res.locals.sd.SUBSCRIBED_TO_EDITORIAL = subscribed
+        res.locals.sd.ARTICLES = articles
+        res.render 'articles',
+          articles: articles
 
 @form = (req, res, next) ->
   request.post('https://us1.api.mailchimp.com/2.0/lists/subscribe')

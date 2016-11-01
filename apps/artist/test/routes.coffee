@@ -37,7 +37,7 @@ describe "#biography", ->
   afterEach ->
     Backbone.sync.restore()
 
-  it 'renders the biography page', ->
+  xit 'renders the biography page', ->
     @templateName.should.equal 'biography'
     @templateOptions.artist.get('id').should.equal 'damien-hershey'
 
