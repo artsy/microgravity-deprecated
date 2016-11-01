@@ -8,7 +8,7 @@ query = """
   query artwork($id: String!, $sale_id: String!) {
     me {
       lot_standing(artwork_id: $id, sale_id: $sale_id) {
-        is_highest_bidder
+        is_leading_bidder
       }
     }
     artwork(id: $id) {

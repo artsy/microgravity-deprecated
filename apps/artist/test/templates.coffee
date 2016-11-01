@@ -63,7 +63,8 @@ describe 'Biography', ->
   beforeEach ->
     @locals = { sd: {}, asset: (->) }
 
-  it 'renders the bio if there is a blurb', ->
-    @locals.artist = new Artist fabricate('artist', blurb: 'Bitty was a cat.')
+  it 'renders the bio and credit if there is one', ->
+    @locals.artist = { hometown: 'Heaven', years: '1995 - 2014', name: 'Bitty', id: 'bitty', biography_blurb: { credit: 'Submitted by Matt', text: 'Bitty was a cat.' } }
     render('biography')(@locals).should.containEql 'Bitty was a cat.'
+    render('biography')(@locals).should.containEql 'Submitted by Matt'
   

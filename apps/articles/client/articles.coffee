@@ -3,31 +3,69 @@ _ = require 'underscore'
 sd = require('sharify').data
 Backbone = require 'backbone'
 Articles = require '../../../collections/articles.coffee'
-PoliteInfiniteScrollView = require '../../../components/polite_infinite_scroll/client/view.coffee'
 EditorialSignupView = require './editorial_signup.coffee'
 articleTemplate = -> require('../templates/articles_feed.jade') arguments...
+request = require 'superagent'
+{ crop } = require '../../../components/resizer/index.coffee'
+{ toSentence } = require 'underscore.string'
 
-module.exports.MagazineView = class MagazineView extends PoliteInfiniteScrollView
+module.exports.MagazineView = class MagazineView extends Backbone.View
 
-  initialize: ({@offset, @params})->
-    @collection.on 'sync', @onSync
-    @onInitialFetch()
-
+  initialize: ({@offset})->
+    @$spinner = @$('#articles-page .loading-spinner')
     @$('.is-show-more-button').click => @startInfiniteScroll()
 
-  onInfiniteScroll: ->
+  onInfiniteScroll: =>
     return if @finishedScrolling
-    @collection.fetch
-      data: @params
-      remove: false
-      success: (articles, res) =>
-        @params.offset += 10
-        @onFinishedScrolling() if res.length is 0
+    @offset += 30
+    query = """
+      {
+        articles(published: true, limit: 30, sort: "-published_at", featured: true, offset: #{@offset} ) {
+          slug
+          thumbnail_title
+          thumbnail_image
+          tier
+          published_at
+          channel_id
+          author{
+            name
+          }
+          contributing_authors{
+            name
+          }
+        }
+      }
+    """
+    request.post(sd.POSITRON_URL + '/api/graphql')
+      .send(
+        query: query
+      ).end (err, response) =>
+        articles = response.body.data?.articles
+        if articles?.length
+          @collection = articles
+          @onSync()
+        else
+          @finishedScrolling = true
+          @$('.loading-spinner').hide()
+          $('html').removeClass 'infinite-scroll-is-active'
+        @$spinner.hide()
+
+  startInfiniteScroll: ->
+    @$('.is-show-more-button').addClass('is-hidden')
+    @$('.loading-spinner').show()
+    $('html').addClass 'infinite-scroll-is-active'
+    @onInfiniteScroll()
+    @throttledInfinite = _.throttle @onInfiniteScroll, 2000, { trailing: false }
+    $.onInfiniteScroll => @throttledInfinite()
 
   onSync: =>
     if @collection.length > 0
-      html = articleTemplate articles: @collection.models
-      @$('.js-articles-feed').html html
+      html = articleTemplate
+        articles: @collection
+        crop: crop
+        toSentence: toSentence
+        pluck: _.pluck
+      @$('.js-articles-feed').append html
       @$('.js-articles-feed img').error -> $(@).closest('.articles-item').hide()
       @$('#articles-feed-empty-message').hide()
     else
@@ -36,16 +74,9 @@ module.exports.MagazineView = class MagazineView extends PoliteInfiniteScrollVie
 module.exports.init = ->
   bootstrap()
 
-  articles = new Articles sd.ARTICLES
-
   new MagazineView
     el: $('#articles-page')
-    collection: articles
-    params:
-      published: true
-      limit: 10
-      offset: 10
-      sort: '-published_at'
-      featured: true
+    collection: sd.ARTICLES
+    offset: 0
 
   new EditorialSignupView el: $('body')

@@ -42,18 +42,18 @@ describe 'Search results template', ->
 
   describe 'Has results', ->
     beforeEach (done) ->
-      @artworks = _.times 2, ->
+      @artworks = _.times 2, (i)->
         new SearchResult({
-          link: 'https://artsy.net/artwork/cool-artwork'
+          link: 'https://artsy.net/artwork/cool-artwork' + i
           title: "Artwork Title | Artist | Artsy"
           snippet: 'cool artwork snippet'
           pagemap:
             metatags: [{'og:type': 'artwork', 'og:description': 'artwork description'}]
             cse_thumbnail: [{ src: 'imgurl' }]
         })
-      @artists = _.times 3, ->
+      @artists = _.times 3, (i) ->
         new SearchResult({
-          link: 'https://artsy.net/artist/cool-artist'
+          link: 'https://artsy.net/artist/cool-artist' + i
           title: "Artist Name | Artsy"
           snippet: 'cool artist snippet'
           pagemap:

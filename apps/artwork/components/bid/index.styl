@@ -6,34 +6,37 @@
 .artwork-auction-bid-module__bid-status-amount
   float right
 
-.artwork-auction-bid-module__bid-status-count
-  garamond-size('m-caption', true)
-  color gray-darker-color
-  display inline
-
-.artwork-auction-bid-module__bid-status__users-bid-status
-  display inline-block
-  float right
-  &.highest-bid
-    color green-color
-    .bidder-status-arrow
-      border-bottom-color green-color
-  &.outbid
-    color red-color
-    .bidder-status-arrow
-      border-bottom-color red-color
-      transform rotate(180deg)
-  .user-bid-status-text
+.artwork-auction-bid-module__bid-status__count-user-status
+  .artwork-auction-bid-module__bid-status-count
+    garamond-size('m-caption', true)
+    color gray-darker-color
     display inline
-    margin-right 10px
-    avant-garde-size('s-headline', true)
-  .bidder-status-arrow
-    width 0
-    height 0
-    border-left 6.5px solid transparent
-    border-right 6.5px solid transparent
-    border-bottom 11.5px solid
-    display inline-block
+    float left
+  .bid-status-message
+    p
+      display inline-block
+      float right
+      color red-color
+      avant-garde()
+      avant-garde-size('s-headline', true)
+      margin-top 2px
+    &__is-winning p
+      color green-color
+    &__is-winning-reserve-not-met p
+      color reserve-yellow-color
+    &__is-losing p
+      color red-color
+    &__arrow-up, &__arrow-down
+      position relative
+      fill currentColor
+      padding-left 3px
+      svg
+        margin-left 4px
+        height .8em
+    &__arrow-up svg
+      transform rotate(180deg)
+    &__arrow-down svg
+      transform rotate(0deg)
 
 .auction-avant-garde-black-button
   avant-garde-size('body', true)

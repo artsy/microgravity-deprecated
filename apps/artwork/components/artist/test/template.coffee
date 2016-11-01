@@ -19,6 +19,25 @@ describe 'Artwork artist templates -', ->
   beforeEach ->
     @artwork = fabricate 'artwork'
 
+  describe 'artwork with a featured bio submitted by that partner', ->
+    beforeEach ->
+      @artwork.artists = artists
+      @artwork.partner = { id: 'catty-partner' }
+      @html = render('index')(
+        artwork: @artwork
+        sd: {}
+        asset: (->)
+        helpers: Helpers
+        _: _
+      )
+
+      @$ = cheerio.load(@html)
+
+    it 'should display artist bio', ->
+      text = @$('.aama-tab-content').filter("[data-id=biography-#{artists[0].id}]").first().text()
+      text.should.containEql 'Picasso was a cat'
+      text.should.containEql 'Submitted by Catty Partner'
+
   describe 'artwork with artist', ->
     beforeEach ->
       @artwork.artists = artists

@@ -46,7 +46,7 @@ describe 'PartnerArtistView', ->
       ]
       $('body').html().should.containEql "Andy Foobar's Finger Painting"
 
-    it 'renders on add', ->
+    xit 'renders on add', ->
       spy = sinon.spy @view, 'renderArtworks'
       # need to call initialize again to bind the spied renderArtworks()
       @view.initialize
@@ -70,7 +70,7 @@ describe 'PartnerArtistView', ->
 
   describe '#seeMoreArtworks', ->
 
-    it 'fetches more artworks and adds them to the collection', ->
+    xit 'fetches more artworks and adds them to the collection', ->
       @view.seeMoreArtworks()
       _.last(Backbone.sync.args)[2].data.page.should.equal 2
       _.last(Backbone.sync.args)[2].success [fabricate('artwork'), fabricate('artwork')]

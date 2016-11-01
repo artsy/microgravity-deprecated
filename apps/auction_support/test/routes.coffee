@@ -34,7 +34,7 @@ describe '#auctionRegistration', ->
 
   it 'redirects to login without user', ->
     routes.auctionRegistration @req, @res
-    @res.redirect.args[0][0].should.equal "/log_in?redirect_uri=/auction-registration/awesome-sale"
+    @res.redirect.args[0][0].should.equal "/log_in?redirect_uri=/auction-registration/awesome-sale?redirect_uri=undefined"
 
   describe 'with current user', ->
 

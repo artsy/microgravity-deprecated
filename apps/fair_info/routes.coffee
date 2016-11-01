@@ -23,7 +23,6 @@ Article = require '../../models/article.coffee'
     res.locals.sd.FAIR = fair.toJSON()
     next()
   .catch (error) ->
-    console.log 'caught an error', error
     next()
   .done()
 

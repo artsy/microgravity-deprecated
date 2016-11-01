@@ -10,7 +10,7 @@ describe 'Partner Profile page', ->
   after ->
     servers.teardown()
 
-  xit 'shows the index page', (done) ->
+  it 'shows the index page', (done) ->
     browser = new Browser
     browser.visit 'http://localhost:5000/gagosian-gallery', ->
       browser.wait ->
@@ -52,14 +52,14 @@ describe 'Partner Profile page', ->
 
   describe 'Institution Partner Profile page', ->
 
-    it 'shows permanent works', (done) ->
+    xit 'shows permanent works', (done) ->
       browser = new Browser
       browser.visit 'http://localhost:5000/lacma/collection', ->
         browser.wait ->
           browser.html().should.containEql 'Works'
           done()
 
-    it 'shows for sale works', (done) ->
+    xit 'shows for sale works', (done) ->
       browser = new Browser
       browser.visit 'http://localhost:5000/lacma/shop', ->
         browser.wait ->
