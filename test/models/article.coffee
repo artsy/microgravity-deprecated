@@ -14,7 +14,7 @@ describe "Article", ->
     Backbone.sync.restore()
 
   describe '#fetchRelated', ->
-    it 'works for sectionless articles', (done) ->
+    it 'works for sectionless articles', ->
       article = _.extend {}, fixtures.article,
         id: 'id-1'
         sections: []
@@ -29,9 +29,8 @@ describe "Article", ->
       @article.sections = []
       @article.fetchRelated success: (data) ->
         data.article.get('id').should.equal 'article-1'
-        done()
 
-    it 'only fetches section content', (done) ->
+    it 'only fetches section content', ->
       sinon.stub Backbone, 'sync'
         .onCall 0
         .yieldsTo 'success', fixtures.section
@@ -46,9 +45,8 @@ describe "Article", ->
         id: 'article-1'
       @article.fetchRelated success: (data) ->
         data.section.get('title').should.equal 'Vennice Biennalez'
-        done()
 
-    it 'fetches related articles for article in super article', (done) ->
+    it 'fetches related articles for article in super article', ->
       relatedArticle1 = _.extend {}, fixtures.article,
         id: 'id-1'
         title: 'RelatedArticle 1',
@@ -86,4 +84,3 @@ describe "Article", ->
         data.superArticle.get('title').should.equal 'SuperArticle'
         data.relatedArticles.models[0].get('title').should.equal 'RelatedArticle 1'
         data.relatedArticles.models[1].get('title').should.equal 'RelatedArticle 2'
-        done()

@@ -8,14 +8,14 @@ qs = require 'querystring'
 uaParser = require 'ua-parser'
 request = require 'superagent'
 
-@forUnsupportedRoute = (req, res, next) ->
+module.exports.forUnsupportedRoute = (req, res, next) ->
   r = request.get(ARTSY_URL + req.path)
   r.set('User-Agent', 'Microgravity')
   r.set('X-Access-Token', req.user.get 'accessToken') if req.user?
   r.end (err, sres) ->
     if not err? and sres.status < 400 then res.send(sres.text) else next()
 
-@forDesktopBrowser = (req, res, next) ->
+module.exports.forDesktopBrowser = (req, res, next) ->
   ua = req.headers['user-agent']
   if ua and ua.length > 0
     family = uaParser.parseOS(ua).family
