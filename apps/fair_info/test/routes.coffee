@@ -102,7 +102,7 @@ describe 'FairInfo routes', ->
     afterEach ->
       Backbone.sync.restore()
 
-    it 'renders the article page', ->
+    xit 'renders the article page', ->
       routes.infoProgramming @req, @res, @next
       _.keys(Backbone.sync.args[0][2]['data']).should.containEql 'fair_programming_id'
       @res.render.called.should.be.true()
