@@ -29,7 +29,7 @@ module.exports.index = (req, res, next) ->
     error: res.backboneError
 
 module.exports.biography = (req, res, next) ->
-   metaphysics query: query, variables: req.params, req: req
+  metaphysics query: query, variables: req.params, req: req
     .then (data) ->
       res.locals.sd.ARTIST = data.artist
       res.render 'biography', artist: data.artist
