@@ -18,14 +18,14 @@ representation = (fair) ->
     dfd.resolve set
   dfd.promise
 
-@overview = (req, res, next) ->
+module.exports.overview = (req, res, next) ->
   return next() if (not res.locals.fairOrg)
   res.render 'index'
 
 #
 # For now this is specific to the Armory Show, eventually can be adapted to suit any fair organizer.
 #
-@fetchFairOrgData = (req, res, next) ->
+module.exports.fetchFairOrgData = (req, res, next) ->
   profile = res.locals.profile = req.profile
 
   return next() unless profile?.isFairOrganizer()

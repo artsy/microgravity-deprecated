@@ -3,5 +3,5 @@
     .search or ''
   res.redirect 301, path + params
 
-@index = (req, res) ->
+module.exports.index = (req, res) ->
   res.render 'index'

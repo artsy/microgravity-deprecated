@@ -20,7 +20,7 @@ partnerOptions = (type) ->
       setID: "542c3d0c7261692cc4510200"
   }[type]
 
-@index = (req, res, next) ->
+module.exports.index = (req, res, next) ->
   options = partnerOptions req.path.split('/')[1]
 
   profiles = new Profiles
@@ -35,7 +35,7 @@ partnerOptions = (type) ->
         featuredCities: FeaturedCities
         featuredPartner: _.first(profiles.shuffle())
 
-@galleries_institutions = (req, res, next) ->
+module.exports.galleries_institutions = (req, res, next) ->
   # If city is a part of the params, get it
   # otherwise the route is /:partner_type/all
   if req.params.city

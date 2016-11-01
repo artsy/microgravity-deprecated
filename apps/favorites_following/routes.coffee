@@ -10,7 +10,7 @@ typeMap =
 # and remove this mess when all are implemented
 implemented = ['profile']
 
-@following = (req, res, next) ->
+module.exports.following = (req, res, next) ->
   if (route = req.params.type) in _.keys(typeMap)
     kind = res.locals.sd.KIND = typeMap[route] or 'artist'
     if _.contains implemented, kind
@@ -21,5 +21,5 @@ implemented = ['profile']
   else
     next()
 
-@favorites = (req, res) ->
+module.exports.favorites = (req, res) ->
   res.render 'placeholder'

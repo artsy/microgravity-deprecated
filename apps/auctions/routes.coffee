@@ -9,7 +9,7 @@ eligibleFilter = _.partial _.filter, _, ((sale) ->
   # Reject sales without artworks
   sale.get('eligible_sale_artworks_count') isnt 0)
 
-@index = (req, res) ->
+module.exports.index = (req, res) ->
   sales = new Sales
   sales.comparator = (sale) ->
     -(Date.parse(sale.get 'end_at'))

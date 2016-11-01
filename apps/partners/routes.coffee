@@ -5,7 +5,7 @@ Partner = require '../../models/partner'
 Profiles = require '../../collections/profiles'
 Q = require 'bluebird-q'
 
-@index = (req, res) ->
+module.exports.index = (req, res) ->
   new Backbone.Collection([]).fetch
     url: "#{sd.API_URL}/api/v1/sets"
     cache: true

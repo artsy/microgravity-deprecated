@@ -5,7 +5,7 @@ Show = require '../../models/show.coffee'
 Location = require '../../models/location.coffee'
 
 
-@index = (req, res, next) ->
+module.exports.index = (req, res, next) ->
   show = new Show id: req.params.id
 
   Q.all([
@@ -54,7 +54,7 @@ Location = require '../../models/location.coffee'
 
   .done()
 
-@hours = (req, res, next) ->
+module.exports.hours = (req, res, next) ->
   show = new Show id: req.params.id
 
   show.fetch

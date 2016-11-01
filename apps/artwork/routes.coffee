@@ -88,7 +88,7 @@ query = (user) -> """
   }
 """
 
-@index = (req, res, next) ->
+module.exports.index = (req, res, next) ->
   send = query: query(req.user), variables: req.params, req: req
 
   if req.query.query?
@@ -104,7 +104,7 @@ query = (user) -> """
       res.render 'index'
     .catch next
 
-@askSpecialist = (req, res, next) ->
+module.exports.askSpecialist = (req, res, next) ->
   send = query: query(), variables: req.params, req: req
 
   if req.query.query?

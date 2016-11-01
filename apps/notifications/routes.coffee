@@ -1,6 +1,6 @@
 _ = require 'underscore'
 
-@worksForYou = (req, res) ->
+module.exports.worksForYou = (req, res) ->
   # If the user is logged-out, redirect to /log_in unless they are coming from email.
   # If they are coming from email, redirect to artist works page.
   unless req.user

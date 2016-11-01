@@ -2,7 +2,7 @@ _ = require 'underscore'
 Order = require '../../models/order.coffee'
 { ARTSY_URL } = require('sharify').data
 
-@resume = (req, res) ->
+module.exports.resume = (req, res) ->
   unless (token = req.query.token) and (orderId = req.params.id)
     return res.redirect '/'
 

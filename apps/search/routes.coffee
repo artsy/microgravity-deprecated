@@ -1,7 +1,7 @@
 GoogleSearchResults = require '../../collections/google_search_results'
 removeDiacritics = require('diacritics').remove
 
-@index = (req, res, next) ->
+module.exports.index = (req, res, next) ->
   return res.redirect('/') unless req.query.term
 
   term = removeDiacritics req.query.term

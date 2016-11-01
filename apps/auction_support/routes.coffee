@@ -24,7 +24,7 @@ registerOrRender = (sale, req, res, next) ->
           monthRange: [1..12]
           yearRange: order.getYearRange()
 
-@auctionRegistration = (req, res, next) ->
+module.exports.auctionRegistration = (req, res, next) ->
   unless req.user
     return res.redirect "/log_in?redirect_uri=" +
         "/auction-registration/#{req.params.id}" +

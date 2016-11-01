@@ -6,7 +6,7 @@ query = require './query.coffee'
 metaphysics = require '../../lib/metaphysics.coffee'
 Helpers = require './helpers.coffee'
 
-@index = (req, res, next) ->
+module.exports.index = (req, res, next) ->
   metaphysics
     variables: page: 1, size: 50
     query: query
