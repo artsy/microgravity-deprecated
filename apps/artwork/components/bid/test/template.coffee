@@ -54,7 +54,7 @@ describe 'Artwork bid templates', ->
       @$('.artwork-auction-bid-form.js-artwork-auction-bid-form').attr('action').should.containEql '/auction/whtney-art-party/bid/skull'
 
     it 'displays an enabled bid button', ->
-      @$('.auction-avant-garde-black-button').should.not.containEql 'disabled'
+      @$('.auction-avant-garde-black-button').html().should.not.containEql 'disabled'
       @$('.auction-avant-garde-black-button').text().should.equal 'Bid'
     describe 'bid-status-count formatting', ->
       it 'displays singular "1 Bid" for one bid', ->
@@ -92,7 +92,7 @@ describe 'Artwork bid templates', ->
         )
         @$ = cheerio.load(@html)
         @$('.artwork-auction-bid-module__bid-status-count').text().should.containEql ', Reserve not met'
-      
+
       it 'displays reserve status correctly with no bids - reserve message only', ->
         @artwork.auction.sale_artwork.counts.bidder_positions = 0
         @artwork.auction.sale_artwork.reserve_status = 'reserve_met'
