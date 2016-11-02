@@ -2,8 +2,7 @@ sinon = require 'sinon'
 rewire = require 'rewire'
 http = require 'http'
 express = require 'express'
-{ forUnsupportedRoute, forDesktopBrowser } = mod =
-  rewire '../../../lib/middleware/redirect_to_gravity'
+{ forUnsupportedRoute, forDesktopBrowser } = mod = rewire '../../../lib/middleware/redirect_to_gravity'
 mod.__set__ 'ARTSY_URL', 'http://localhost:5001'
 
 describe '#forUnsupportedRoute', ->
@@ -26,13 +25,15 @@ describe '#forUnsupportedRoute', ->
     @res.send = (txt) ->
       txt.should.containEql 'foo/bar'
       done()
-    forUnsupportedRoute @req, @res
+    forUnsupportedRoute @req, @res, done
+    return
 
   it 'passes to the next middleware if the route is 404 on Force', (done) ->
     @req.path = '/fail'
     @req.url = '/fail'
     @req.query = {}
     forUnsupportedRoute @req, @res, done
+    return
 
 describe '#forDesktopBrowser', ->
 

@@ -20,7 +20,7 @@ fairFromProfile = (req) ->
   else
     false
 
-@mainPage = (req, res, next) ->
+module.exports.mainPage = (req, res, next) ->
   return next() unless fair = fairFromProfile(req)
   fair.fetch
     cache: true
@@ -31,7 +31,7 @@ fairFromProfile = (req) ->
         profile: req.profile
     error: res.backboneError
 
-@exhibitorsAtoZ = (req, res, next) ->
+module.exports.exhibitorsAtoZ = (req, res, next) ->
   return next() unless fair = fairFromProfile(req)
   fair.fetch
     cache: true
@@ -49,7 +49,7 @@ fairFromProfile = (req) ->
         error: res.backboneError
     error: res.backboneError
 
-@artistsAtoZ = (req, res, next) ->
+module.exports.artistsAtoZ = (req, res, next) ->
   return next() unless fair = fairFromProfile(req)
   fair.fetch
     cache: true
@@ -66,7 +66,7 @@ fairFromProfile = (req) ->
         error: res.backboneError
     error: res.backboneError
 
-@sections = (req, res, next) ->
+module.exports.sections = (req, res, next) ->
   return next() unless fair = fairFromProfile(req)
   fair.fetch
     cache: true
@@ -81,7 +81,7 @@ fairFromProfile = (req) ->
         error: res.backboneError
     error: res.backboneError
 
-@articles = (req, res, next) ->
+module.exports.articles = (req, res, next) ->
   return next() unless fair = fairFromProfile(req)
   fair.fetch
     cache: true
@@ -91,7 +91,7 @@ fairFromProfile = (req) ->
         profile: req.profile
     error: res.backboneError
 
-@search = (req, res, next) ->
+module.exports.search = (req, res, next) ->
   return next() unless fair = fairFromProfile(req)
   return res.redirect("/#{fair.get('id')}") unless term = req.query?.term
   fairSearch = new SearchResults
@@ -126,7 +126,7 @@ fairFromProfile = (req) ->
           success()
         error: res.backboneError
 
-@exhibitors = (req, res, next) ->
+module.exports.exhibitors = (req, res, next) ->
   return next() unless fair = fairFromProfile(req)
   fair.fetch
     cache: true
@@ -157,7 +157,7 @@ fairFromProfile = (req) ->
       options.data.artist = req.params.artistId if req.params.artistId
       fair.fetchShows(options)
 
-@artworks = (req, res, next) ->
+module.exports.artworks = (req, res, next) ->
   return next() unless fair = fairFromProfile(req)
   params = req.query
 
@@ -170,7 +170,7 @@ fairFromProfile = (req) ->
       res.render 'artworks',
         fair: fair
 
-@artist = (req, res, next) ->
+module.exports.artist = (req, res, next) ->
   return next() unless fair = fairFromProfile(req)
   artist = new Artist { id: req.params.artistId }
   shows = new ShowsFeed []
@@ -205,7 +205,7 @@ fairFromProfile = (req) ->
     success: render
     error: res.backboneError
 
-@info = (req, res, next) ->
+module.exports.info = (req, res, next) ->
   return next() unless fair = fairFromProfile(req)
   fair.fetch
     cache: true
@@ -216,7 +216,7 @@ fairFromProfile = (req) ->
         location: location
     error: res.backboneError
 
-@forYou = (req, res, next) ->
+module.exports.forYou = (req, res, next) ->
   return next() unless fair = fairFromProfile(req)
   fair.fetch
     cache: true
@@ -226,7 +226,7 @@ fairFromProfile = (req) ->
       res.render 'for_you', fair: fair
     error: res.backboneError
 
-@trending = (req, res, next) ->
+module.exports.trending = (req, res, next) ->
   return next() unless fair = fairFromProfile(req)
   fair.fetch
     success: ->
@@ -236,7 +236,7 @@ fairFromProfile = (req) ->
         fair: fair
     error: res.backboneError
 
-@feed = (req, res, next) ->
+module.exports.feed = (req, res, next) ->
   return next() unless fair = fairFromProfile(req)
   fair.fetch
     success: ->
@@ -246,7 +246,7 @@ fairFromProfile = (req) ->
         fair: fair
     error: res.backboneError
 
-@programming = (req, res, next) ->
+module.exports.programming = (req, res, next) ->
   return next() unless fair = fairFromProfile(req)
   fairEvents = new FairEvents [], { fairId: fair.id}
   fairEvents.fetchUntilEnd
@@ -263,7 +263,7 @@ fairFromProfile = (req) ->
         fair: fair
         profileId: req.params.profileId
 
-@programmingEvent = (req, res, next) ->
+module.exports.programmingEvent = (req, res, next) ->
   return next() unless fair = fairFromProfile(req)
   event = new FairEvent
     id: req.params.eventId
@@ -275,7 +275,7 @@ fairFromProfile = (req) ->
         event: event
     error: res.backboneError
 
-@showRedirect = (req, res, next) ->
+module.exports.showRedirect = (req, res, next) ->
   fair = fairFromProfile req
   fair.fetchShowForPartner req.params.partnerId,
     cache: true

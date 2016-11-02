@@ -12,7 +12,7 @@ embed = require 'embed-video'
 { stringifyJSONForWeb } = require '../../components/util/json.coffee'
 sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU_SECRET)
 
-@article = (req, res, next) ->
+module.exports.article = (req, res, next) ->
   article = new Article id: req.params.id
   article.fetch
     cache: true
@@ -49,10 +49,10 @@ sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU
             videoOptions: { query: { title: 0, portrait: 0, badge: 0, byline: 0, showinfo: 0, rel: 0, controls: 2, modestbranding: 1, iv_load_policy: 3, color: "E5E5E5" } }
             lushSignup: true
 
-@redirectPost = (req, res, next) ->
+module.exports.redirectPost = (req, res, next) ->
   res.redirect 301, req.url.replace 'post', 'article'
 
-@section = (req, res, next) ->
+module.exports.section = (req, res, next) ->
   new Section(id: req.params.slug).fetch
     cache: true
     error: -> next()
@@ -69,7 +69,7 @@ sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU
             res.locals.sd.MAILCHIMP_SUBSCRIBED = cb
             res.render 'section', featuredSection: section, articles: articles
 
-@articles = (req, res, next) ->
+module.exports.articles = (req, res, next) ->
   query = """
     {
       articles(published: true, limit: 30, sort: "-published_at", featured: true ) {
@@ -101,7 +101,7 @@ sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU
         res.render 'articles',
           articles: articles
 
-@form = (req, res, next) ->
+module.exports.form = (req, res, next) ->
   request.post('https://us1.api.mailchimp.com/2.0/lists/subscribe')
     .send(
       apikey: MAILCHIMP_KEY
@@ -136,7 +136,7 @@ subscribedToEditorial = (email, cb) ->
     return cb err, false if err
     cb null, response.vars?.receive_editorial_email
 
-@editorialForm = (req, res, next) ->
+module.exports.editorialForm = (req, res, next) ->
   sailthru.apiPost 'user',
     id: req.body.email
     lists:

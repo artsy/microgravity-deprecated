@@ -1,7 +1,7 @@
 request = require 'superagent'
 sd = require('sharify').data
 
-@index = (req, res) ->
+module.exports.index = (req, res) ->
   url = "#{sd.ARTSY_URL}/how-auctions-work/data"
   request
     .get(url)

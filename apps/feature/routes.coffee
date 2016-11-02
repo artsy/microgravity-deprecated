@@ -8,7 +8,7 @@ Artwork = require '../../models/artwork'
 sanitizeRedirect = require '../../components/sanitize_redirect'
 metaphysics = require '../../lib/metaphysics'
 
-@index = (req, res, next) ->
+module.exports.index = (req, res, next) ->
   new Feature(id: req.params.id).fetch
     cache: true
     success: (feature) ->
@@ -16,7 +16,7 @@ metaphysics = require '../../lib/metaphysics'
       res.render 'page', feature: feature
     error: res.backboneError
 
-@auctionRegister = (req, res, next) ->
+module.exports.auctionRegister = (req, res, next) ->
   # If not logged in, send them to sign up to return to this handler
   unless req.user
     res.redirect "/sign_up?action=register-for-auction&redirect-to=#{req.url}"
@@ -40,7 +40,7 @@ metaphysics = require '../../lib/metaphysics'
               monthRange: sale.getMonthRange()
               yearRange: sale.getYearRange()
 
-@bid = (req, res, next) ->
+module.exports.bid = (req, res, next) ->
   res.locals.error = req.session.error
   req.session.error = null
 
@@ -110,7 +110,7 @@ metaphysics = require '../../lib/metaphysics'
     render()
   .catch next
 
-@confirmRegistration = (from) ->
+module.exports.confirmRegistration = (from) ->
   return (req, res, next) ->
     locals = switch from
       when 'artwork'

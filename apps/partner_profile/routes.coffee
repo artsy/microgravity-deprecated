@@ -16,7 +16,7 @@ partnerFromProfile = (req) ->
   else
     false
 
-@fetchArtworksAndRender = (label) ->
+module.exports.fetchArtworksAndRender = (label) ->
   return (req, res, next) ->
     return next() unless partner = partnerFromProfile(req)
     artworks = new Artworks []
@@ -42,7 +42,7 @@ partnerFromProfile = (req) ->
 
       error: res.backboneError
 
-@index = (req, res, next) ->
+module.exports.index = (req, res, next) ->
   return next() unless partner = partnerFromProfile(req)
   partner.fetch
     cache: true
@@ -58,13 +58,13 @@ partnerFromProfile = (req) ->
             partner: partner
             articles: articles
 
-@articles = (req, res, next) ->
+module.exports.articles = (req, res, next) ->
   return next() unless partner = partnerFromProfile(req)
   res.render 'articles',
     sectionLabel: "Articles"
     profile: req.profile
 
-@article = (req, res, next) ->
+module.exports.article = (req, res, next) ->
   article = new Article id: req.params.articleId
   article.fetch
     cache: true
@@ -86,7 +86,7 @@ partnerFromProfile = (req) ->
             jsonLD: stringifyJSONForWeb(article.toJSONLD())
             videoOptions: { query: { title: 0, portrait: 0, badge: 0, byline: 0, showinfo: 0, rel: 0, controls: 2, modestbranding: 1, iv_load_policy: 3, color: "E5E5E5" } }
 
-@shows = (req, res, next) ->
+module.exports.shows = (req, res, next) ->
   return next() unless partner = partnerFromProfile(req)
   shows = new PartnerShows [], partnerId: req.profile.get('owner').id
   shows.fetch
@@ -97,7 +97,7 @@ partnerFromProfile = (req) ->
         profile: req.profile
     error: res.backboneError
 
-@artists = (req, res, next) ->
+module.exports.artists = (req, res, next) ->
   return next() unless partner = partnerFromProfile(req)
   partner.fetchArtistGroups
     success: (representedArtists, unrepresentedArtists) ->
@@ -109,7 +109,7 @@ partnerFromProfile = (req) ->
 
     error: res.backboneError
 
-@artist = (req, res, next) ->
+module.exports.artist = (req, res, next) ->
   return next() unless partner = partnerFromProfile(req)
   artist = new Artist id: req.params.artistId
   artist.fetch
@@ -123,7 +123,7 @@ partnerFromProfile = (req) ->
         profile: req.profile
     error: res.backboneError
 
-@contact = (req, res, next) ->
+module.exports.contact = (req, res, next) ->
   return next() unless partner = partnerFromProfile(req)
   partner.fetch
     cache: true

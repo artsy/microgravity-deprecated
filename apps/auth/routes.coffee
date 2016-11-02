@@ -7,7 +7,7 @@ qs = require 'querystring'
 { API_URL } = require '../../config'
 sanitizeRedirect = require '../../components/sanitize_redirect'
 
-@login = (req, res) ->
+module.exports.login = (req, res) ->
   url = req.body['redirect-to'] or
     req.query['redirect-to'] or
     req.param('redirect_uri') or
@@ -23,10 +23,10 @@ sanitizeRedirect = require '../../components/sanitize_redirect'
   else
     res.render 'login', action: true, redirectTo: sanitizeRedirect(url)
 
-@forgotPassword = (req, res) ->
+module.exports.forgotPassword = (req, res) ->
   res.render 'forgot_password'
 
-@submitForgotPassword = (req, res, next) ->
+module.exports.submitForgotPassword = (req, res, next) ->
   new Backbone.Model().save null,
     url: "#{sd.API_URL}/api/v1/users/send_reset_password_instructions?email=#{req.body.email}"
     success: ->
@@ -34,10 +34,10 @@ sanitizeRedirect = require '../../components/sanitize_redirect'
     error: (m, response) ->
       res.render 'forgot_password', error: response.body.error
 
-@resetPassword = (req, res) ->
+module.exports.resetPassword = (req, res) ->
   res.render 'reset_password'
 
-@signUp = (req, res) ->
+module.exports.signUp = (req, res) ->
   req.session.signupReferrer ?= req.query['redirect-to'] or req.get('Referrer')
   req.session.action ?= req.query.action
   locals =
@@ -54,5 +54,5 @@ sanitizeRedirect = require '../../components/sanitize_redirect'
   else
     res.render 'signup', locals
 
-@twitterLastStep = (req, res) ->
+module.exports.twitterLastStep = (req, res) ->
   res.render 'twitter_email'

@@ -6,7 +6,7 @@ PartnerShows = require '../../collections/partner_shows'
 {Cities, FeaturedCities} = require 'places'
 
 
-@index = (req, res) ->
+module.exports.index = (req, res) ->
   shows = new Items [], id: '530ebe92139b21efd6000071', item_type: 'PartnerShow'
   render = ->
     res.render 'index',
@@ -16,7 +16,7 @@ PartnerShows = require '../../collections/partner_shows'
 
   shows.fetch success: render, error: render
 
-@city = (req, res, next) ->
+module.exports.city = (req, res, next) ->
   city = _.findWhere(Cities, slug: req.params.city)
   return next() unless city?
 
@@ -56,5 +56,5 @@ PartnerShows = require '../../collections/partner_shows'
       size: criteria().size
   ).done()
 
-@all_cities = (req, res, next) ->
+module.exports.all_cities = (req, res, next) ->
   res.render 'all_cities', cities: Cities

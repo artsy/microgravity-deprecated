@@ -18,6 +18,7 @@ describe 'ArtistPageView', ->
       benv.expose { $: benv.require 'jquery' }
       Backbone.$ = $
       sinon.stub Backbone, 'sync'
+      $.fn.error = sinon.stub()
       benv.render resolve(__dirname, '../templates/page.jade'), {
         artist: new Artist(fabricate 'artist'),
         sd: {}
