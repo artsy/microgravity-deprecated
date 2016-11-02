@@ -1,7 +1,9 @@
 { fabricate } = require 'antigravity'
 sinon = require 'sinon'
-routes = require '../routes'
 Backbone = require 'backbone'
+rewire = require 'rewire'
+routes = rewire '../routes'
+Q = require 'bluebird-q'
 
 describe '#index', ->
 
@@ -25,21 +27,16 @@ describe '#index', ->
 describe "#biography", ->
 
   beforeEach ->
-    sinon.stub Backbone, 'sync'
-    routes.biography(
-      { params: { id: 'foo' } }
-      { locals: { sd: {}, asset: (->) }, render: renderStub = sinon.stub(), cacheOnCDN: -> }
-    )
-    Backbone.sync.args[0][2].success fabricate 'artist', id: 'damien-hershey'
-    @templateName = renderStub.args[0][0]
-    @templateOptions = renderStub.args[0][1]
+    artist = fabricate 'artist', id: 'damien-hershey'
+    routes.__set__ 'metaphysics', => Q.resolve { artist: artist }
+    @req = { params: {} }
+    @res = render: sinon.stub(), locals: sd: sinon.stub()
 
-  afterEach ->
-    Backbone.sync.restore()
-
-  xit 'renders the biography page', ->
-    @templateName.should.equal 'biography'
-    @templateOptions.artist.get('id').should.equal 'damien-hershey'
+  it 'renders the biography page', ->
+    routes.biography @req, @res
+      .then =>
+        @res.render.args[0][0].should.equal 'biography'
+        @res.render.args[0][1].artist.id.should.equal 'damien-hershey'
 
 describe '#auctionResults', ->
 
