@@ -78,18 +78,6 @@ module.exports = class Artwork extends Backbone.Model
     else
       @get('partner').name
 
-  fetchAuctionResults: (options = {}) ->
-    new Backbone.Collection().fetch _.extend options,
-      url: "#{sd.API_URL}/api/v1/artwork/#{@get 'id'}/comparable_sales"
-
-  canShowAuctionResults: (options = {}) ->
-    new Backbone.Collection().fetch
-      url: "#{sd.API_URL}/api/v1/site_features"
-      success: (features) =>
-        options.success features.findWhere(id: 'auction-results')?.get('enabled') and
-                        @get('comparables_count') > 0 and @get('category') isnt 'Architecture'
-      error: options.error
-
   fetchRelatedSales: (options = {}) ->
     new Backbone.Collection(null,
       model: Sale
