@@ -72,7 +72,7 @@ module.exports.section = (req, res, next) ->
 module.exports.articles = (req, res, next) ->
   query = """
     {
-      articles(published: true, limit: 30, sort: "-published_at", featured: true ) {
+      articles(published: true, limit: 10, sort: "-published_at", featured: true ) {
         slug
         thumbnail_title
         thumbnail_image

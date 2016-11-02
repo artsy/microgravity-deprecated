@@ -17,10 +17,10 @@ module.exports.MagazineView = class MagazineView extends Backbone.View
 
   onInfiniteScroll: =>
     return if @finishedScrolling
-    @offset += 30
+    @offset += 10
     query = """
       {
-        articles(published: true, limit: 30, sort: "-published_at", featured: true, offset: #{@offset} ) {
+        articles(published: true, limit: 10, sort: "-published_at", featured: true, offset: #{@offset} ) {
           slug
           thumbnail_title
           thumbnail_image
@@ -51,7 +51,7 @@ module.exports.MagazineView = class MagazineView extends Backbone.View
         @$spinner.hide()
 
   startInfiniteScroll: ->
-    @$('.is-show-more-button').addClass('is-hidden')
+    @$('.is-show-more-button').hide()
     @$('.loading-spinner').show()
     $('html').addClass 'infinite-scroll-is-active'
     @onInfiniteScroll()
