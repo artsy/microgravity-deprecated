@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "engines": {
-    "node": ">=6.9.x",
-    "npm": "3.10.x"
+    "node": ">=6.x.x",
+    "npm": "4.x.x"
   },
   "scripts": {
     "start": "make sf",
