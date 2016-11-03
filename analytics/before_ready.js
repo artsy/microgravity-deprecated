@@ -4,7 +4,7 @@
 
 // Disable Parsely firing on non-article/section pages
 if (!location.pathname.match(/^\/article/)) {
-  PARSELY = { autotrack: false };
+  window.PARSELY = { autotrack: false };
 }
 
 // Track pageview
