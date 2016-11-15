@@ -29,3 +29,9 @@ describe 'showMarketingSignupModal', ->
     middleware @req, @res, @next
     (@res.locals.showMarketingSignupModal?).should.not.be.ok()
 
+  it 'does not show the modal if logged in', ->
+    @req.user = name: 'Andy'
+    @req.path = '/foo'
+    @req.get = sinon.stub().returns 'google.com'
+    middleware @req, @res, @next
+    (@res.locals.showMarketingSignupModal?).should.not.be.ok()
