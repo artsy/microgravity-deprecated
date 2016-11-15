@@ -3,7 +3,7 @@ include ./login-signup
 
 block body
   #content
-    if _.include(sd.MARKETING_SIGNUP_MODAL_PATHS.split(','), sd.CURRENT_PATH)
+    if showMarketingSignupModal
       include ../../marketing_signup_modal/index
     else
       mixin login-signup
