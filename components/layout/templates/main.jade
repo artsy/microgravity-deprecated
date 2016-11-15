@@ -3,7 +3,10 @@ include ./login-signup
 
 block body
   #content
-    mixin login-signup
+    if _.include(sd.MARKETING_SIGNUP_MODAL_PATHS.split(','), sd.CURRENT_PATH)
+      include ../../marketing_signup_modal/index
+    else
+      mixin login-signup
 
     header#main-header
       nav.main-dropdown-menu.js-main-dropdown-menu

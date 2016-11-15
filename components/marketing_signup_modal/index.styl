@@ -1,0 +1,47 @@
+modal-height = 360px
+
+.marketing-signup-modal
+  height modal-height
+  z-index 3
+  background black
+  position relative
+  overflow hidden
+
+  &-inner
+    background black
+    padding 30px
+    color white
+    text-align center
+    position fixed
+    width 100%
+    height modal-height
+    z-index -1
+
+  &-copy
+    garamond-size('l-body', true)
+    margin-top 10px
+
+  &-img
+    height 100px
+    width @height
+    border-radius @height
+
+  &-fb, &-signup
+    avant-garde-size('body')
+
+  &-signup
+    margin-top 20px
+
+  &-fb
+    background-color #39439C
+    color white
+    margin 15px 0 20px 0
+    border-color @background-color
+
+  .icon-facebook
+    position absolute
+    top -2px
+    left 22px
+
+  a
+    color white

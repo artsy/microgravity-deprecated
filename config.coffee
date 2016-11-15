@@ -66,6 +66,9 @@ module.exports =
   PC_ARTSY_CHANNEL: '5759e508b5989e6f98f77999'
   PC_AUCTION_CHANNEL: '5759e4d7b5989e6f98f77997'
   CRITEO_ACCOUNT_NUMBER: 'ArtsyUS;7766801;7766802;28539'
+  MARKETING_SIGNUP_MODAL_PATHS: '/miami-beach,/feature/miami*'
+  MARKETING_SIGNUP_MODAL_COPY: 'Sign up for early access'
+  MARKETING_SIGNUP_MODAL_IMG: 'http://placekitten.com/200/200'
 
 # Override any values with env variables if they exist.
 # You can set JSON-y values for env variables as well such as "true" or
