@@ -20,6 +20,7 @@ artsyXapp = require 'artsy-xapp'
 localsMiddleware = require './middleware/locals'
 redirectToGravity = require './middleware/redirect_to_gravity'
 redirectExternalLinks = require './middleware/redirect_external_links.coffee'
+marketingSignupModal = require '../components/marketing_signup_modal/middleware'
 artsyPassport = require 'artsy-passport'
 ensureSSL = require './middleware/ensure_ssl'
 hsts = require './middleware/hsts'
@@ -63,6 +64,7 @@ module.exports = (app) ->
   app.use hsts unless app.get('env') is 'test'
   app.use helmet.frameguard() unless app.get('env') is 'test'
   app.use bucketAssets()
+  app.use marketingSignupModal
 
   # Setup Artsy XAPP & Passport middleware for authentication along with the
   # body/cookie parsing middleware needed for that.
