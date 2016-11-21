@@ -120,6 +120,7 @@ module.exports = class EditorialSignupView extends Backbone.View
           @$('.articles-es-cta__container').fadeOut =>
             @$('.articles-es-cta__social').fadeIn()
 
+        @ctaBarView.close()
         @trackSignup @email
 
   getType: ->
