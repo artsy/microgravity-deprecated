@@ -20,6 +20,7 @@ describe 'EditorialSignupView', ->
         render: sinon.stub().returns { $el: '<div class="cta-bar-magazine"></div>' }
         previouslyDismissed: sinon.stub()
         transitionIn: sinon.stub()
+        close: sinon.stub()
       @EditorialSignupView.__set__ 'CTABarView', @ctaBarView
       @view = new @EditorialSignupView el: @$el
       done()
