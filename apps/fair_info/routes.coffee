@@ -10,7 +10,7 @@ InfoMenu = require './info_menu.coffee'
 Articles = require '../../collections/articles.coffee'
 Article = require '../../models/article.coffee'
 
-@assignFair = (req, res, next) ->
+module.exports.assignFair = (req, res, next) ->
   return next() unless req.profile?.isFair()
   fair = new Fair req.profile.get('owner')
   infoMenu = new InfoMenu fair: fair
@@ -23,23 +23,22 @@ Article = require '../../models/article.coffee'
     res.locals.sd.FAIR = fair.toJSON()
     next()
   .catch (error) ->
-    console.log 'caught an error', error
     next()
   .done()
 
-@info = (req, res, next) ->
+module.exports.info = (req, res, next) ->
   return next() unless fair = res.locals.fair
   res.render 'index',
     location: new PartnerLocation res.locals.fair.get('location')
 
-@visitors = (req, res, next) ->
+module.exports.visitors = (req, res, next) ->
   return next() unless fair = res.locals.fair
   location = new PartnerLocation fair.get('location')
   res.render 'visitors',
     fair: fair
     location: location
 
-@events = (req, res, next) ->
+module.exports.events = (req, res, next) ->
   return next() unless fair = res.locals.fair
   fairEvents = new FairEvents [], { fairId: fair.id }
   params = { size: 50 }
@@ -61,7 +60,7 @@ Article = require '../../models/article.coffee'
         fair: fair
         id: req.params.id
 
-@singleEvent = (req, res, next) ->
+module.exports.singleEvent = (req, res, next) ->
   return next() unless fair = res.locals.fair
   fairEvent = new FairEvent
     id: req.params.eventId
@@ -73,7 +72,7 @@ Article = require '../../models/article.coffee'
       res.render 'event',
         event: fairEvent
 
-@addEventToCalendar = (req, res, next) ->
+module.exports.addEventToCalendar = (req, res, next) ->
   return next() unless fair = res.locals.fair
   fairEvent = new FairEvent
     id: req.params.eventId
@@ -87,13 +86,13 @@ Article = require '../../models/article.coffee'
         'Content-Disposition': "attachment; filename='#{req.params.eventId}.ics"
       res.end fairEvent.icsCalendarData()
 
-@infoProgramming = (req, res, next) ->
+module.exports.infoProgramming = (req, res, next) ->
   fetchArticle('fair_programming_id', req, res, next)
 
-@atTheFair = (req, res, next) ->
+module.exports.atTheFair = (req, res, next) ->
   fetchArticle('fair_artsy_id', req, res, next)
 
-@aboutFair = (req, res, next) ->
+module.exports.aboutFair = (req, res, next) ->
   fetchArticle('fair_about_id', req, res, next)
 
 fetchArticle = (articleParam, req, res, next) ->
@@ -113,7 +112,7 @@ fetchArticle = (articleParam, req, res, next) ->
       res.locals.sd.ARTICLE = articles.first().toJSON() if articles.length > 0
       res.render('article', { article: articles.first() })
 
-@armoryArtsWeek = (req, res, next) ->
+module.exports.armoryArtsWeek = (req, res, next) ->
   return next() unless fair = res.locals.fair
   fairEvents = new FairEvents [], { fairId: res.locals.fair.id }
   params = { fair_event_group_id: '56c21fdd2a893a579b00010a' }
@@ -134,7 +133,7 @@ fetchArticle = (articleParam, req, res, next) ->
 
 aawMap = require './maps/armory_arts_week_neighborhoods'
 
-@armoryArtsWeekAll = (req, res, next) ->
+module.exports.armoryArtsWeekAll = (req, res, next) ->
   neighborhoods = _.map aawMap, (neighborhood) ->
     _.extend neighborhood, { article: new Article id: neighborhood.id }
 

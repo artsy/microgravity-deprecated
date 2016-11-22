@@ -21,5 +21,4 @@ describe 'Artists routes', ->
     routes.index {path: '/artists'}, @res
     Backbone.sync.args[0][2].success [fabricate 'set']
     Backbone.sync.args[1][2].success [fabricate('gene'), fabricate('gene')]
-    console.log @res.render.args
     @res.render.args[0][1].genes.length.should.be.above 1

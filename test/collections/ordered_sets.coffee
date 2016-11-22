@@ -23,8 +23,8 @@ describe 'OrderedSets', ->
       @fetchSpy.calledTwice.should.be.ok()
     it 'should return a promise', ->
       @orderedSets.fetchSets().constructor.name.should.equal 'Promise'
-    it 'should be thennable', (done) ->
-      @orderedSets.fetchSets().then -> done()
+    it 'should be thennable', ->
+      @orderedSets.fetchSets()
 
   describe '#fetchAll', ->
     beforeEach ->
@@ -33,5 +33,7 @@ describe 'OrderedSets', ->
     it 'triggers sync:complete when it is done', (done) ->
       @orderedSets.on 'sync:complete', done
       @orderedSets.fetchAll()
+      return
     it 'should be thennable', (done) ->
       @orderedSets.fetchAll().then -> done()
+      return

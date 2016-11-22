@@ -23,6 +23,16 @@ module.exports = class Artist extends Backbone.Model
   hasImage: (size = 'tall') ->
     size in (@get('image_versions') || [])
 
+  maybeFetchAndSetFeaturedBio: (cb = ->) ->
+    return cb() if @get('blurb')
+    partner_artists = new Backbone.Collection()
+    partner_artists.url = "#{sd.API_URL}/api/v1/artist/#{@get('id')}/partner_artists?size=1&featured=true"
+    partner_artists.fetch
+      success: (featured) =>
+        return cb() unless featured.length and featured.models[0].has('biography')
+        @set 'blurb', featured.models[0].get('biography')
+        cb()
+
   fetchArtworks: (options = {}) ->
     artworks = new Artworks
     artworks.url = @url() + '/artworks'

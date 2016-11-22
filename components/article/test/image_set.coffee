@@ -64,6 +64,12 @@ describe 'ImageSetView', ->
       @view.close()
       @view.$el.html().should.not.containEql '.image-set-modal'
 
+  describe '#setupFollowButton', ->
+
+    it 'creates a follow button for artists', ->
+      $('.artist-follow').data('state').should.containEql 'follow'
+
+
   describe '#render', ->
 
     it 'renders a regular image', ->

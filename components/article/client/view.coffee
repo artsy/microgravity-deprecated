@@ -14,6 +14,9 @@ FollowButtonView = require '../../follow_button/view.coffee'
 ImageSetView = require './image_set.coffee'
 jqueryFillwidthLite = require 'jquery-fillwidth-lite'
 JumpView = require '../../jump/view.coffee'
+Partner = require '../../../models/partner.coffee'
+Profile = require '../../../models/profile.coffee'
+partnerBreadcrumbTemplate = -> require('../templates/partner_breadcrumb.jade') arguments...
 calloutTemplate = -> require('../templates/sections/callout.jade') arguments...
 whatToReadNextTemplate = -> require('../templates/what_to_read_next.jade') arguments...
 { crop } = require('embedly-view-helpers')(sd.EMBEDLY_KEY)
@@ -45,6 +48,7 @@ module.exports = class ArticleView extends Backbone.View
     @setupWhatToReadNext()
     @followArtists = new FollowArtists []
     @setupFollowButtons()
+    @setupPartnerBreadcrumb() if @article.get('partner_channel_id')
     @setupTOC()
     @setupImageSetPreviews()
     new SlideshowsView
@@ -68,6 +72,13 @@ module.exports = class ArticleView extends Backbone.View
     ).done =>
       @loadedCallouts = true
       @maybeFinishedLoading()
+
+  setupPartnerBreadcrumb: =>
+    new Partner(id: @article.get('partner_ids')?[0]).fetch
+      success: (partner) =>
+        @$('#article-body-container').addClass('partner').prepend partnerBreadcrumbTemplate
+          name: partner.get('name')
+          href: "/" + partner.get('default_profile_id')
 
   setupFollowButtons: ->
     @artists = []
@@ -96,7 +107,7 @@ module.exports = class ArticleView extends Backbone.View
       $(value).find('.article-section-image-set__images').fillwidthLite({
         targetHeight: 150
         apply: (img, i, gutterSize) ->
-          img.$el.width(img.width).css({ 'margin-right' : '5px' })
+          img.$el.width(img.width)
         gutterSize: 5
         done: -> $(value).css('visibility','visible')
       })

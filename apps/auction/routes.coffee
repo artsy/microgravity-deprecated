@@ -25,7 +25,7 @@ setupUser = (user, auction) ->
       error: ->
         user.set 'registered_to_bid', false
 
-@index = (req, res, next) ->
+module.exports.index = (req, res, next) ->
   id = req.params.id
   state = new State
   auction = new Auction id: id
@@ -56,7 +56,7 @@ setupUser = (user, auction) ->
         saleArtworks: saleArtworks
       }, nav()
 
-@subscribe = (req, res, next) ->
+module.exports.subscribe = (req, res, next) ->
   request.post('https://us1.api.mailchimp.com/2.0/lists/subscribe')
     .send(
       apikey: MAILCHIMP_KEY

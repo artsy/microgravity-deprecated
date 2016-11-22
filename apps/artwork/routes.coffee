@@ -2,6 +2,7 @@
 qs = require 'qs'
 metaphysics = require '../../lib/metaphysics'
 { METAPHYSICS_ENDPOINT, CURRENT_USER } = require('sharify').data
+Helpers = require './helpers'
 
 query = (user) -> """
   query artwork($id: String!) {
@@ -75,6 +76,7 @@ query = (user) -> """
         href
         counts {
           artworks
+          partner_shows
         }
       }
       #{require('./components/bid/query.coffee')}
@@ -86,7 +88,7 @@ query = (user) -> """
   }
 """
 
-@index = (req, res, next) ->
+module.exports.index = (req, res, next) ->
   send = query: query(req.user), variables: req.params, req: req
 
   if req.query.query?
@@ -98,10 +100,11 @@ query = (user) -> """
       res.locals.artwork = data.artwork
       res.locals.sd.ARTWORK = data.artwork
       res.locals.sd.SEADRAGON_URL = res.locals.asset('/assets/openseadragon.js')
+      res.locals.helpers = Helpers
       res.render 'index'
     .catch next
 
-@askSpecialist = (req, res, next) ->
+module.exports.askSpecialist = (req, res, next) ->
   send = query: query(), variables: req.params, req: req
 
   if req.query.query?

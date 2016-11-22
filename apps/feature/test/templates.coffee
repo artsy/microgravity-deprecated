@@ -20,6 +20,7 @@ describe 'Bid page template', ->
       auction: new Sale fabricate 'sale'
       sd: {}
       accounting: require('accounting')
+      bidIncrements: []
     ).should.containEql 'Confirm your bid'
 
 describe 'Register button', ->

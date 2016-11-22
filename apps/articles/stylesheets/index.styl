@@ -4,5 +4,32 @@
 @import './fixed_share'
 @import './editorial_signup_lush'
 
+#articles-page
+  .loading-spinner
+    display none
+
 .articles-feed
   display block
+
+.promoted .article
+  padding-top 0
+
+.articles-promoted
+  text-decoration none
+  display flex
+  justify-content space-between
+  margin 0px 20px
+  padding 15px 0
+  border-bottom 1px solid #ccc
+  &__title
+    avant-garde()
+    font-size 11px
+    line-height 2
+  &__name
+    garamond-size('l-body')
+  &__right
+    align-items center
+    display flex
+    i
+      font-size 22px
+      margin-right -5px

@@ -26,6 +26,7 @@ describe 'HomePageView', ->
         @HomePageView = benv.requireWithJadeify resolve(__dirname, '../client/view'),
           ['featuredItemsTemplate', 'currentShowsTemplate', 'artworkColumnsTemplate']
         sinon.stub Backbone, 'sync'
+        @HomePageView.__set__ 'Flickity', @Flickity = sinon.stub()
         @view = new @HomePageView
         Backbone.sync.restore()
         sinon.stub Backbone, 'sync'
@@ -51,8 +52,8 @@ describe 'HomePageView', ->
     it 'sets up hero units', ->
       @view.onSync = sinon.stub()
       @view.initialize()
-      @view.slideshow.element.id.should.equal 'carousel-track'
-      @view.slideshow.options.autoPlay.should.equal 10000
+      @Flickity.args[0][0].should.equal '#carousel-track'
+      @Flickity.args[0][1].autoPlay.should.equal 10000
 
   describe '#renderCurrentShows', ->
 

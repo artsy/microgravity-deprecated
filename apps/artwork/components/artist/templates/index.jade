@@ -1,3 +1,11 @@
+mixin showItem(show, trailingText)
+  .artwork-artist-module__content__exhibition-highlights__item
+    .artwork-artist-module__content__exhibition-highlights__item__date= helpers.date(show.start_at).year()
+    .artwork-artist-module__content__exhibition-highlights__item__text
+      a(href=show.href)= show.name
+      if trailingText
+        | #{!!show.name ? ', ' : ''}#{trailingText}
+
 - var artists = artwork.artists;
 
 if artists.length
@@ -39,6 +47,18 @@ if artists.length
             if artist.bio
               a.aama-overview-title.js-aama-accordion-link.is-active(data-id="overview-#{artist.id}") Overview
               .aama-tab-content.js-aama-content.is-active(data-id="overview-#{artist.id}")  #{artist.bio.replace('born', 'b.')}
-            if artist.biography
+            if artist.biography_blurb && artist.biography_blurb.partner_id == artwork.partner.id
               a.aama-biography-title.js-aama-accordion-link(data-id="biography-#{artist.id}") Biography
-              .aama-tab-content.js-aama-content(data-id="biography-#{artist.id}")!= artist.biography
+              .aama-tab-content.js-aama-content(data-id="biography-#{artist.id}")
+                != artist.biography_blurb.text
+                if artist.biography_blurb.credit
+                  .aama-biography-credit &mdash; #{artist.biography_blurb.credit}
+            else if artist.blurb
+              a.aama-biography-title.js-aama-accordion-link(data-id="biography-#{artist.id}") Biography
+              .aama-tab-content.js-aama-content(data-id="biography-#{artist.id}")!= artist.blurb
+
+        .artwork-artist-module__accordion
+          if artist.exhibition_highlights && artist.exhibition_highlights.length <= 15
+            include exhibition
+          else if artist.exhibition_highlights && artist.exhibition_highlights.length > 15
+            include highlights

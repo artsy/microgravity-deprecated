@@ -21,7 +21,12 @@ module.exports = """
       }
     }
     bio
-    biography: blurb(format: HTML)
+    blurb(format: HTML)
+    biography_blurb(format: HTML, partner_bio: true) {
+      text
+      credit
+      partner_id
+    }
     articles {
       title
       href
@@ -36,19 +41,18 @@ module.exports = """
         }
       }
     }
-    exhibition_history: partner_shows {
+    exhibition_highlights(size: 16) {
       kind
-      year: start_at(format: "YYYY")
       name
+      start_at
       href
-      images {
-        url
-      }
       partner {
-        name
-      }
-      location {
-        city
+        ... on ExternalPartner {
+          name
+        }
+        ... on Partner {
+          name
+        }
       }
     }
   }

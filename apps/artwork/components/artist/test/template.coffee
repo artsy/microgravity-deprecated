@@ -6,6 +6,7 @@ fs = require 'fs'
 Backbone = require 'backbone'
 { fabricate } = require 'antigravity'
 artists = require './fixture.coffee'
+Helpers = require '../../../helpers.coffee'
 
 render = (templateName) ->
   filename = path.resolve __dirname, "../templates/#{templateName}.jade"
@@ -18,6 +19,25 @@ describe 'Artwork artist templates -', ->
   beforeEach ->
     @artwork = fabricate 'artwork'
 
+  describe 'artwork with a featured bio submitted by that partner', ->
+    beforeEach ->
+      @artwork.artists = artists
+      @artwork.partner = { id: 'catty-partner' }
+      @html = render('index')(
+        artwork: @artwork
+        sd: {}
+        asset: (->)
+        helpers: Helpers
+        _: _
+      )
+
+      @$ = cheerio.load(@html)
+
+    it 'should display artist bio', ->
+      text = @$('.aama-tab-content').filter("[data-id=biography-#{artists[0].id}]").first().text()
+      text.should.containEql 'Picasso was a cat'
+      text.should.containEql 'Submitted by Catty Partner'
+
   describe 'artwork with artist', ->
     beforeEach ->
       @artwork.artists = artists
@@ -26,6 +46,7 @@ describe 'Artwork artist templates -', ->
         artwork: @artwork
         sd: {}
         asset: (->)
+        helpers: Helpers
         _: _
       )
 
@@ -49,6 +70,10 @@ describe 'Artwork artist templates -', ->
 
     it 'should display artists - plural', ->
       @$('.artwork-artist-module__section-title').text().should.equal 'About the Artists'
+
+    it 'displays exhibition history', ->
+      @$('.artwork-artist-module__content__exhibition-highlights__item__date').first().text().should.equal '2016'
+      @$('.artwork-artist-module__content__exhibition-highlights__item__text').last().text().should.equal 'A Warhol Show, The Goog'
 
   describe 'artist with one artwork', ->
     beforeEach ->

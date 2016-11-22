@@ -98,7 +98,7 @@ describe 'Exhibitors template', ->
         sd: {}
       )
 
-    it 'should display artwork slider', ->
+    xit 'should display artwork slider', ->
       $ = cheerio.load @template
       $.html().should.containEql 'fair-exhibit-artworks-slider'
 

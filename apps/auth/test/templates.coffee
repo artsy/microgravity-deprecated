@@ -10,15 +10,18 @@ render = (templateName) ->
 
 describe 'Sign up page template', ->
   it 'hides log-in/sign-up header and footer', ->
-    render('signup').should.not.containEql 'login-signup'
+    render('signup')(sd: { AP: {} }, asset: (->))
+      .should.not.containEql 'login-signup'
 
 describe 'Sign up with email template', ->
   it 'hides log-in/sign-up header and footer', ->
-    render('signup_email').should.not.containEql 'login-signup'
+    render('signup_email')(sd: { AP: {} }, asset: (->))
+      .should.not.containEql 'login-signup'
 
 describe 'Log in page template', ->
   it 'hides log-in/sign-up header and footer', ->
-    render('login').should.not.containEql 'login-signup'
+    render('login')(sd: { AP: {} }, asset: (->))
+      .should.not.containEql 'login-signup'
 
   it 'passes the redirectTo param to the signup link', ->
     html = render('login')({redirectTo: '/auction-registration', sd: { AP: {} }, asset: (->)})

@@ -3,7 +3,7 @@
 module.exports =
   artist = [
     fabricate('artist',
-      counts: { artworks: 20, for_sale_artworks: 8 },
+      counts: { artworks: 20, for_sale_artworks: 8, partner_shows: 10 },
       carousel:
         images: [
           {
@@ -45,31 +45,20 @@ module.exports =
         }
       ],
       bio: 'Born 1970, New York, New York, and based in Paris'
-      biography: "This is Picasso's bio.",
-      exhibition_history: [
+      blurb: "This is Picasso's bio.",
+      biography_blurb: {
+        text: 'Picasso was a cat.'
+        credit: 'Submitted by Catty Partner.'
+        partner_id: 'catty-partner'
+      }
+      exhibition_highlights: [
         {
           href: "/show/retrospective"
-          images: [
-            {
-              thumb:
-                height: 58
-                url: "show_img.png"
-                width: 100
-            },
-            {
-              thumb:
-                height: 66
-                url: "show_img_2.png"
-                width: 100
-            }
-          ]
           kind: 'solo'
-          location: city: "New York"
           name: "Marcel Broodthaers: A Retrospective"
           partner:
-            href: "/museum-of-modern-art"
             name: "Museum of Modern Art"
-          year: "2016"
+          start_at: "1/1/2016"
         }
       ]
     ),
@@ -119,30 +108,14 @@ module.exports =
       ],
       bio: 'Born 1987, Cairo, Egypt, and lives and works in New York'
       biography: "Some cool bio.",
-      exhibition_history: [
+      exhibition_highlights: [
         {
-          href: "/show/reflective"
-          images: [
-            {
-              thumb:
-                height: 58
-                url: "img.png"
-                width: 100
-            },
-            {
-              thumb:
-                height: 66
-                url: "img_2.png"
-                width: 100
-            }
-          ]
-          kind: 'solo'
-          location: city: "New York"
-          name: "Reflective"
+          href: "/show/warhol"
+          kind: 'group'
+          name: "A Warhol Show"
           partner:
-            href: "/reflective"
-            name: "Artsy"
-          year: "2016"
+            name: "The Goog"
+          start_at: "1/1/2016"
         }
       ]
     )

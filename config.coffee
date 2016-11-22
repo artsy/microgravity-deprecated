@@ -57,13 +57,18 @@ module.exports =
   DISABLE_IMAGE_PROXY: false
   IMAGE_PROXY: 'GEMINI'
   GEMINI_CLOUDFRONT_URL: 'https://d7hftxdivxxvm.cloudfront.net'
-  EMAIL_SIGNUP_IMAGES_ID: '572a6098c88a280f5e9efa6c'
+  EMAIL_SIGNUP_IMAGES_ID: '572a7996b5989e6f98f77992'
   SAILTHRU_KEY: ''
   SAILTHRU_SECRET: ''
   SAILTHRU_MASTER_LIST: 'Master List'
   MAX_POLLS_FOR_MAX_BIDS: 20
   ARTSY_EDITORIAL_CHANNEL: '5759e3efb5989e6f98f77993'
+  PC_ARTSY_CHANNEL: '5759e508b5989e6f98f77999'
+  PC_AUCTION_CHANNEL: '5759e4d7b5989e6f98f77997'
   CRITEO_ACCOUNT_NUMBER: 'ArtsyUS;7766801;7766802;28539'
+  MARKETING_SIGNUP_MODAL_COPY: 'Sign up for early access'
+  MARKETING_SIGNUP_MODAL_IMG: 'http://placekitten.com/200/200'
+  MARKETING_SIGNUP_MODAL_SLUG: 'miami'
 
 # Override any values with env variables if they exist.
 # You can set JSON-y values for env variables as well such as "true" or

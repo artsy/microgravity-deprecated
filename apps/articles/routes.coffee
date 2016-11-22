@@ -1,4 +1,5 @@
 _ = require 'underscore'
+{ toSentence } = require 'underscore.string'
 Q = require 'bluebird-q'
 { MAILCHIMP_KEY, SAILTHRU_KEY, SAILTHRU_SECRET, SAILTHRU_MASTER_LIST } = require '../../config'
 sd = require('sharify').data
@@ -11,7 +12,7 @@ embed = require 'embed-video'
 { stringifyJSONForWeb } = require '../../components/util/json.coffee'
 sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU_SECRET)
 
-@article = (req, res, next) ->
+module.exports.article = (req, res, next) ->
   article = new Article id: req.params.id
   article.fetch
     cache: true
@@ -21,7 +22,7 @@ sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU
         success: (data) ->
           res.locals.sd.ARTICLE = article
           res.locals.sd.RELATED_ARTICLES = data.relatedArticles?.toJSON()
-
+          return next() if article.get('partner_channel_id')
           email = res.locals.sd.CURRENT_USER?.email
           subscribedToGI email, article.get('section_ids')?[0], (cb) ->
             res.locals.sd.MAILCHIMP_SUBSCRIBED = cb
@@ -48,15 +49,17 @@ sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU
             videoOptions: { query: { title: 0, portrait: 0, badge: 0, byline: 0, showinfo: 0, rel: 0, controls: 2, modestbranding: 1, iv_load_policy: 3, color: "E5E5E5" } }
             lushSignup: true
 
-@redirectPost = (req, res, next) ->
+module.exports.redirectPost = (req, res, next) ->
   res.redirect 301, req.url.replace 'post', 'article'
 
-@section = (req, res, next) ->
+module.exports.section = (req, res, next) ->
   new Section(id: req.params.slug).fetch
+    cache: true
     error: -> next()
     success: (section) ->
       return next() unless req.params.slug is section.get('slug')
       new Articles().fetch
+        cache: true
         data: section_id: section.get('id'), published: true, limit: 100, sort: '-published_at'
         error: res.backboneError
         success: (articles) ->
@@ -66,28 +69,39 @@ sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU
             res.locals.sd.MAILCHIMP_SUBSCRIBED = cb
             res.render 'section', featuredSection: section, articles: articles
 
-@articles = (req, res, next) ->
-  Q.allSettled([
-    (sections = new Sections).fetch(data: featured: true)
-    (articles = new Articles).fetch(
-      data:
-        published: true
-        limit: 10
-        sort: '-published_at'
-        featured: true
-    )
-  ]).fail(next).then =>
-    email = res.locals.sd.CURRENT_USER?.email
-    subscribedToEditorial email, (err, subscribed) ->
-      res.locals.sd.SUBSCRIBED_TO_EDITORIAL = subscribed
+module.exports.articles = (req, res, next) ->
+  query = """
+    {
+      articles(published: true, limit: 10, sort: "-published_at", featured: true ) {
+        slug
+        thumbnail_title
+        thumbnail_image
+        tier
+        published_at
+        channel_id
+        author{
+          name
+        }
+        contributing_authors{
+          name
+        }
+      }
+    }
+  """
+  request.post(sd.POSITRON_URL + '/api/graphql')
+    .send(
+      query: query
+    ).end (err, response) ->
+      return next() if err
+      articles = response.body.data?.articles
+      email = res.locals.sd.CURRENT_USER?.email
+      subscribedToEditorial email, (err, subscribed) ->
+        res.locals.sd.SUBSCRIBED_TO_EDITORIAL = subscribed
+        res.locals.sd.ARTICLES = articles
+        res.render 'articles',
+          articles: articles
 
-      res.locals.sd.ARTICLES = articles.toJSON()
-      section = sections.running()[0]
-      res.render 'articles',
-        featuredSection: section
-        articles: articles.models
-
-@form = (req, res, next) ->
+module.exports.form = (req, res, next) ->
   request.post('https://us1.api.mailchimp.com/2.0/lists/subscribe')
     .send(
       apikey: MAILCHIMP_KEY
@@ -122,7 +136,7 @@ subscribedToEditorial = (email, cb) ->
     return cb err, false if err
     cb null, response.vars?.receive_editorial_email
 
-@editorialForm = (req, res, next) ->
+module.exports.editorialForm = (req, res, next) ->
   sailthru.apiPost 'user',
     id: req.body.email
     lists:

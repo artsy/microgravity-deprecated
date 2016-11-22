@@ -9,13 +9,11 @@ eligibleFilter = _.partial _.filter, _, ((sale) ->
   # Reject sales without artworks
   sale.get('eligible_sale_artworks_count') isnt 0)
 
-@index = (req, res) ->
+module.exports.index = (req, res) ->
   sales = new Sales
-  sales.comparator = (sale) ->
-    -(Date.parse(sale.get 'end_at'))
   sales.fetch
     cache: true
-    data: is_auction: true, published: true, size: 20, sort: '-created_at'
+    data: is_auction: true, published: true, size: 20, sort: '-end_at'
     success: (collection, response, options) ->
       # Fetch artworks for the sale
       Q.allSettled(sales.map (sale) ->

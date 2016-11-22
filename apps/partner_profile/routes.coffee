@@ -5,6 +5,10 @@ PartnerShows = require '../../collections/partner_shows'
 Partner = require '../../models/partner'
 Profile = require '../../models/profile'
 Articles = require '../../collections/articles'
+Article = require '../../models/article'
+embed = require 'embed-video'
+{ stringifyJSONForWeb } = require '../../components/util/json.coffee'
+{ resize } = require '../../components/resizer/index.coffee'
 
 partnerFromProfile = (req) ->
   if req.profile?.isPartner()
@@ -12,7 +16,7 @@ partnerFromProfile = (req) ->
   else
     false
 
-@fetchArtworksAndRender = (label) ->
+module.exports.fetchArtworksAndRender = (label) ->
   return (req, res, next) ->
     return next() unless partner = partnerFromProfile(req)
     artworks = new Artworks []
@@ -38,7 +42,7 @@ partnerFromProfile = (req) ->
 
       error: res.backboneError
 
-@index = (req, res, next) ->
+module.exports.index = (req, res, next) ->
   return next() unless partner = partnerFromProfile(req)
   partner.fetch
     cache: true
@@ -54,13 +58,35 @@ partnerFromProfile = (req) ->
             partner: partner
             articles: articles
 
-@articles = (req, res, next) ->
+module.exports.articles = (req, res, next) ->
   return next() unless partner = partnerFromProfile(req)
   res.render 'articles',
     sectionLabel: "Articles"
     profile: req.profile
 
-@shows = (req, res, next) ->
+module.exports.article = (req, res, next) ->
+  article = new Article id: req.params.articleId
+  article.fetch
+    cache: true
+    error: (article, err) ->
+      if (err.status is 404 or err.status is 401) then next() else res.backboneError(err, next)
+    success: =>
+      article.fetchRelated
+        success: (data) ->
+          res.locals.sd.ARTICLE = article
+          res.locals.sd.RELATED_ARTICLES = data.relatedArticles?.toJSON()
+          res.locals.sd.INFINITE_SCROLL = false
+          res.render 'article',
+            article: article
+            footerArticles: data.footerArticles if data.footerArticles
+            relatedArticles: data.article.relatedArticles
+            calloutArticles: data.article.calloutArticles
+            embed: embed
+            resize: resize
+            jsonLD: stringifyJSONForWeb(article.toJSONLD())
+            videoOptions: { query: { title: 0, portrait: 0, badge: 0, byline: 0, showinfo: 0, rel: 0, controls: 2, modestbranding: 1, iv_load_policy: 3, color: "E5E5E5" } }
+
+module.exports.shows = (req, res, next) ->
   return next() unless partner = partnerFromProfile(req)
   shows = new PartnerShows [], partnerId: req.profile.get('owner').id
   shows.fetch
@@ -71,7 +97,7 @@ partnerFromProfile = (req) ->
         profile: req.profile
     error: res.backboneError
 
-@artists = (req, res, next) ->
+module.exports.artists = (req, res, next) ->
   return next() unless partner = partnerFromProfile(req)
   partner.fetchArtistGroups
     success: (representedArtists, unrepresentedArtists) ->
@@ -83,7 +109,7 @@ partnerFromProfile = (req) ->
 
     error: res.backboneError
 
-@artist = (req, res, next) ->
+module.exports.artist = (req, res, next) ->
   return next() unless partner = partnerFromProfile(req)
   artist = new Artist id: req.params.artistId
   artist.fetch
@@ -97,7 +123,7 @@ partnerFromProfile = (req) ->
         profile: req.profile
     error: res.backboneError
 
-@contact = (req, res, next) ->
+module.exports.contact = (req, res, next) ->
   return next() unless partner = partnerFromProfile(req)
   partner.fetch
     cache: true

@@ -46,7 +46,7 @@ describe 'Artwork bid templates', ->
 
       @$ = cheerio.load(@html)
 
-    it 'display artwork current bid, bid counts, reserve status', ->
+    xit 'display artwork current bid, bid counts, reserve status', ->
       @$('.artwork-auction-bid-module__bid-status-amount').text().should.equal '$7,000'
       @$('.artwork-auction-bid-module__bid-status-count').text().should.containEql '3 Bids, Reserve not met'
 
@@ -54,113 +54,11 @@ describe 'Artwork bid templates', ->
       @$('.artwork-auction-bid-form.js-artwork-auction-bid-form').attr('action').should.containEql '/auction/whtney-art-party/bid/skull'
 
     it 'displays an enabled bid button', ->
-      @$('.auction-avant-garde-black-button').should.not.containEql 'disabled'
+      @$('.auction-avant-garde-black-button').html().should.not.containEql 'disabled'
       @$('.auction-avant-garde-black-button').text().should.equal 'Bid'
-
-  describe 'bidder with bidder positions', ->
-
-    beforeEach ->
-      @artwork.auction.is_open = true
-      @me =  { id: 'my unique id', lot_standing: { is_highest_bidder: true } }
-
-      @html = render('index')(
-        artwork: @artwork
-        me: @me
-        sd: {}
-        asset: (->)
-        _: _
-      )
-
-      @$ = cheerio.load(@html)
-
-    it 'displays user bidder status - highest bid', ->
-      @html = render('index')(
-        artwork: @artwork
-        me: @me
-        sd: {}
-        asset: (->)
-        _: _
-      )
-
-      @$ = cheerio.load(@html)
-
-      @$('.artwork-auction-bid-module__bid-status__users-bid-status').hasClass('highest-bid').should.equal true
-      @$('.artwork-auction-bid-module__bid-status__users-bid-status').hasClass('outbid').should.equal false
-
-    it 'displays user bidder status - outbid', ->
-      me =  { id: 'my unique id', lot_standing: { is_highest_bidder: false } }
-
-      @html = render('index')(
-        artwork: @artwork
-        me: me
-        sd: {}
-        asset: (->)
-        _: _
-      )
-
-      @$ = cheerio.load(@html)
-
-      @$('.artwork-auction-bid-module__bid-status__users-bid-status').hasClass('outbid').should.equal true
-      @$('.artwork-auction-bid-module__bid-status__users-bid-status').hasClass('highest-bid').should.equal false
-
-    it 'displays correct bidding amount label with bids', ->
-      me =  { id: 'my unique id', lot_standing: { is_highest_bidder: false } }
-
-      @html = render('index')(
-        artwork: @artwork
-        me: me
-        sd: {}
-        asset: (->)
-        _: _
-      )
-
-      @$ = cheerio.load(@html)
-
-      @$('.artwork-auction-bid-module__bid-status-title').text().should.equal 'Current Bid:'
-
-  describe 'bidder with no bidder positions', ->
-
-    beforeEach ->
-      @artwork.auction.is_open = true
-      @me =  { id: 'my unique id',lot_standing: null }
-
-      @html = render('index')(
-        artwork: @artwork
-        me: @me
-        sd: {}
-        asset: (->)
-        _: _
-      )
-
-      @$ = cheerio.load(@html)
-
-    it 'displays user bidder status', ->
-
-      @$('.artwork-auction-bid-module__bid-status__users-bid-status').should.not.exist
-
-  describe 'ask a specialist', ->
-
-    beforeEach ->
-      @artwork.auction.is_open = true
-
-      @html = render('index')(
-        artwork: @artwork
-        sd: {}
-        asset: (->)
-        _: _
-      )
-
-      @$ = cheerio.load(@html)
-
-    it 'displays link to ask a specialist', ->
-
-      @$('.ask-a-specialist').attr('href').should.containEql '/ask_specialist'
-
-    describe 'bidder with no bidder positions', ->
-      beforeEach ->
-        @artwork.auction.is_open = true
-        @me =  { id: 'my unique id', lot_standing: { is_highest_bidder: true } }
-
+    describe 'bid-status-count formatting', ->
+      it 'displays singular "1 Bid" for one bid', ->
+        @artwork.auction.sale_artwork.counts.bidder_positions = 1
         @html = render('index')(
           artwork: @artwork
           me: @me
@@ -168,18 +66,51 @@ describe 'Artwork bid templates', ->
           asset: (->)
           _: _
         )
-
         @$ = cheerio.load(@html)
+        @$('.artwork-auction-bid-module__bid-status-count').text().should.containEql '1 Bid'
 
-      it 'displays user bidder status', ->
+      it 'displays plural "x Bids" for plural bids', ->
+        @artwork.auction.sale_artwork.counts.bidder_positions = 7
+        @html = render('index')(
+          artwork: @artwork
+          me: @me
+          sd: {}
+          asset: (->)
+          _: _
+        )
+        @$ = cheerio.load(@html)
+        @$('.artwork-auction-bid-module__bid-status-count').text().should.containEql '7 Bids'
 
-        @$('.artwork-auction-bid-module__bid-status__users-bid-status').hasClass('highest-bid').should.equal true
-        @$('.user-bid-status-text').text().should.equal 'Highest Bid'
+      it 'displays reserve status correctly with bids', ->
+        @artwork.auction.sale_artwork.counts.bidder_positions = 1
+        @html = render('index')(
+          artwork: @artwork
+          me: @me
+          sd: {}
+          asset: (->)
+          _: _
+        )
+        @$ = cheerio.load(@html)
+        @$('.artwork-auction-bid-module__bid-status-count').text().should.containEql ', Reserve not met'
 
-  describe 'bidder with no bidder positions', ->
+      it 'displays reserve status correctly with no bids - reserve message only', ->
+        @artwork.auction.sale_artwork.counts.bidder_positions = 0
+        @artwork.auction.sale_artwork.reserve_status = 'reserve_met'
+        @html = render('index')(
+          artwork: @artwork
+          me: @me
+          sd: {}
+          asset: (->)
+          _: _
+        )
+        @$ = cheerio.load(@html)
+        @$('.artwork-auction-bid-module__bid-status-count').text().should.equal 'Reserve met'
+
+  describe 'bidder with bidder positions', ->
+
     beforeEach ->
       @artwork.auction.is_open = true
-      @me =  { id: 'my unique id', lot_standing: { is_highest_bidder: false } }
+      @me =  { id: 'my unique id', lot_standing: { is_leading_bidder: true } }
 
       @html = render('index')(
         artwork: @artwork
@@ -191,10 +122,100 @@ describe 'Artwork bid templates', ->
 
       @$ = cheerio.load(@html)
 
-    it 'displays user bidder status', ->
+    it 'displays user bidder status - highest bid & reserve does not apply', ->
+      @artwork.auction.sale_artwork.reserve_status = 'reserve_met'
+      @html = render('index')(
+        artwork: @artwork
+        me: @me
+        sd: {}
+        asset: (->)
+        _: _
+      )
+      @$ = cheerio.load(@html)
+      @$('.bid-status-message p').text().should.match /^Highest Bidder\n/
 
-      @$('.artwork-auction-bid-module__bid-status__users-bid-status').hasClass('outbid').should.equal true
-      @$('.user-bid-status-text').text().should.equal 'Outbid'
+    it 'displays user bidder status - leading bidder & reserve not met', ->
+      @artwork.auction.sale_artwork.reserve_status = 'no.'
+      me =  { id: 'my unique id', lot_standing: { is_leading_bidder: true } }
+      @artwork.auction.sale_artwork.reserve_status = 'reserve_not_met'
+      @html = render('index')(
+        artwork: @artwork
+        me: me
+        sd: {}
+        asset: (->)
+        _: _
+      )
+      @$ = cheerio.load(@html)
+      @$('.bid-status-message__is-winning-reserve-not-met').text().should.containEql 'Highest Bidder'
+
+    it 'displays user bidder status - outbid, reserve not met', ->
+      me =  { id: 'my unique id', lot_standing: { is_leading_bidder: false } }
+      @html = render('index')(
+        artwork: @artwork
+        me: me
+        sd: {}
+        asset: (->)
+        _: _
+      )
+      @$ = cheerio.load(@html)
+      @$('.bid-status-message p').text().should.containEql 'Outbid'
+
+    it 'displays user bidder status - outbid, reserve does not apply', ->
+      me =  { id: 'my unique id', lot_standing: { is_leading_bidder: false } }
+      @html = render('index')(
+        artwork: @artwork
+        me: me
+        sd: {}
+        asset: (->)
+        _: _
+      )
+      @$ = cheerio.load(@html)
+      @$('.bid-status-message p').text().should.containEql 'Outbid'
+
+    it 'displays correct bidding amount label with bids', ->
+      me =  { id: 'my unique id', lot_standing: { is_leading_bidder: false } }
+      @html = render('index')(
+        artwork: @artwork
+        me: me
+        sd: {}
+        asset: (->)
+        _: _
+      )
+      @$ = cheerio.load(@html)
+      @$('.artwork-auction-bid-module__bid-status-title').text().should.equal 'Current Bid:'
+
+  describe 'ask a specialist', ->
+    beforeEach ->
+      @artwork.auction.is_open = true
+
+      @html = render('index')(
+        artwork: @artwork
+        sd: {}
+        asset: (->)
+        _: _
+      )
+      @$ = cheerio.load(@html)
+    it 'displays link to ask a specialist', ->
+      @$('.ask-a-specialist').attr('href').should.containEql '/ask_specialist'
+
+  describe 'bidder with no bidder positions', ->
+    beforeEach ->
+      @artwork.auction.is_open = true
+      @me =  { id: 'my unique id', lot_standing: null }
+
+      @html = render('index')(
+        artwork: @artwork
+        me: @me
+        sd: {}
+        asset: (->)
+        _: _
+      )
+
+      @$ = cheerio.load(@html)
+
+    it 'displays no bidder status', ->
+
+      @$('.bid-status-message p').should.not.exist
 
   describe 'artwork in a closed auction', ->
     beforeEach ->

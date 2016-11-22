@@ -128,30 +128,6 @@ describe 'Artwork', ->
       Backbone.sync.args[0][2].success [fabricate 'sale', is_auction: true, name: 'Awesome Sale']
       Backbone.sync.args[1][2].success fabricate 'sale_artwork', opening_bid_cents: 100000
 
-  describe '#fetchAuctionResults', ->
-
-    it 'fetches the auction results for that artwork', (done) ->
-      @artwork.fetchAuctionResults success: (results) ->
-        results.first().get('estimate_text').should.equal '$100,000'
-        done()
-      Backbone.sync.args[0][2].success [fabricate 'auction_result', estimate_text: '$100,000']
-
-  describe '#canShowAuctionResults', ->
-
-    it 'returns true if site feature enabled', (done) ->
-      @artwork.set comparables_count: 2, category: 'Painting'
-      @artwork.canShowAuctionResults success: (show) ->
-        show.should.be.ok()
-        done()
-      Backbone.sync.args[0][2].success [{ id: 'auction-results', enabled: true }]
-
-    it 'returns false if in Architecture', (done) ->
-      @artwork.set comparables_count: 2, category: 'Architecture'
-      @artwork.canShowAuctionResults success: (show) ->
-        show.should.not.be.ok()
-        done()
-      Backbone.sync.args[0][2].success [{ id: 'auction-results', enabled: true }]
-
   describe '#hasMoreInfo', ->
 
     it 'returns true if the artwork has more info to display and false otherwise', ->

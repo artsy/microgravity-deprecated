@@ -87,7 +87,7 @@ describe 'Sign up (with email) client-side code', ->
       beforeEach ->
         Backbone.sync.yieldsTo 'success'
 
-      it 'creates the user then logs in', ->
+      xit 'creates the user then logs in', ->
 
         @view.signup foo: 'bar'
         # Registers the user

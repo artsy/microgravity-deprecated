@@ -35,8 +35,17 @@ if(location.pathname.match('/article/')){
     var articleId = $(this).closest('.article-container').data('id');
     analytics.track('Clicked article impression', {
       article_id: articleId,
-      destination_path: $(this)[0].href,
+      destination_path: $(this)[0].href.replace(/^.*\/\/[^\/]+/, ''),
       impression_type: 'article_callout',
+      context_type: 'article_fixed'
+    });
+
+  }).on('click', '.article-footer-next a', function(){
+    var articleId = $(this).closest('.article-container').data('id');
+    analytics.track('Clicked article impression', {
+      article_id: articleId,
+      destination_path: $(this)[0].href.replace(/^.*\/\/[^\/]+/, ''),
+      impression_type: 'related_article',
       context_type: 'article_fixed'
     });
 
@@ -69,6 +78,15 @@ if(location.pathname.match('/article/')){
       article_id: $(this).closest('.article-container').data('id'),
       context_type: options.type,
       user_email: options.email
+    });
+  });
+
+  analyticsHooks.on('impression:editorial-signup', function(options){
+    analytics.track('Article Impression', {
+        article_id: options.article_id,
+        context_type: options.type,
+        impression_type: 'newsletter_signup',
+        user_email: options.email
     });
   });
 
