@@ -88,6 +88,7 @@ module.exports = (app) ->
     ARTSY_SECRET: config.CLIENT_SECRET
     ARTSY_URL: config.API_URL
     APP_URL: config.APP_URL
+    SEGMENT_WRITE_KEY: config.SEGMENT_WRITE_KEY
     CurrentUser: CurrentUser
     signupRedirect: '/personalize'
     XAPP_TOKEN: artsyXapp.token

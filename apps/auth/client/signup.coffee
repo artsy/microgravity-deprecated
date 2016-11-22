@@ -28,7 +28,7 @@ module.exports.SignUpView = class SignUpView extends Backbone.View
 
   signup: (data) ->
     options =
-      url: "#{sd.API_URL}/api/v1/user"
+      url: sd.AP.signupPagePath
       error: @onError
       success: =>
         @login(data)
@@ -48,7 +48,6 @@ module.exports.SignUpView = class SignUpView extends Backbone.View
       _csrf: @$("input[name='_csrf']").val()
     @signup data
     false
-
 
 module.exports.init = ->
   bootstrap()
