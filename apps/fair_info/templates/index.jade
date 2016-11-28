@@ -9,7 +9,7 @@ block content
         if infoMenu.events
           a(href="/#{sd.PROFILE.id}/info/events") events
         a(target="_blank", href=location.gmapLink()) map
-        if fair.has('floorplan_url')
+        if fair.get('floorplan_url')
           a(href=fair.get('floorplan_url')) floorplan (pdf)
         if infoMenu.programming
           a(href="/#{sd.PROFILE.id}/info/programming") programming
