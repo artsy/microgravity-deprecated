@@ -45,7 +45,7 @@ module.exports.SignUpView = class SignUpView extends Backbone.View
       name: @$("input[name='name']").val()
       email: @$("input[name='email']").val()
       password: @$("input[name='password']").val()
-      acquisition_initiative: qs.parse(location.search)['m-id']
+      acquisition_initiative: qs.parse(location.search).acquisition_initiative
       redirectTo: @$("input[name='redirect-to']").val()
       _csrf: @$("input[name='_csrf']").val()
     @signup data
