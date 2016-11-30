@@ -3,10 +3,10 @@ section.marketing-signup-modal
     img.marketing-signup-modal-img( src=sd.MARKETING_SIGNUP_MODAL_IMG )
     h1.marketing-signup-modal-copy= sd.MARKETING_SIGNUP_MODAL_COPY
     a.avant-garde-box-button.avant-garde-box-button-gray.marketing-signup-modal-signup(
-      href='/sign_up'
+      href='/sign_up?email=1&m-id=' + sd.MARKETING_SIGNUP_MODAL_SLUG
     ) Sign up
     a.avant-garde-box-button.marketing-signup-modal-fb(
-      href=sd.AP.facebookPath
+      href=sd.AP.facebookPath + '?acquisition_initiative=' + sd.MARKETING_SIGNUP_MODAL_SLUG
     )
       i.icon-facebook
       | Continue with Facebook

@@ -1,4 +1,5 @@
 sd = require('sharify').data
+qs = require 'querystring'
 Backbone = require "backbone"
 bootstrap = require "../../../components/layout/bootstrap.coffee"
 
@@ -30,9 +31,9 @@ module.exports.SignUpView = class SignUpView extends Backbone.View
     options =
       url: sd.AP.signupPagePath
       error: @onError
-      success: =>
+      success: (m, res) =>
         @login(data)
-        analyticsHooks.trigger 'auth:signup'
+        analyticsHooks.trigger 'auth:signup', data, res
     new Backbone.Model().save data, options
 
   onError: (m, res) =>
@@ -44,6 +45,7 @@ module.exports.SignUpView = class SignUpView extends Backbone.View
       name: @$("input[name='name']").val()
       email: @$("input[name='email']").val()
       password: @$("input[name='password']").val()
+      acquisition_initiative: qs.parse(location.search)['m-id']
       redirectTo: @$("input[name='redirect-to']").val()
       _csrf: @$("input[name='_csrf']").val()
     @signup data
