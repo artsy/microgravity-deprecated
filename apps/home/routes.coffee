@@ -19,9 +19,3 @@ module.exports.featuredArtworks = (req, res, next) ->
       res.render 'featured_works',
         artworks: artworks.models.slice(0, sd.HOMEPAGE_ARTWORKS_COUNT)
     errors: res.backboneError
-
-module.exports.featuredArticles = (req, res, next) ->
-  new FeaturedLinks().fetchSetItemsByKey 'homepage:featured-links',
-    success: (links) ->
-      res.render 'featured_articles', items: links.models.slice(0, sd.HOMEPAGE_LINKS_COUNT)
-    errors: res.backboneError

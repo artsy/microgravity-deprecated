@@ -40,18 +40,3 @@ describe '#featuredArtworks', ->
     renderStub.args[0][0].should.equal 'featured_works'
     renderStub.args[0][1].artworks[0].get('title').should.equal 'Hello World'
     renderStub.args[0][1].artworks[0].get('blurb').should.equal 'This is mah blurb'
-
-describe '#featuredArticles', ->
-
-  beforeEach ->
-    sinon.stub Backbone, 'sync'
-
-  afterEach ->
-    Backbone.sync.restore()
-
-  it 'renders the featured articles page', ->
-    routes.featuredArticles {}, { render: renderStub = sinon.stub() }
-    Backbone.sync.args[0][2].success fabricate 'set'
-    Backbone.sync.args[1][2].success [fabricate 'post', title: 'Hello World']
-    renderStub.args[0][0].should.equal 'featured_articles'
-    renderStub.args[0][1].items[0].get('title').should.equal 'Hello World'
