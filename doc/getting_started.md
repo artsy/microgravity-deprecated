@@ -17,13 +17,13 @@ curl https://raw.github.com/creationix/nvm/master/install.sh | sh
 Then install the latest node
 
 ````
-nvm install 0.10
+nvm install 6
 ````
 
 Then tell nvm to use the latest version of node by default and to update your PATH
 
 ````
-nvm alias default 0.10
+nvm alias default 6
 ````
 
 ## Install Node Modules
