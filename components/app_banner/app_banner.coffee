@@ -54,10 +54,10 @@ module.exports = class AppBanner
     @$el.remove()
     @$content.css marginTop: 0
 
-  seen: ->
+  dismissed: ->
     Cookies.set @cookie, yes, expires: (60 * 60 * 24 * 365)
 
-  @hasSeen: ->
+  @hasDismissed: ->
     Cookies.get(@::cookie)?
 
   @isEigen: ->
@@ -65,6 +65,6 @@ module.exports = class AppBanner
 
   @shouldDisplay: ->
     USER_AGENT?.match(/(Chrome)/)? and
-    not @hasSeen() and
+    not @hasDismissed() and
     not @isEigen() and
     not excluded.check()
