@@ -64,7 +64,8 @@ module.exports = class AppBanner
     USER_AGENT?.match('Artsy-Mobile')?
 
   @shouldDisplay: ->
-    USER_AGENT?.match(/(Chrome)/)? and
+    USER_AGENT?.match(/iPhone/i)? and
+    USER_AGENT?.match(/CriOS/i)? and
     not @hasDismissed() and
     not @isEigen() and
     not excluded.check()
