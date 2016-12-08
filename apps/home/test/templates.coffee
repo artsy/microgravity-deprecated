@@ -53,19 +53,6 @@ describe 'Featured artworks template', ->
     html = render('featured_works')(artworks: artworks.models, sd: {})
     html.should.containEql 'Blurb about what else, cats'
 
-describe 'Featured articles/links template', ->
-
-  it 'shows the title and subtitle of links', ->
-    links = new FeaturedLinks [
-      fabricate('featured_link',
-        title: 'Diary of a cat'
-        subtitle: 'By Bitty'
-      )
-    ]
-    html = render('featured_articles')(items: links.models, sd: {})
-    html.should.containEql 'Diary of a cat'
-    html.should.containEql 'By Bitty'
-
 describe 'Index', ->
 
   it 'with hero units', ->
