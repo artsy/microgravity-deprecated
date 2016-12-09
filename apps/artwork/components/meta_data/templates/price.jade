@@ -1,4 +1,6 @@
 if artwork.sale_message && !artwork.auction
   .artwork-meta-data-price
-    span.price-label Price:
-    span.listed-price= artwork.sale_message
+    .price-label Price:
+    .listed-price= artwork.sale_message
+    if artwork.price
+      .shipping-info Shipping, tax, and services quoted by seller
