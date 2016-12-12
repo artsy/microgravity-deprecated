@@ -14,10 +14,6 @@ module.exports = class Sale extends Backbone.Model
 
   urlRoot: "#{sd.API_URL}/api/v1/sale"
 
-  parse: (response) ->
-    response.auction_state = @calculateAuctionState response.start_at, response.end_at
-    response
-
   href: ->
     if @isSale()
       "/sale/#{@id}"
@@ -43,6 +39,7 @@ module.exports = class Sale extends Backbone.Model
       url: "#{sd.API_URL}/api/v1/system/time"
       success: (response) =>
         offset = moment().diff(moment(response.get('iso8601')))
+        @set('offsetLiveStartAtMoment', moment(@get 'live_start_at').add(offset))
         @set('offsetStartAtMoment', moment(@get 'start_at').add(offset))
         @set('offsetEndAtMoment', moment(@get 'end_at').add(offset))
         @updateState()
@@ -50,30 +47,22 @@ module.exports = class Sale extends Backbone.Model
       error: options?.error
 
   updateState: ->
-    @set('auctionState', (
-      if moment().isAfter(@get 'offsetEndAtMoment')
+    @set('clockState', (
+      if moment().isAfter(@get 'offsetEndAtMoment') || @get('auction_state') == 'closed'
         'closed'
+      else if @get('live_start_at') and moment().isBefore(@get 'offsetLiveStartAtMoment')
+        'live'
       else if moment().isAfter(@get 'offsetStartAtMoment') and moment().isBefore(@get 'offsetEndAtMoment')
         'open'
       else if moment().isBefore(@get 'offsetStartAtMoment')
         'preview'
     ))
 
-  calculateAuctionState: (start_at, end_at, offset = 0) ->
-    start = moment(start_at).add(offset, 'milliseconds')
-    end = moment(end_at).add(offset, 'milliseconds')
-    if moment().isAfter(end) or moment().isSame(end)
-      'closed'
-    else if moment().isBetween(start, end)
-      'open'
-    else if moment().isBefore(start) or moment().isSame(start)
-      'preview'
-
   state: ->
     if @has('clockState') then @get('clockState') else @get('auction_state')
 
   auctionState: ->
-    @calculateAuctionState _.values(@pick('start_at', 'end_at', 'offset'))...
+    @get('auction_state')
 
   isRegisterable: ->
     @isAuction() and _.contains(['preview', 'open'], @get('auction_state'))
@@ -131,4 +120,4 @@ module.exports = class Sale extends Backbone.Model
     [startYear..endYear]
 
   isLiveOpen: ->
-    moment().isBefore(@get 'end_at') and moment().isAfter(@get 'live_start_at')
+    @get('auction_state' == 'open') and moment().isAfter(@get 'live_start_at')

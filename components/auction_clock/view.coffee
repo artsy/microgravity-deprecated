@@ -13,19 +13,19 @@ UNIT_MAP =
 module.exports = class AuctionClockView extends Backbone.View
   almostOver: 60
   initialize: ->
-    @listenTo @model, 'change:auctionState', @render
+    @listenTo @model, 'change:clockState', @render
 
   start: ->
     @model.calculateOffsetTimes
       success: =>
-        @model.on('change:auctionState', ->
+        @model.on('change:clockState', ->
           clearInterval @interval
           window.location.reload()
         )
         @render()
 
   render: =>
-    switch @model.get('auctionState')
+    switch @model.get('clockState')
       when 'preview'
         string = if @model.isAuctionPromo() then 'Auction Opens In' else 'Bidding Opens In'
         @$('h2').html string
@@ -34,6 +34,9 @@ module.exports = class AuctionClockView extends Backbone.View
         string = if @model.isAuctionPromo() then 'Auction Closes In' else 'Bidding Closes In'
         @$('h2').html string
         @toDate = @model.get 'offsetEndAtMoment'
+      when 'live'
+        @$('h2').html 'Live Bidding Opens In'
+        @toDate = @model.get 'offsetLiveStartAtMoment'
       when 'closed'
         mediator.trigger 'clock:is-over'
         string = if @model.isAuctionPromo() then 'Auction Closed' else 'Online Bidding Closed'
