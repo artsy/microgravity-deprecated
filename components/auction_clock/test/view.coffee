@@ -107,6 +107,17 @@ describe 'AuctionClockView', ->
       @view.render()
       @triggerSpy.args[0][0].should.equal 'clock:is-over'
 
+    describe 'live auction integration', ->
+      beforeEach ->
+        @view.$el.html omg()
+        @view.model.set live_start_at: moment().add(2, 'days').format()
+
+      it 'renders the correct copy', ->
+        @view.model.set 'clockState', 'live'
+        @view.$('h2').text().should.equal 'Live Bidding Opening In'
+        @view.model.set 'clockState', 'closed'
+        @view.$('h2').text().should.equal 'Online Bidding Closed'
+
     describe 'isAuctionPromo', ->
       beforeEach ->
         @view.$el.html omg()

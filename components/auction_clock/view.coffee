@@ -35,7 +35,7 @@ module.exports = class AuctionClockView extends Backbone.View
         @$('h2').html string
         @toDate = @model.get 'offsetEndAtMoment'
       when 'live'
-        @$('h2').html 'Live Bidding Opens In'
+        @$('h2').html 'Live Bidding Opening In'
         @toDate = @model.get 'offsetLiveStartAtMoment'
       when 'closed'
         mediator.trigger 'clock:is-over'

@@ -33,7 +33,7 @@ describe 'auction templates', ->
             name: 'An Auction'
             start_at: moment().subtract(2, 'days').format()
             end_at: moment().add(2, 'days').format()
-          , parse: true
+
 
         benv.render resolve(__dirname, '../templates/index.jade'), data, =>
           done()
@@ -56,7 +56,8 @@ describe 'auction templates', ->
             name: 'An Auction'
             start_at: moment().add(2, 'days').format()
             end_at: moment().add(4, 'days').format()
-          ), parse: true
+            auction_state: 'preview'
+          )
 
         benv.render resolve(__dirname, '../templates/index.jade'), data, =>
           done()

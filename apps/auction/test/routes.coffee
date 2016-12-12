@@ -50,8 +50,10 @@ describe '/auction routes', ->
         routes.index @req, @res
         Backbone.sync.args[0][2].success fabricate 'sale',
           id: 'foobar-auction'
+          start_at: moment().subtract(2, 'days')
           live_start_at: moment().startOf('day')
           end_at: moment().endOf('day')
+          auction_state: 'open'
         Backbone.sync.args[1][2].success {}
         _.defer => _.defer =>
           @res.redirect.args[0][0].should

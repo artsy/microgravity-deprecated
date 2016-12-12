@@ -120,4 +120,4 @@ module.exports = class Sale extends Backbone.Model
     [startYear..endYear]
 
   isLiveOpen: ->
-    @get('auction_state' == 'open') and moment().isAfter(@get 'live_start_at')
+    @get('auction_state') == 'open' and moment().isAfter(@get 'live_start_at')
