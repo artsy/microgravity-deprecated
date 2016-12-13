@@ -47,7 +47,6 @@ module.exports = class AutoCompleteView extends Backbone.View
       @$el.removeClass 'is-active'
 
   __search__: ->
-    console.log 'search'
     term = _s.trim (@$input ?= @$('input')).val()
 
     if @term isnt term and not _.isEmpty(term)
