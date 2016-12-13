@@ -27,6 +27,7 @@ module.exports = class AutoCompleteView extends Backbone.View
     @search = _.debounce @__search__, 250
     @collection = new SearchResults
     @listenTo @collection, 'sync', @renderResults
+    @delegateEvents()
 
   trap: ->
     @trapping = true
@@ -46,6 +47,7 @@ module.exports = class AutoCompleteView extends Backbone.View
       @$el.removeClass 'is-active'
 
   __search__: ->
+    console.log 'search'
     term = _s.trim (@$input ?= @$('input')).val()
 
     if @term isnt term and not _.isEmpty(term)
