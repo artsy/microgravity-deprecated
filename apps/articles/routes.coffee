@@ -1,7 +1,7 @@
 _ = require 'underscore'
 { toSentence } = require 'underscore.string'
 Q = require 'bluebird-q'
-{ MAILCHIMP_KEY, SAILTHRU_KEY, SAILTHRU_SECRET, SAILTHRU_MASTER_LIST } = require '../../config'
+{ MAILCHIMP_KEY, SAILTHRU_KEY, SAILTHRU_SECRET, SAILTHRU_MASTER_LIST, EOY_2016_SLUGS } = require '../../config'
 sd = require('sharify').data
 request = require 'superagent'
 Article = require '../../models/article'
@@ -13,6 +13,7 @@ embed = require 'embed-video'
 sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU_SECRET)
 
 module.exports.article = (req, res, next) ->
+  return next() if req.params.id.match(EOY_2016_SLUGS)?.length
   article = new Article id: req.params.id
   article.fetch
     cache: true
