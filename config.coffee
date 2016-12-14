@@ -69,6 +69,7 @@ module.exports =
   MARKETING_SIGNUP_MODAL_COPY: 'Sign up for early access'
   MARKETING_SIGNUP_MODAL_IMG: 'http://placekitten.com/200/200'
   MARKETING_SIGNUP_MODAL_SLUG: 'miami'
+  EOY_2016_SLUGS: ''
 
 # Override any values with env variables if they exist.
 # You can set JSON-y values for env variables as well such as "true" or

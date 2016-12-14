@@ -9,6 +9,7 @@ Article = require '../../models/article'
 embed = require 'embed-video'
 { stringifyJSONForWeb } = require '../../components/util/json.coffee'
 { resize } = require '../../components/resizer/index.coffee'
+{ EOY_2016_SLUGS } = require '../../config.coffee'
 
 partnerFromProfile = (req) ->
   if req.profile?.isPartner()
@@ -65,6 +66,7 @@ module.exports.articles = (req, res, next) ->
     profile: req.profile
 
 module.exports.article = (req, res, next) ->
+  return next() if req.params.articleId.match(EOY_2016_SLUGS)?.length
   article = new Article id: req.params.articleId
   article.fetch
     cache: true
