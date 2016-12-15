@@ -16,9 +16,10 @@ block content
                     h2.avant-garde-header!= heroUnit.mdToHtml('heading')
                     h1.home-page-hero-unit-title.avant-garde-header= heroUnit.get('mobile_title')
                     h2!= heroUnit.mdToHtml('mobile_description')
-
-  .main-side-margin.home-page-section
-    include ../../../components/eoy_artist_list/index
+  
+  if user && user.isAdmin()
+    .main-side-margin.home-page-section
+      include ../../../components/eoy_artist_list/index
 
   section.main-side-margin.home-page-section
     h1.avant-garde-header-center Explore Artsy
