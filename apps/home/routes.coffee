@@ -19,7 +19,7 @@ module.exports.index = (req, res, next) ->
       res.render 'page', 
         heroUnits: heroUnits.models
         eoy_2016: eoyData
-    .catch (thing, err) ->
+    .catch (err) ->
       res.render 'page', heroUnits: []
 
 module.exports.featuredArtworks = (req, res, next) ->
