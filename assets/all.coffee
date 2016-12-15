@@ -91,9 +91,6 @@ hash =
   '^/all-cities': ->
     require('../apps/shows/client/shows.coffee').init()
 
-  '^/home/featured_works': ->
-    require '../apps/home/client/index.coffee'
-
   '^/(galleries|institutions)': ->
     require('../apps/galleries_institutions/client/galleries_institutions.coffee').init()
 

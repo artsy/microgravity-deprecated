@@ -1,0 +1,50 @@
+@import '../stylus_lib'
+
+.eoy-2016
+  .avant-garde-box-button.is-small
+    border 1px solid gray-color
+    display inline-block
+    width auto
+  &__headline
+    garamond-size('headline')
+    padding-bottom 10px
+  &__subheadline
+    garamond-size('s-body')
+    color gray-darker-color
+    padding-bottom 10px
+  &__lists
+    .circle-border-icon-button
+      height 24px
+      width 24px
+      top -12px
+      transform-origin center
+      & .chevron-arrow-button::after
+        margin-top 15px
+        height 11px
+
+    &__list
+      margin 20px 0 0
+      max-height 250px
+      position relative
+      overflow hidden
+      border-bottom 1px solid gray-color
+      &__headline
+        garamond-size('s-headline')
+
+.eoy_2016-artist
+  margin-bottom 10px
+  &__name
+    avant-garde-size('s-headline', true)
+    display inline-block
+    vertical-align middle
+    margin-left 10px
+    &__link
+      text-decoration none
+  &__thumb 
+    display inline-block
+    vertical-align middle
+    img
+      height 30px
+      width 30px
+      border-radius 30px
+      vertical-align middle

@@ -141,6 +141,9 @@ module.exports = class CurrentUser extends Backbone.Model
   @orNull: ->
     if CURRENT_USER then new @(CURRENT_USER) else null
 
+  isAdmin: ->
+    @get('type') is 'Admin'
+
   isEditorialAdmin: ->
     @get('type') is 'Admin' and
     @get('email')?.split('@')[0] in EDITORIAL_ADMINS?.split(',')

@@ -1,0 +1,5 @@
+.eoy_2016-artist
+  .eoy_2016-artist__thumb
+    img(src="#{sd.API_URL}/api/v1/artist/#{artist.slug}/image")
+  .eoy_2016-artist__name
+    a.eoy_2016-artist__name__link(href="/artist/#{artist.slug}")= artist.name
