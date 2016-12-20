@@ -1,7 +1,7 @@
 if eoy_2016
   .eoy-2016
-    .eoy-2016__headline= eoy_2016.headline
-    .eoy-2016__subheadline= eoy_2016.subheadline
+    .eoy-2016__headline!= eoy_2016.headline
+    .eoy-2016__subheadline!= eoy_2016.subheadline
     a.avant-garde-box-button.avant-garde-box-button-white.is-small(href="#{eoy_2016.article_link}") Read article
     .eoy-2016__lists
       for list in eoy_2016.lists
