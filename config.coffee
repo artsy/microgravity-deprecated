@@ -14,7 +14,7 @@ module.exports =
   ARTSY_URL: 'http://localhost:5000' # Desktop url
   APP_URL: 'http://localhost:3003'
   CALENDAR_URL: 'http://localhost:3003' # For redirecting to .ics files
-  ARTSY_URL: 'http://www.artsy.net'
+  ARTSY_URL: 'https://www.artsy.net'
   POSITRON_URL: 'http://writer.artsy.net'
   EUROPA_URL: 'http://europa-production.herokuapp.com'
   PORT: 3003
