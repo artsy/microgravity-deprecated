@@ -20,13 +20,16 @@ query = """
 module.exports.index = (req, res, next) ->
   artist = new Artist id: req.params.id
   artist.fetch
+    error: res.backboneError
     cache: true
     success: ->
       artist.maybeFetchAndSetFeaturedBio =>
-        res.locals.sd.ARTIST = artist.toJSON()
-        showAuctionLink = artist.get('display_auction_link')
-        res.render 'page', artist: artist, sort: req.query?.sort, showAuctionLink: showAuctionLink
-    error: res.backboneError
+        artist.fetchArtworks
+          success: (results, resp, opts) ->
+            res.locals.sd.ARTIST = artist
+            res.locals.sd.ARTWORKS = results.toJSON()
+            showAuctionLink = artist.get('display_auction_link')
+            res.render 'page', artist: artist, sort: req.query?.sort, showAuctionLink: showAuctionLink
 
 module.exports.biography = (req, res, next) ->
   metaphysics query: query, variables: req.params, req: req
