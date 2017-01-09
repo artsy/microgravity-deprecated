@@ -16,11 +16,10 @@ module.exports.index = (req, res, next) ->
     ]
     .then ([x, eoyData]) ->
       res.locals.sd.EOY_DATA = eoyData
-      console.log 'res.render', res.render
-      res.render 'page', 
+      res.render 'page',
         heroUnits: heroUnits.models
         eoy_2016: eoyData
     .catch (err) ->
-      res.render 'page', 
+      res.render 'page',
         heroUnits: heroUnits.models
         eoy_2016: eoyData

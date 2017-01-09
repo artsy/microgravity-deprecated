@@ -64,6 +64,8 @@ module.exports = class FilterView extends PoliteInfiniteScrollView
       @params.unset name
     else
       @params.set name, value
+      if name == 'price_range' && location.pathname.includes '/collect'
+        analyticsHooks.trigger('commercialFilterPrice:triggered', { price_range: value })
 
   renderDropdowns: ->
     for name, options of _.pick @collection.counts, _.keys @labelMap
