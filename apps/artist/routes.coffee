@@ -1,5 +1,6 @@
 Artist = require '../../models/artist'
 metaphysics = require '../../lib/metaphysics'
+Q = require 'bluebird-q'
 
 query = """
   query artist($id: String!) {
@@ -19,17 +20,20 @@ query = """
 
 module.exports.index = (req, res, next) ->
   artist = new Artist id: req.params.id
-  artist.fetch
-    error: res.backboneError
-    cache: true
-    success: ->
-      artist.maybeFetchAndSetFeaturedBio =>
-        artist.fetchArtworks
-          success: (results, resp, opts) ->
-            res.locals.sd.ARTIST = artist
-            res.locals.sd.ARTWORKS = results.toJSON()
-            showAuctionLink = artist.get('display_auction_link')
-            res.render 'page', artist: artist, sort: req.query?.sort, showAuctionLink: showAuctionLink
+  Q.all([
+    artist.fetch(cache: true)
+    artist.maybeFetchAndSetFeaturedBio
+    artist.fetchArtworks
+      success: (artworks) ->
+        res.locals.sd.ARTWORKS = artworks
+  ]).then () ->
+    res.locals.sd.ARTIST = artist.toJSON()
+    showAuctionLink = artist.get('display_auction_link')
+    res.render 'page', artist: artist, sort: req.query?.sort, showAuctionLink: showAuctionLink
+    next()
+  .catch (error) ->
+    next()
+  .done()
 
 module.exports.biography = (req, res, next) ->
   metaphysics query: query, variables: req.params, req: req
