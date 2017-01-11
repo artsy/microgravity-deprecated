@@ -27,6 +27,7 @@ module.exports = class AutoCompleteView extends Backbone.View
     @search = _.debounce @__search__, 250
     @collection = new SearchResults
     @listenTo @collection, 'sync', @renderResults
+    @delegateEvents()
 
   trap: ->
     @trapping = true

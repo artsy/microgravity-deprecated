@@ -19,6 +19,7 @@ describe 'Article routes', ->
     @next = sinon.stub()
     sinon.stub Backbone, 'sync'
     routes.__set__ 'sailthru', apiGet: sinon.stub().yields('error')
+    routes.__set__ 'EOY_2016_SLUGS', '/article/'
 
   afterEach ->
     Backbone.sync.restore()

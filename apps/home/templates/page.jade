@@ -16,11 +16,14 @@ block content
                     h2.avant-garde-header!= heroUnit.mdToHtml('heading')
                     h1.home-page-hero-unit-title.avant-garde-header= heroUnit.get('mobile_title')
                     h2!= heroUnit.mdToHtml('mobile_description')
+  
+  .main-side-margin.home-page-section
+    include ../../../components/eoy_artist_list/index
 
   section.main-side-margin.home-page-section
     h1.avant-garde-header-center Explore Artsy
     nav#home-page-featured-list.chevron-nav-list
-      a#home-page-featured-works( href='/home/featured_works' ) Featured Artworks
+      a#home-page-featured-works( href='/browse' ) Featured Artworks
       a#home-page-featured-articles( href='/articles' ) Featured Articles
   section.main-side-margin.home-page-section
     h1.avant-garde-header-center Current Shows

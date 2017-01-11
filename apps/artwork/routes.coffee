@@ -17,6 +17,7 @@ query = (user) -> """
       is_inquireable
       is_acquireable
       sale_message
+      price
       is_for_sale
       medium
       edition_of

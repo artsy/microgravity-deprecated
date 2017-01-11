@@ -11,6 +11,7 @@ module.exports = """
     is_with_buyers_premium
     start_at
     end_at
+    live_start_at
     sale_artwork(id: $id) {
       id
       estimate

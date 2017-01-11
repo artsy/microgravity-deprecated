@@ -11,10 +11,10 @@ module.exports =
   CLIENT_ID: 'e750db60ac506978fc70'
   CLIENT_SECRET: '3a33d2085cbd1176153f99781bbce7c6'
   API_URL: 'http://localhost:3000'
-  ARTSY_URL: 'http://localhost:3000' # Desktop url
+  ARTSY_URL: 'http://localhost:5000' # Desktop url
   APP_URL: 'http://localhost:3003'
   CALENDAR_URL: 'http://localhost:3003' # For redirecting to .ics files
-  ARTSY_URL: 'http://www.artsy.net'
+  ARTSY_URL: 'https://www.artsy.net'
   POSITRON_URL: 'http://writer.artsy.net'
   EUROPA_URL: 'http://europa-production.herokuapp.com'
   PORT: 3003
@@ -69,6 +69,7 @@ module.exports =
   MARKETING_SIGNUP_MODAL_COPY: 'Sign up for early access'
   MARKETING_SIGNUP_MODAL_IMG: 'http://placekitten.com/200/200'
   MARKETING_SIGNUP_MODAL_SLUG: 'miami'
+  EOY_2016_SLUGS: ''
 
 # Override any values with env variables if they exist.
 # You can set JSON-y values for env variables as well such as "true" or

@@ -98,6 +98,7 @@ describe 'AuctionClockView', ->
         is_auction: true
         start_at: moment().subtract(2, 'minutes').format()
         end_at: moment().subtract(1, 'minutes').format()
+        auction_state: 'closed'
 
       @view.model.calculateOffsetTimes()
       Backbone.sync.args[0][2].success { time: moment().format() }
@@ -106,15 +107,26 @@ describe 'AuctionClockView', ->
       @view.render()
       @triggerSpy.args[0][0].should.equal 'clock:is-over'
 
+    describe 'live auction integration', ->
+      beforeEach ->
+        @view.$el.html omg()
+        @view.model.set live_start_at: moment().add(2, 'days').format()
+
+      it 'renders the correct copy', ->
+        @view.model.set 'clockState', 'live'
+        @view.$('h2').text().should.equal 'Live Bidding Opening In'
+        @view.model.set 'clockState', 'closed'
+        @view.$('h2').text().should.equal 'Online Bidding Closed'
+
     describe 'isAuctionPromo', ->
       beforeEach ->
         @view.$el.html omg()
         @view.model.set sale_type: 'auction promo'
 
       it 'renders the correct copy', ->
-        @view.model.set 'auctionState', 'preview'
+        @view.model.set 'clockState', 'preview'
         @view.$('h2').text().should.equal 'Auction Opens In'
-        @view.model.set 'auctionState', 'open'
+        @view.model.set 'clockState', 'open'
         @view.$('h2').text().should.equal 'Auction Closes In'
-        @view.model.set 'auctionState', 'closed'
+        @view.model.set 'clockState', 'closed'
         @view.$('h2').text().should.equal 'Auction Closed'

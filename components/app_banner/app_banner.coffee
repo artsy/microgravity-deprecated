@@ -54,17 +54,18 @@ module.exports = class AppBanner
     @$el.remove()
     @$content.css marginTop: 0
 
-  seen: ->
+  dismissed: ->
     Cookies.set @cookie, yes, expires: (60 * 60 * 24 * 365)
 
-  @hasSeen: ->
+  @hasDismissed: ->
     Cookies.get(@::cookie)?
 
   @isEigen: ->
     USER_AGENT?.match('Artsy-Mobile')?
 
   @shouldDisplay: ->
-    USER_AGENT?.match(/(Chrome)/)? and
-    not @hasSeen() and
+    USER_AGENT?.match(/iPhone/i)? and
+    USER_AGENT?.match(/CriOS/i)? and
+    not @hasDismissed() and
     not @isEigen() and
     not excluded.check()
