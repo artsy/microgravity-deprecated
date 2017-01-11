@@ -100,7 +100,7 @@ module.exports.index = (req, res, next) ->
     .then (data) ->
       res.locals.artwork = data.artwork
       res.locals.sd.ARTWORK = data.artwork
-      res.locals.sd.SEADRAGON_URL = res.locals.asset('/assets/openseadragon.js')
+      res.locals.sd.SEADRAGON_URL = res.locals.asset('/assets/mobile_openseadragon.js')
       res.locals.helpers = Helpers
       res.render 'index'
     .catch next

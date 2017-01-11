@@ -1,6 +1,6 @@
 //- Override any locals with `append locals`
 block locals
-  - assetPackage = 'all'
+  - assetPackage = 'mobile_all'
   //- Hacky way of dealing with specs that depend on this template
   - if (!asset) asset = function(u) { return u }
 
@@ -28,7 +28,7 @@ html( class=htmlClass )
         include ./quantcast.html
         if sd.GOOGLE_ANALYTICS_ID
           include ./ga.html
-        
+
       //- Sharify
       if sharify
         != sharify.script()
@@ -38,7 +38,7 @@ html( class=htmlClass )
 
       //- Include asset package's javascript
       script( src=asset('/assets/' + assetPackage + '.js') )
-      script( src=asset('/assets/analytics.js'))
+      script( src=asset('/assets/mobile_analytics.js'))
 
       //- Stripe
       script( type="text/javascript", src="https://js.stripe.com/v2/" )
