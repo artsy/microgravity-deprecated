@@ -12,10 +12,9 @@ module.exports.index = (req, res, next) ->
     .all [
       heroUnits.fetch()
     ]
-    .then ([x, eoyData]) ->
+    .then ([x]) ->
       res.render 'page',
         heroUnits: heroUnits.models
     .catch (err) ->
       res.render 'page',
         heroUnits: heroUnits.models
-        eoy_2016: eoyData
