@@ -13,7 +13,6 @@ describe '#index', ->
       fabricate 'site_hero_unit', heading: 'Artsy Editorial focus on Kittens'
       fabricate 'site_hero_unit'
     ]
-    routes.__set__ 'fetchEOYLists', @fetchEOY = sinon.stub().returns Q.resolve {}
 
   afterEach ->
     Backbone.sync.restore()
