@@ -21,34 +21,42 @@ module.exports.article = (req, res, next) ->
     success: =>
       article.fetchRelated
         success: (data) ->
-          res.locals.sd.ARTICLE = article
-          res.locals.sd.RELATED_ARTICLES = data.relatedArticles?.toJSON()
-          return next() if article.get('partner_channel_id')
-          email = res.locals.sd.CURRENT_USER?.email
-          subscribedToGI email, article.get('section_ids')?[0], (cb) ->
-            res.locals.sd.MAILCHIMP_SUBSCRIBED = cb
-          subscribedToEditorial email, (err, subscribed) ->
-            res.locals.sd.SUBSCRIBED_TO_EDITORIAL = subscribed
-          # Only Artsy Editorial and non super/subsuper articles can have an infinite scroll
-          if data.relatedArticles?.length > 0
-            res.locals.sd.INFINITE_SCROLL = false
-          else if data.article.get('channel_id') isnt sd.ARTSY_EDITORIAL_CHANNEL
-            res.locals.sd.INFINITE_SCROLL = false
-          else
-            res.locals.sd.INFINITE_SCROLL = true
+          if article.get('partner_channel_id')
+            return res.redirect "/#{data.partner.get('default_profile_id')}/article/#{article.get('slug')}"
+          if data.fair
+            return res.redirect "/#{data.fair.get('default_profile_id')}/article/#{article.get('slug')}"
+          return next()
+          # if req.params.slug isnt data.article.get('slug')
+          #   return res.redirect "/article/#{data.article.get 'slug'}"
+          # handle fair redirect too...
 
-          res.render 'article',
-            article: article
-            footerArticles: data.footerArticles if data.footerArticles
-            featuredSection: data.section
-            featuredSectionArticles: data.sectionArticles if data.section
-            relatedArticles: data.relatedArticles
-            calloutArticles: data.calloutArticles
-            superArticle: data.superArticle
-            embed: embed
-            jsonLD: stringifyJSONForWeb(article.toJSONLD())
-            videoOptions: { query: { title: 0, portrait: 0, badge: 0, byline: 0, showinfo: 0, rel: 0, controls: 2, modestbranding: 1, iv_load_policy: 3, color: "E5E5E5" } }
-            lushSignup: true
+          # res.locals.sd.ARTICLE = article
+          # res.locals.sd.RELATED_ARTICLES = data.relatedArticles?.toJSON()
+          # email = res.locals.sd.CURRENT_USER?.email
+          # subscribedToGI email, article.get('section_ids')?[0], (cb) ->
+          #   res.locals.sd.MAILCHIMP_SUBSCRIBED = cb
+          # subscribedToEditorial email, (err, subscribed) ->
+          #   res.locals.sd.SUBSCRIBED_TO_EDITORIAL = subscribed
+          # # Only Artsy Editorial and non super/subsuper articles can have an infinite scroll
+          # if data.relatedArticles?.length > 0
+          #   res.locals.sd.INFINITE_SCROLL = false
+          # else if data.article.get('channel_id') isnt sd.ARTSY_EDITORIAL_CHANNEL
+          #   res.locals.sd.INFINITE_SCROLL = false
+          # else
+          #   res.locals.sd.INFINITE_SCROLL = true
+
+          # res.render 'article',
+          #   article: article
+          #   footerArticles: data.footerArticles if data.footerArticles
+          #   featuredSection: data.section
+          #   featuredSectionArticles: data.sectionArticles if data.section
+          #   relatedArticles: data.relatedArticles
+          #   calloutArticles: data.calloutArticles
+          #   superArticle: data.superArticle
+          #   embed: embed
+          #   jsonLD: stringifyJSONForWeb(article.toJSONLD())
+          #   videoOptions: { query: { title: 0, portrait: 0, badge: 0, byline: 0, showinfo: 0, rel: 0, controls: 2, modestbranding: 1, iv_load_policy: 3, color: "E5E5E5" } }
+          #   lushSignup: true
 
 module.exports.redirectPost = (req, res, next) ->
   res.redirect 301, req.url.replace 'post', 'article'

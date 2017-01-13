@@ -6,6 +6,7 @@ moment = require 'moment'
 Backbone = require 'backbone'
 Artworks = require '../collections/artworks.coffee'
 Section = require './section.coffee'
+Partner = require './partner.coffee'
 { crop, resize } = require '../components/resizer/index.coffee'
 { compactObject } = require './mixins/compact_object.coffee'
 
@@ -85,6 +86,9 @@ module.exports = class Article extends Backbone.Model
             success: (article) ->
               calloutArticles.add(article)
 
+    if @get('partner_channel_id')
+      dfds.push (partner = new Partner(id: @get('partner_channel_id'))).fetch(cache: true)
+
     Q.allSettled(dfds).then =>
       superArticleDefferreds = if superArticle then superArticle.fetchRelatedArticles(relatedArticles) else []
       Q.allSettled(superArticleDefferreds).then =>
@@ -100,6 +104,7 @@ module.exports = class Article extends Backbone.Model
           superArticle: superArticle
           relatedArticles: relatedArticles
           calloutArticles: calloutArticles
+          partner: partner if partner
         )
 
   #
