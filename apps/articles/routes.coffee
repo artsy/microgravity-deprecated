@@ -30,20 +30,21 @@ module.exports.redirectPost = (req, res, next) ->
   res.redirect 301, req.url.replace 'post', 'article'
 
 module.exports.section = (req, res, next) ->
-  new Section(id: req.params.slug).fetch
+  new Section(id: 'venice-biennale-2015').fetch
     cache: true
     error: -> next()
     success: (section) ->
-      return next() unless req.params.slug is section.get('slug')
       new Articles().fetch
         cache: true
-        data: section_id: section.get('id'), published: true, limit: 100, sort: '-published_at'
+        data:
+          section_id: section.get('id')
+          published: true
+          limit: 100
+          sort: '-published_at'
         error: res.backboneError
         success: (articles) ->
           res.locals.sd.SECTION = section
           email = res.locals.sd.CURRENT_USER?.email
-          # subscribedToGI email, section.get('id'), (cb) ->
-          #   res.locals.sd.MAILCHIMP_SUBSCRIBED = cb
           res.render 'section', featuredSection: section, articles: articles
 
 module.exports.articles = (req, res, next) ->
