@@ -96,7 +96,6 @@ module.exports.articles = (req, res, next) ->
     error: res.backboneError
 
 module.exports.article = (req, res, next) ->
-  return next() unless fair = fairFromProfile(req)
   article = new Article id: req.params.slug
   article.fetch
     cache: true
@@ -104,7 +103,6 @@ module.exports.article = (req, res, next) ->
       if (err.status is 404 or err.status is 401) then next() else res.backboneError(err, next)
     success: =>
       return next() unless article.isFairArticle()
-      console.log 'gonna render a fair article'
       article.fetchRelated
         success: (data) ->
           res.locals.sd.ARTICLE = article
