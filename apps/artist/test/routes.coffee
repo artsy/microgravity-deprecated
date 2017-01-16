@@ -4,25 +4,47 @@ Backbone = require 'backbone'
 rewire = require 'rewire'
 routes = rewire '../routes'
 Q = require 'bluebird-q'
+_ = require 'underscore'
 
 describe '#index', ->
 
   beforeEach ->
+    @req =
+      params:
+        id: 'artist-id'
+    @res =
+      locals:
+        sd: {}
+      render: sinon.stub()
+    @next = sinon.stub()
     sinon.stub Backbone, 'sync'
-    routes.index(
-      { params: { id: 'foo' } }
-      { locals: { sd: {}, asset: (->) }, render: renderStub = sinon.stub(), cacheOnCDN: -> }
-    )
-    Backbone.sync.args[0][2].success fabricate 'artist', id: 'damien-hershey'
-    @templateName = renderStub.args[0][0]
-    @templateOptions = renderStub.args[0][1]
+      .onCall 0
+      .returns Promise.resolve fabricate('artist', name: 'Oliver')
+      .onCall 1
+      .returns Promise.resolve []
+      .onCall 2
+      .returns Promise.resolve [fabricate('artwork', title: 'A Great Painting'), fabricate('artwork')]
 
   afterEach ->
     Backbone.sync.restore()
 
-  it 'renders the post page', ->
-    @templateName.should.equal 'page'
-    @templateOptions.artist.get('id').should.equal 'damien-hershey'
+  it 'renders the page template', ->
+    routes.index(@req, @res, @next)
+    _.defer => _.defer =>
+      @res.render.args[0][0].should.equal 'page'
+
+  it 'fetches the correct artist', ->
+    routes.index(@req, @res, @next)
+    _.defer => _.defer =>
+      @res.locals.sd.ARTIST.should.exist
+      @res.render.args[0][1].artist.name.should.equal 'Oliver'
+      @res.locals.sd.ARTIST.name.should.equal 'Oliver'
+
+  it 'fetches the correct artworks', ->
+    routes.index(@req, @res, @next)
+    _.defer => _.defer =>
+      @res.locals.sd.ARTWORKS.length.should.equal 2
+      @res.locals.sd.ARTWORKS[0].title.should.equal 'A Great Painting'
 
 describe "#biography", ->
 
