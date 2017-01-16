@@ -93,9 +93,6 @@ module.exports = class Article extends Backbone.Model
     if @get('partner_channel_id')
       dfds.push (partner = new Partner(id: @get('partner_channel_id'))).fetch(cache: true)
 
-    if @isFairArticle()
-      dfds.push (fair = new Fair(id: @get('fair_ids')[0])).fetch(cache: true)
-
     Q.allSettled(dfds).then =>
       superArticleDefferreds = if superArticle then superArticle.fetchRelatedArticles(relatedArticles) else []
       Q.allSettled(superArticleDefferreds).then =>
@@ -112,8 +109,20 @@ module.exports = class Article extends Backbone.Model
           relatedArticles: relatedArticles
           calloutArticles: calloutArticles
           partner: partner if partner
-          fair: fair if fair
         )
+
+  fetchProfiles: (options) ->
+    dfds = []
+    if @get('partner_channel_id')
+      dfds.push (partner = new Partner(id: @get('partner_channel_id'))).fetch(cache: true)
+
+    else if @isFairArticle()
+      dfds.push (fair = new Fair(id: @get('fair_ids')[0])).fetch(cache: true)
+
+    Q.allSettled(dfds).then =>
+      options.success
+        fair: fair if fair
+        partner: partner if partner
 
   #
   # Super Article helpers

@@ -13,18 +13,18 @@ embed = require 'embed-video'
 sailthru = require('sailthru-client').createSailthruClient(SAILTHRU_KEY,SAILTHRU_SECRET)
 
 module.exports.article = (req, res, next) ->
+  # Handles fair and partner articles
   article = new Article id: req.params.id
   article.fetch
-    cache: true
     error: -> next()
     success: =>
-      article.fetchRelated
+      article.fetchProfiles
         success: (data) ->
-          if article.get('partner_channel_id')
+          if data.partner
             return res.redirect "/#{data.partner.get('default_profile_id')}/article/#{article.get('slug')}"
-          if data.fair
+          else if data.fair
             return res.redirect "/#{data.fair.get('default_profile_id')}/article/#{article.get('slug')}"
-          return next()
+          else return next()
 
 module.exports.redirectPost = (req, res, next) ->
   res.redirect 301, req.url.replace 'post', 'article'
