@@ -103,7 +103,7 @@ if (pathSplit[1] === "auctions") {
       { event: "setAccount", account: sd.CRITEO_ARTWORKS_ACCOUNT_NUMBER },
       { event: "setSiteType", type: "m" },
       { event: "setEmail", email: userEmail },
-      { event: "viewList", item: _.pluck(_.filter(sd.ARTWORKS, (a) => a.forsale), '_id') }
+      { event: "viewList", item: _.pluck(_.filter(sd.ARTWORKS, function(a) { return a.availability === 'for sale' }), '_id') }
     )
   }
 }
