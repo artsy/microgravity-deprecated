@@ -1,8 +1,6 @@
 .article-container( data-id=article.get('id') )
   article.article
     .main-side-margin
-      if featuredSection
-        .article-section-header= featuredSection.get('title')
       if article.get('hero_section') && article.get('hero_section').type === 'video'
         .article-large-format-video
           - video = article.get('hero_section')
@@ -38,24 +36,6 @@
           when 'video'
             - video = section
             include sections/video
-          when 'callout'
-            if section.article.length > 0
-              .article-section-callout-container( data-id=section.article )
-                //- Rendered on client
-            else if section.text
-              include sections/callout
-          when 'embed'
-            .article-section-embed( data-id=section.url )
-              .article-embed-container
-                include sections/embed
-          when 'toc'
-            - toc = section
-            .article-section-toc
-              include sections/toc
-          when 'image_set'
-            if section.images.length > 0
-              .article-section-image-set( data-index= i )
-                include sections/image_set
 
 .article-footer-container
   footer.article-footer

@@ -9,7 +9,6 @@ Article = require '../../models/article'
 embed = require 'embed-video'
 { stringifyJSONForWeb } = require '../../components/util/json.coffee'
 { resize } = require '../../components/resizer/index.coffee'
-{ EOY_2016_SLUGS } = require '../../config.coffee'
 
 partnerFromProfile = (req) ->
   if req.profile?.isPartner()
@@ -76,13 +75,9 @@ module.exports.article = (req, res, next) ->
       article.fetchRelated
         success: (data) ->
           res.locals.sd.ARTICLE = article
-          res.locals.sd.RELATED_ARTICLES = data.relatedArticles?.toJSON()
-          res.locals.sd.INFINITE_SCROLL = false
           res.render 'article',
             article: article
             footerArticles: data.footerArticles if data.footerArticles
-            relatedArticles: data.article.relatedArticles
-            calloutArticles: data.article.calloutArticles
             embed: embed
             resize: resize
             jsonLD: stringifyJSONForWeb(article.toJSONLD())

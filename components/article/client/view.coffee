@@ -1,5 +1,6 @@
 Backbone = require 'backbone'
 _ = require 'underscore'
+sd = require('sharify').data
 Article = require '../../../models/article.coffee'
 Articles = require '../../../collections/articles.coffee'
 SlideshowsView = require './slideshows.coffee'
@@ -11,8 +12,8 @@ module.exports = class ArticleView extends Backbone.View
   events:
     'click .article-video-play-button' : 'clickPlay'
 
-  initialize: (options = {}) ->
-    { @article } = options
+  initialize: ->
+    @article = new Article sd.ARTICLE
     @setupPartnerBreadcrumb() if @article.get('partner_channel_id')
     new SlideshowsView
 

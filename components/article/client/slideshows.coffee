@@ -34,7 +34,6 @@ module.exports = ->
         wrapAround: false
         imagesLoaded: true
         pageDots: false
-        freeScroll: true
 
     artworks.invoke 'fetch',
       complete: prepareFigures

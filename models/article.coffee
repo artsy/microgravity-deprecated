@@ -121,8 +121,8 @@ module.exports = class Article extends Backbone.Model
 
     Q.allSettled(dfds).then =>
       options.success
-        fair: fair if fair
-        partner: partner if partner
+        fair: fair
+        partner: partner
 
   #
   # Super Article helpers

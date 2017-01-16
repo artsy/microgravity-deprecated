@@ -19,14 +19,13 @@ describe 'Article routes', ->
     @next = sinon.stub()
     sinon.stub Backbone, 'sync'
     routes.__set__ 'sailthru', apiGet: sinon.stub().yields('error')
-    routes.__set__ 'EOY_2016_SLUGS', '/article/'
 
   afterEach ->
     Backbone.sync.restore()
 
   describe '#article', ->
 
-    it 'fetches and renders the article page', (done) ->
+    it 'fetches and redirects partner articles', (done) ->
       article = _.extend _.clone(fixtures.article), id: 'foobar'
       routes.article @req, @res, @next
       Backbone.sync.args[0][1].url().should.containEql 'api/articles/foobar'
@@ -38,22 +37,29 @@ describe 'Article routes', ->
         @res.render.args[0][1].article.id.should.equal 'foobar'
         done()
 
-    it 'fetches and render super articles', (done) ->
-      article = _.extend _.clone(fixtures.article), id: 'foobar', is_super_article: true, super_article: related_articles: ['related-1']
-      relatedArticle = _.extend _.clone(fixtures.article), id: 'related-1'
+    it 'fetches and redirects fair articles', (done) ->
+      article = _.extend _.clone(fixtures.article), id: 'foobar'
       routes.article @req, @res, @next
       Backbone.sync.args[0][1].url().should.containEql 'api/articles/foobar'
       Backbone.sync.args[0][2].success article
       Backbone.sync.args[1][2].data.featured.should.be.ok()
       Backbone.sync.args[1][2].success()
       _.defer => _.defer =>
-        Backbone.sync.args[2][1].url().should.containEql 'api/articles/related-1'
-        Backbone.sync.args[2][2].success relatedArticle
-        _.defer => _.defer =>
-          @res.render.args[0][0].should.equal 'article'
-          @res.render.args[0][1].article.id.should.equal 'foobar'
-          @res.render.args[0][1].relatedArticles.models[0].id.should.equal 'related-1'
-          done()
+        @res.render.args[0][0].should.equal 'article'
+        @res.render.args[0][1].article.id.should.equal 'foobar'
+        done()
+
+    it 'nexts regular articles', (done) ->
+      article = _.extend _.clone(fixtures.article), id: 'foobar'
+      routes.article @req, @res, @next
+      Backbone.sync.args[0][1].url().should.containEql 'api/articles/foobar'
+      Backbone.sync.args[0][2].success article
+      Backbone.sync.args[1][2].data.featured.should.be.ok()
+      Backbone.sync.args[1][2].success()
+      _.defer => _.defer =>
+        @res.render.args[0][0].should.equal 'article'
+        @res.render.args[0][1].article.id.should.equal 'foobar'
+        done()
 
   describe '#section', ->
 

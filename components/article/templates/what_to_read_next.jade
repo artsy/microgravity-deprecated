@@ -1,6 +1,0 @@
-.wtrn-header What To Read Next
-for article in related
-  a.wtrn-article-container(href=article.fullHref())
-    .wtrn-image
-      img(src=crop(article.get('thumbnail_image'),{ width: 70, height: 70, quality: 90 }))
-    .wtrn-title= article.get('thumbnail_title')
