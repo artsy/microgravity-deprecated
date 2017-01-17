@@ -18,7 +18,7 @@ module.exports.article = (req, res, next) ->
   article.fetch
     error: -> next()
     success: =>
-      article.fetchProfiles
+      article.fetchRelated
         success: (data) ->
           if data.partner
             return res.redirect "/#{data.partner.get('default_profile_id')}/article/#{article.get('slug')}"

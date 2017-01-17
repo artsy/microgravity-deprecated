@@ -35,7 +35,7 @@ describe 'Article routes', ->
       routes.article @req, @res, @next
       Backbone.sync.args[0][1].url().should.containEql 'api/articles/foobar'
       Backbone.sync.args[0][2].success article
-      Backbone.sync.args[1][2].success fabricate 'partner'
+      Backbone.sync.args[2][2].success fabricate 'partner'
       _.defer => _.defer =>
         @res.redirect.args[0][0].should.equal '/gagosian/article/foobar'
         done()
@@ -48,7 +48,7 @@ describe 'Article routes', ->
       routes.article @req, @res, @next
       Backbone.sync.args[0][1].url().should.containEql 'api/articles/foobar'
       Backbone.sync.args[0][2].success article
-      Backbone.sync.args[1][2].success fabricate 'fair'
+      Backbone.sync.args[2][2].success fabricate 'fair'
       _.defer => _.defer =>
         @res.redirect.args[0][0].should.equal '/the-armory-show/article/foobar'
         done()
