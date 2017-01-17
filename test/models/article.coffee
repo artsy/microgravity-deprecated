@@ -2,85 +2,59 @@ _ = require 'underscore'
 Q = require 'bluebird-q'
 Backbone = require 'backbone'
 { fabricate } = require 'antigravity'
-Article = require '../../models/article.coffee'
+rewire = require 'rewire'
+Article = rewire '../../models/article.coffee'
 sinon = require 'sinon'
 fixtures = require '../helpers/fixtures.coffee'
 
 describe "Article", ->
   beforeEach ->
+    sinon.stub Backbone, 'sync'
     @article = new Article fixtures.article
+    Article.__set__ 'sd', { FAIR_CHANNEL_ID: '12345' }
 
   afterEach ->
     Backbone.sync.restore()
 
   describe '#fetchRelated', ->
-    it 'works for sectionless articles', ->
-      article = _.extend {}, fixtures.article,
-        id: 'id-1'
-        sections: []
 
-      sinon.stub Backbone, 'sync'
+    it 'sets a fair if there is one', ->
+      Backbone.sync
         .onCall 0
-        .yieldsTo 'success', article
-        .returns Q.resolve article
-
-      @article.set 'id', 'article-1'
-      @article.is_super_article = false
-      @article.sections = []
-      @article.fetchRelated success: (data) ->
-        data.article.get('id').should.equal 'article-1'
-
-    it 'only fetches section content', ->
-      sinon.stub Backbone, 'sync'
-        .onCall 0
-        .yieldsTo 'success', fixtures.section
-        .returns Q.resolve fixtures.section
+        .yieldsTo 'success', [fabricate 'article']
+        .returns Q.resolve [fabricate 'article']
         .onCall 1
-        .yieldsTo 'success', []
-        .returns Q.resolve []
-
-      @article.is_super_article = false
+        .yieldsTo 'success', fabricate 'fair'
+        .returns Q.resolve fabricate 'fair'
       @article.set
-        section_ids: ['foo']
-        id: 'article-1'
-      @article.fetchRelated success: (data) ->
-        data.section.get('title').should.equal 'Vennice Biennalez'
-
-    it 'fetches related articles for article in super article', ->
-      relatedArticle1 = _.extend {}, fixtures.article,
         id: 'id-1'
-        title: 'RelatedArticle 1',
-        sections: []
-      relatedArticle2 = _.extend {}, fixtures.article,
-        id: 'id-2'
-        title: 'RelatedArticle 2',
-        sections: []
-      superArticle = _.extend {}, fixtures.article,
-        id: 'id-3'
-        title: 'SuperArticle',
-        is_super_article: true
-        sections: []
-        super_article:
-          related_articles: ['id-1', 'id-2']
-
-      @article.set
-        section_ids: []
-        id: 'article-1'
-
-      sinon.stub Backbone, 'sync'
-        .onCall 0
-        .returns Q.resolve []
-        .onCall 1
-        .yieldsTo 'success', {results: superArticle}
-        .returns Q.resolve {results: superArticle}
-        .onCall 2
-        .yieldsTo 'success', relatedArticle2
-        .returns Q.resolve relatedArticle2
-        .onCall 3
-        .yieldsTo 'success', relatedArticle1
-        .returns Q.resolve relatedArticle1
-
+        fair_ids: ['123']
+        channel_id: '12345'
       @article.fetchRelated success: (data) ->
-        data.superArticle.get('title').should.equal 'SuperArticle'
-        data.relatedArticles.models[0].get('title').should.equal 'RelatedArticle 1'
-        data.relatedArticles.models[1].get('title').should.equal 'RelatedArticle 2'
+        data.fair.get('default_profile_id').should.equal 'the-armory-show'
+
+    it 'sets a partner if there is one', ->
+      Backbone.sync
+        .onCall 0
+        .yieldsTo 'success', [fabricate 'article']
+        .returns Q.resolve [fabricate 'article']
+        .onCall 1
+        .yieldsTo 'success', fabricate 'partner'
+        .returns Q.resolve fabricate 'partner'
+      @article.set
+        id: 'id-1'
+        partner_channel_id: '147'
+      @article.fetchRelated success: (data) ->
+        data.partner.get('default_profile_id').should.equal 'gagosian'
+
+  describe '#isFairArticle', ->
+
+    it 'returns true for a fair article', ->
+      @article.set 'channel_id', '12345'
+      @article.set 'fair_ids', ['123']
+      @article.isFairArticle().should.be.true()
+
+    it 'returns false for a non fair article', ->
+      @article.set 'channel_id', '12345'
+      @article.set 'fair_ids', []
+      @article.isFairArticle().should.be.false()
