@@ -22,3 +22,4 @@ $ -> analytics.ready ->
   require '../analytics/article_impressions.js'
   require '../analytics/following.js'
   require '../analytics/save.js'
+  require '../analytics/partners.js'
