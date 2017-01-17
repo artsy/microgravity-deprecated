@@ -9,6 +9,7 @@ Fair = require '../../../models/fair'
 Profile = require '../../../models/profile'
 PartnerLocation = require '../../../models/partner_location'
 Artist = require '../../../models/artist'
+Article = require '../../../models/article'
 { fabricate } = require 'antigravity'
 SearchResult = require '../../../models/search_result'
 Artworks = require '../../../collections/artworks'
@@ -273,3 +274,25 @@ describe 'Search', ->
       render {
         shows: new Shows [fabricate 'show', fair_location: null]
       }, 'artist'
+
+describe 'article page template ', ->
+
+  beforeEach ->
+
+  render = (profile, fair) ->
+    filename = path.resolve __dirname, "../templates/article.jade"
+    jade.compile(fs.readFileSync(filename), filename: filename)(
+      fair: fair
+      profile: profile
+      sd: {}
+      article: new Article fabricate 'article'
+      resize: ->
+    )
+
+  it 'renders the article body', ->
+    profile = new Profile(fabricate('profile'))
+    fair = new Fair(fabricate('fair'))
+
+    articlePage = render profile, fair
+    articlePage.should.containEql 'On The Heels of A Stellar Year'
+    articlePage.should.containEql 'Taipei Biennial'

@@ -1,5 +1,4 @@
 _ = require 'underscore'
-imagesLoaded = require 'imagesloaded'
 
 module.exports = class Cycle
   defaults:

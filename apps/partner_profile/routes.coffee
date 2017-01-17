@@ -76,6 +76,7 @@ module.exports.article = (req, res, next) ->
         success: (data) ->
           res.locals.sd.ARTICLE = article
           res.render 'article',
+            partner: data.partner
             article: article
             footerArticles: data.footerArticles if data.footerArticles
             embed: embed

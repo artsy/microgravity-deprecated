@@ -7,6 +7,7 @@ Cycle = require '../../../components/cycle/index.coffee'
 CTABarView = require '../../../components/cta_bar/view.coffee'
 cookies = require '../../../components/cookies/index.coffee'
 analyticsHooks = require '../../../lib/analytics_hooks.coffee'
+imagesLoaded = require 'imagesloaded'
 
 module.exports = class EditorialSignupView extends Backbone.View
 

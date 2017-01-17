@@ -33,14 +33,12 @@ describe 'EditorialSignupView', ->
 
     it 'checks is not in editorial article or magazine', ->
       @EditorialSignupView.__set__ 'sd',
-        ARTICLE: null
         SUBSCRIBED_TO_EDITORIAL: false
         CURRENT_PATH: ''
       @view.eligibleToSignUp().should.not.be.ok()
 
     it 'checks if in article or magazine', ->
       @EditorialSignupView.__set__ 'sd',
-        ARTICLE: null
         SUBSCRIBED_TO_EDITORIAL: false
         CURRENT_PATH: '/articles'
       @view.eligibleToSignUp().should.be.ok()
@@ -49,10 +47,8 @@ describe 'EditorialSignupView', ->
 
     it 'removes the form when successful', ->
       @EditorialSignupView.__set__ 'sd',
-        ARTICLE: { channel_id: '123', id: '123' }
-        ARTSY_EDITORIAL_CHANNEL: '123'
+        CURRENT_PATH: '/articles'
         SUBSCRIBED_TO_EDITORIAL: false
-        MEDIUM: 'social'
       @view.initialize()
       @view.onSubscribe({currentTarget: $('<div></div>')})
       $.ajax.args[0][0].success
@@ -69,10 +65,8 @@ describe 'EditorialSignupView', ->
     it 'removes the loading spinner if there is an error', ->
       $.ajax.yieldsTo('error')
       @EditorialSignupView.__set__ 'sd',
-        ARTICLE: channel_id: '123'
-        ARTSY_EDITORIAL_CHANNEL: '123'
         SUBSCRIBED_TO_EDITORIAL: false
-        MEDIUM: 'social'
+        CURRENT_PATH: '/articles'
       $subscribe = $('<div></div>')
       @view.onSubscribe({currentTarget: $subscribe})
       $($subscribe).hasClass('loading-spinner').should.be.false()

@@ -44,7 +44,7 @@
         h2 More From #{featuredSection.get('title')}
         for article in featuredSectionArticles.models
           include ../../article_figure/template
-      else
+      else if footerArticles
         h2 What to Read Next
         for article in footerArticles.models
           include ../../article_figure/template
