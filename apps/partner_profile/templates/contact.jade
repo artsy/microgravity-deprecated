@@ -10,11 +10,20 @@ block content
       h1.partner-profile-contact-email
         | Are you interested in purchasing works from #{partner.get('name')}?
         br
-        a( data-id=partner.get('id'), href=partner.getMailTo() ) Contact gallery via email.
+        a(
+          data-partner-id=partner.get('_id'),
+          data-partner-slug=partner.get('id'),
+          href=partner.getMailTo()
+        ) Contact gallery via email.
 
     if partner.has('website')
       h2.partner-profile-contact-website
-        a( data-id=partner.get('id'), href=partner.get('website'), target='_blank' )= partner.getSimpleWebsite()
+        a(
+          data-partner-id=partner.get('_id'),
+          data-partner-slug=partner.get('id'),
+          href=partner.get('website'),
+          target='_blank'
+        )= partner.getSimpleWebsite()
 
 
     for locations, city in locationGroups
