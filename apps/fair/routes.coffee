@@ -2,6 +2,7 @@ _ = require 'underscore'
 sd = require('sharify').data
 Artist = require '../../models/artist.coffee'
 Artists = require '../../collections/artists.coffee'
+Article = require '../../models/article.coffee'
 Fair = require '../../models/fair.coffee'
 FairEvent = require '../../models/fair_event.coffee'
 FairEvents = require '../../collections/fair_events.coffee'
@@ -13,6 +14,9 @@ ShowsFeed = require '../../collections/shows_feed.coffee'
 SearchResults = require '../../collections/search_results.coffee'
 moment = require 'moment'
 querystring = require 'querystring'
+embed = require 'embed-video'
+{ resize } = require '../../components/resizer/index.coffee'
+{ stringifyJSONForWeb } = require '../../components/util/json.coffee'
 
 fairFromProfile = (req) ->
   if req.profile?.isFair()
@@ -90,6 +94,29 @@ module.exports.articles = (req, res, next) ->
         fair: fair
         profile: req.profile
     error: res.backboneError
+
+module.exports.article = (req, res, next) ->
+  article = new Article id: req.params.slug
+  article.fetch
+    cache: true
+    error: (article, err) ->
+      if (err.status is 404 or err.status is 401) then next() else res.backboneError(err, next)
+    success: =>
+      return next() unless article.isFairArticle()
+      article.fetchRelated
+        success: (data) ->
+          res.locals.sd.ARTICLE = article
+          res.locals.sd.RELATED_ARTICLES = data.relatedArticles?.toJSON()
+          res.locals.sd.INFINITE_SCROLL = false
+          res.render 'article',
+            article: article
+            footerArticles: data.footerArticles if data.footerArticles
+            relatedArticles: data.article.relatedArticles
+            calloutArticles: data.article.calloutArticles
+            embed: embed
+            resize: resize
+            jsonLD: stringifyJSONForWeb(article.toJSONLD())
+            videoOptions: { query: { title: 0, portrait: 0, badge: 0, byline: 0, showinfo: 0, rel: 0, controls: 2, modestbranding: 1, iv_load_policy: 3, color: "E5E5E5" } }
 
 module.exports.search = (req, res, next) ->
   return next() unless fair = fairFromProfile(req)

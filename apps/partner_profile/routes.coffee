@@ -9,7 +9,6 @@ Article = require '../../models/article'
 embed = require 'embed-video'
 { stringifyJSONForWeb } = require '../../components/util/json.coffee'
 { resize } = require '../../components/resizer/index.coffee'
-{ EOY_2016_SLUGS } = require '../../config.coffee'
 
 partnerFromProfile = (req) ->
   if req.profile?.isPartner()
@@ -66,23 +65,20 @@ module.exports.articles = (req, res, next) ->
     profile: req.profile
 
 module.exports.article = (req, res, next) ->
-  return next() if req.params.articleId.match(EOY_2016_SLUGS)?.length
   article = new Article id: req.params.articleId
   article.fetch
     cache: true
     error: (article, err) ->
       if (err.status is 404 or err.status is 401) then next() else res.backboneError(err, next)
     success: =>
+      return next() unless article.get('partner_channel_id')
       article.fetchRelated
         success: (data) ->
           res.locals.sd.ARTICLE = article
-          res.locals.sd.RELATED_ARTICLES = data.relatedArticles?.toJSON()
-          res.locals.sd.INFINITE_SCROLL = false
           res.render 'article',
+            partner: data.partner
             article: article
             footerArticles: data.footerArticles if data.footerArticles
-            relatedArticles: data.article.relatedArticles
-            calloutArticles: data.article.calloutArticles
             embed: embed
             resize: resize
             jsonLD: stringifyJSONForWeb(article.toJSONLD())

@@ -51,55 +51,7 @@ describe 'article page', ->
     @article.get('sections').should.have.lengthOf 12
     @$('.article-section').should.have.lengthOf 12
 
-  it 'renders a video fullscreen article', ->
-    @$('.article-fullscreen-video-player').attr('src').should.equal 'http://video.mp4'
-
   it 'renders artworks', ->
     @$('.article-section-artworks').should.have.lengthOf 1
     @$('.article-section-artworks').html().should.containEql 'govinda-sah-azad-matter-slash-nothing-slash-matter'
     @$('.article-section-artworks').html().should.containEql 'https://d32dm0rphc51dk.cloudfront.net/UhkwvicwkJGgGoPIAP5pVA/larger.jpg'
-
-  it 'renders a image fullscreen article', ->
-    _.extend @article.attributes,
-      hero_section:
-        type: 'fullscreen'
-        background_image_url: 'http://image.png'
-
-    html = render('index')
-      sd: {}
-      resize: ->
-      article: @article
-      footerArticles: new Backbone.Collection
-      featuredSection: new Section _.extend _.clone(fixtures.section), title: 'Moo Bar'
-      featuredSectionArticles: @sectionArticles
-
-    @$ = cheerio.load html
-
-    @$('.article-fullscreen-image').attr('src').should.equal 'http://image.png'
-
-  it 'renders a TOC', ->
-    _.extend @article.attributes,
-      sections: [
-        {
-          type: 'toc'
-          links: [
-            { value: 'ayan', name: 'Ayan Farah' }
-            { value: 'pieter', name: 'Pieter Hugo' }
-            { value: 'elad', name: 'Elad Lassry' }
-          ]
-        }
-      ]
-
-    html = render('index')
-      sd: {}
-      resize: ->
-      article: @article
-      footerArticles: new Backbone.Collection
-      featuredSection: new Section _.extend _.clone(fixtures.section), title: 'Moo Bar'
-      featuredSectionArticles: @sectionArticles
-
-    @$ = cheerio.load html
-
-    @$('.article-section-toc').html().should.containEql '<a href="#ayan">Ayan Farah</a>'
-    @$('.article-section-toc').html().should.containEql '<a href="#pieter">Pieter Hugo</a>'
-    @$('.article-section-toc').html().should.containEql '<a href="#elad">Elad Lassry</a>'

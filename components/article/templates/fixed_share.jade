@@ -1,6 +1,6 @@
 - referer = sd && encodeURIComponent(sd.APP_URL + sd.CURRENT_PATH)
-- url = url || referer
-- description = description || ''
+- url = article.fullHref() || referer
+- description = article.shareDescription() || ''
 
 nav.article-fixed-share-nav
   a.article-fixed-share-item(

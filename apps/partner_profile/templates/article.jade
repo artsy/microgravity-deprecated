@@ -4,7 +4,14 @@ append locals
   - assetPackage = 'mobile_articles'
 
 block content
-  #article-body-container
+
+  .main-side-margin
+    nav.slash-breadcrumbs
+      a( href="/#{partner.get('default_profile_id')}" )= partner.get('name')
+      a( href="/#{partner.get('default_profile_id')}/articles" )
+        span Articles
+
+  #article-body-container.partner
     include ../../../components/article/templates/index
 
   .article-fixed-share.js--article-fixed-share

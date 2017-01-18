@@ -1,12 +1,6 @@
-if article.get('hero_section') && article.get('hero_section').type === 'fullscreen'
-  include fullscreen
-.article-container( class=(article.get('hero_section') && article.get('hero_section').type === 'fullscreen' ? 'article-fullscreen-content' : '') data-id=article.get('id') )
-  if superArticle
-    include super_article_sticky_header
+.article-container( data-id=article.get('id') )
   article.article
     .main-side-margin
-      if featuredSection
-        .article-section-header= featuredSection.get('title')
       if article.get('hero_section') && article.get('hero_section').type === 'video'
         .article-large-format-video
           - video = article.get('hero_section')
@@ -42,41 +36,19 @@ if article.get('hero_section') && article.get('hero_section').type === 'fullscre
           when 'video'
             - video = section
             include sections/video
-          when 'callout'
-            if section.article.length > 0
-              .article-section-callout-container( data-id=section.article )
-                //- Rendered on client
-            else if section.text
-              include sections/callout
-          when 'embed'
-            .article-section-embed( data-id=section.url )
-              .article-embed-container
-                include sections/embed
-          when 'toc'
-            - toc = section
-            .article-section-toc
-              include sections/toc
-          when 'image_set'
-            if section.images.length > 0
-              .article-section-image-set( data-index= i )
-                include sections/image_set
 
 .article-footer-container
-  if superArticle
-    include super_article_footer
-  else if !sd.INFINITE_SCROLL
-    footer.article-footer
-      .article-footer-next
-        if article.get('section_ids').length
-          h2 More From #{featuredSection.get('title')}
-          for article in featuredSectionArticles.models
-            include ../../article_figure/template
-        else
-          h2 What to Read Next
-          for article in footerArticles.models
-            include ../../article_figure/template
-        a.avant-garde-box-button( href='/articles' ) Show More
-  else if !lushSignup
-    .main-layout-container
-      .articles-featured-articles.article-related-widget( data-id = article.get('id') )
-        //- Rendered on client
+  footer.article-footer
+    .article-footer-next
+      if article.get('section_ids').length
+        h2 More From #{featuredSection.get('title')}
+        for article in featuredSectionArticles.models
+          include ../../article_figure/template
+      else if footerArticles
+        h2 What to Read Next
+        for article in footerArticles.models
+          include ../../article_figure/template
+      a.avant-garde-box-button( href='/articles' ) Show More
+
+.article-fixed-share.js--article-fixed-share
+  include fixed_share

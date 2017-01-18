@@ -17,6 +17,7 @@ app.get '/:profileId/live', routes.trending  # This changed to "Trending", but r
 app.get '/:profileId/for-you', routes.forYou
 app.get '/:profileId/overview', routes.mainPage
 app.get '/:profileId/articles', routes.articles
+app.get '/:profileId/article/:slug', routes.article
 app.get '/:profileId/search', routes.search
 app.get '/:profileId/browse/exhibitors', routes.exhibitorsAtoZ
 app.get '/:profileId/browse/artists', routes.artistsAtoZ
