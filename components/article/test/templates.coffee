@@ -55,3 +55,7 @@ describe 'article page', ->
     @$('.article-section-artworks').should.have.lengthOf 1
     @$('.article-section-artworks').html().should.containEql 'govinda-sah-azad-matter-slash-nothing-slash-matter'
     @$('.article-section-artworks').html().should.containEql 'https://d32dm0rphc51dk.cloudfront.net/UhkwvicwkJGgGoPIAP5pVA/larger.jpg'
+
+  it 'can render artworks with two artists', ->
+    @$('.article-section-artworks').html().should.containEql 'Govinda Sah'
+    @$('.article-section-artworks').html().should.containEql 'Andy Warhol'
