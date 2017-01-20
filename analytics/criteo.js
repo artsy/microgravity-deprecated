@@ -63,42 +63,6 @@ if (pathSplit[1] === "auctions") {
       { event: "viewItem", item: sd.ARTWORK._id }
     )
   }
-  // ARTWORKS viewBasket
-  analyticsHooks.on("inquiry_questionnaire:modal:opened", function(data) {
-    window.criteo_q.push(
-      { event: "setAccount", account: sd.CRITEO_ARTWORKS_ACCOUNT_NUMBER },
-      { event: "setSiteType", type: "m" },
-      { event: "setEmail", email: userEmail },
-      {
-        event: "viewBasket",
-        item: [
-          {
-            id: sd.ARTWORK._id,
-            price: sd.ARTWORK.price,
-            quantity: 1
-          }
-        ]
-      }
-    )
-  })
-  // ARTWORKS trackTransaction
-  analyticsHooks.on("inquiry:sent", function(data) {
-    window.criteo_q.push(
-      { event: "setAccount", account: sd.CRITEO_ARTWORKS_ACCOUNT_NUMBER },
-      { event: "setSiteType", type: "m" },
-      { event: "setEmail", email: userEmail },
-      {
-        event: "trackTransaction",
-        item: [
-          {
-            id: sd.ARTWORK._id,
-            price: sd.ARTWORK.price,
-            quantity: 1
-          }
-        ]
-      }
-    )
-  })
 } else {
   if (pathSplit[1] === "collect") {
     // https://www.artsy.net/collect - (ARTWORKS viewHome)
