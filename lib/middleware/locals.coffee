@@ -5,6 +5,7 @@
 #
 
 _ = require 'underscore'
+_s = require 'underscore.string'
 uuid = require 'node-uuid'
 artsyXapp = require 'artsy-xapp'
 { parse } = require 'url'
@@ -15,6 +16,7 @@ module.exports = (req, res, next) ->
   res.locals.sd.SESSION_ID = req.session?.id ?= uuid.v1()
   res.locals.sd.USER_AGENT = ua
   res.locals._ = _
+  res.locals._s = _s
   res.locals.htmlClass = if ua?.match(/Artsy-Mobile/) then 'layout-artsy-mobile-app' else ''
   res.locals.htmlClass += ' layout-logged-in' if req.user?
   res.locals.sd.ARTSY_XAPP_TOKEN = artsyXapp.token

@@ -1,6 +1,5 @@
 _ = require 'underscore'
 Backbone = require 'backbone'
-HeroUnits = require '../../../collections/hero_units'
 { fabricate } = require 'antigravity'
 sinon = require 'sinon'
 benv = require 'benv'
@@ -16,11 +15,7 @@ describe 'HomePageView', ->
 
       Backbone.$ = $
       benv.render resolve(__dirname, '../templates/page.jade'), {
-        heroUnits: new HeroUnits([
-          fabricate 'site_hero_unit'
-          fabricate 'site_hero_unit'
-          fabricate 'site_hero_unit'
-        ]).models
+        heroUnits: []
         sd: {}
       }, =>
         @HomePageView = benv.requireWithJadeify resolve(__dirname, '../client/view'),

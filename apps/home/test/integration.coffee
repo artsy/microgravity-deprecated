@@ -2,8 +2,8 @@ servers = require '../../../test/helpers/servers'
 Browser = null
 sinon = require 'sinon'
 
-describe 'Homepage', ->
-  
+xdescribe 'Homepage', ->
+
   before (done) ->
     Browser = require 'zombie'
     servers.setup -> done()
@@ -11,7 +11,7 @@ describe 'Homepage', ->
   after ->
     servers.teardown()
 
-  xit 'intializes the client-side homepage view', (done) ->
+  it 'intializes the client-side homepage view', (done) ->
     browser = new Browser
     browser.visit 'http://localhost:5000', ->
       browser.wait ->

@@ -7,15 +7,15 @@ block content
         #carousel-track.carousel-track
           for heroUnit in heroUnits
             figure.home-page-hero-unit(
-              class= heroUnit.cssClass()
-              style="background-image: url(#{heroUnit.get('background_image_mobile_url')});"
+              class= 'home-page-hero-unit' + _s.dasherize(_s.humanize(heroUnit.mode))
+              style="background-image: url(#{heroUnit.background_image_url});"
             )
-              a( href= heroUnit.get('link') )
+              a( href= heroUnit.href )
                 figcaption.home-page-hero-unit-details
                   .vcenter-outer: .vcenter-inner
-                    h2.avant-garde-header!= heroUnit.mdToHtml('heading')
-                    h1.home-page-hero-unit-title.avant-garde-header= heroUnit.get('mobile_title')
-                    h2!= heroUnit.mdToHtml('mobile_description')
+                    h2.avant-garde-header!= heroUnit.heading
+                    h1.home-page-hero-unit-title.avant-garde-header= heroUnit.title
+                    h2!= heroUnit.subtitle
 
   section.main-side-margin.home-page-section
     h1.avant-garde-header-center Explore Artsy
