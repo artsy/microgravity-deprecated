@@ -1,20 +1,22 @@
-HeroUnits = require '../../collections/hero_units'
-Artworks = require '../../collections/artworks'
-FeaturedLinks = require '../../collections/featured_links'
-sd = require('sharify').data
-Backbone = require 'backbone'
-_ = require 'underscore'
-Q = require 'bluebird-q'
+metaphysics = require '../../lib/metaphysics.coffee'
+
+query = """
+  query {
+    home_page {
+      hero_units(platform: MOBILE) {
+        mode
+        heading
+        title
+        subtitle
+        href
+        background_image_url
+      }
+    }
+  }
+"""
 
 module.exports.index = (req, res, next) ->
-  heroUnits = new HeroUnits
-  Q
-    .all [
-      heroUnits.fetch()
-    ]
-    .then ([x]) ->
-      res.render 'page',
-        heroUnits: heroUnits.models
-    .catch (err) ->
-      res.render 'page',
-        heroUnits: heroUnits.models
+  metaphysics(query: query)
+    .then ({ home_page  }) ->
+      res.render 'page', heroUnits: home_page.hero_units
+    .catch next

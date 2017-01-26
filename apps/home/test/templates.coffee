@@ -1,3 +1,4 @@
+_s = require 'underscore.string'
 cheerio = require 'cheerio'
 jade = require 'jade'
 path = require 'path'
@@ -5,7 +6,6 @@ fs = require 'fs'
 Shows = require '../../../collections/shows_feed'
 Artworks = require '../../../collections/artworks'
 FeaturedLinks = require '../../../collections/featured_links'
-HeroUnits = require '../../../collections/hero_units'
 { fabricate } = require 'antigravity'
 
 render = (templateName) ->
@@ -56,15 +56,11 @@ describe 'Featured artworks template', ->
 describe 'Index', ->
 
   it 'with hero units', ->
-    heroUnits = new HeroUnits [
-      fabricate('site_hero_unit',
-        heading: 'Diary of a cat'
-      ),
-      fabricate('site_hero_unit',
-        heading: 'Diary of a dog'
-      )
+    heroUnits = [
+      { title: 'Diary of a cat' }
+      { title: 'Diary of a dog' }
     ]
-    html = render('page')(heroUnits: heroUnits.models, sd: {})
+    html = render('page')(heroUnits: heroUnits, sd: {}, _s: _s)
     html.should.containEql 'Diary of a cat'
     $ = cheerio.load html
 

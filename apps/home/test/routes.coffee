@@ -1,28 +1,21 @@
-{ fabricate } = require 'antigravity'
 _ = require 'underscore'
-Q = require 'bluebird-q'
 sinon = require 'sinon'
 rewire = require 'rewire'
 routes = rewire '../routes'
-Backbone = require 'backbone'
 
 describe '#index', ->
 
   beforeEach ->
-    sinon.stub(Backbone, 'sync').yieldsTo 'success', [
-      fabricate 'site_hero_unit', heading: 'Artsy Editorial focus on Kittens'
-      fabricate 'site_hero_unit'
-    ]
-
-  afterEach ->
-    Backbone.sync.restore()
+    @req = {}
+    @res = { render: sinon.stub() }
+    @next = sinon.stub()
+    routes.__set__ 'metaphysics', @metaphysics = sinon.stub()
+    @metaphysics.returns Promise.resolve home_page: hero_units: [{
+      title: 'Foo'
+    }]
 
   it 'renders the hero units', (done) ->
-    routes.index(
-      {}
-      { locals: { sd: { } }, render: renderStub = sinon.stub() }
-    )
+    routes.index @req, @res, @next
     _.defer =>
-      renderStub.args[0][0].should.equal 'page'
-      renderStub.args[0][1].heroUnits[0].get('heading').should.equal 'Artsy Editorial focus on Kittens'
+      @res.render.args[0][1].heroUnits[0].title.should.equal 'Foo'
       done()
