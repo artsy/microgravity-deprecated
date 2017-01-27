@@ -131,11 +131,11 @@ describe 'ArtistPageView', ->
     it 'fetches the artworks with the params', ->
       @view.artworkParams.sort = 'title'
       @view.resetArtworks()
-      Backbone.sync.args[0][2].data.should.containEql 'sort=title'
+      _.last(Backbone.sync.args)[2].data.should.containEql 'sort=title'
 
   describe '#sortArtworks', ->
 
     it 'sorts the artworks based on the select value', ->
       @view.$('#artist-page-sort select').val '-published_at'
       @view.sortArtworks()
-      Backbone.sync.args[0][2].data.should.containEql '-published_at'
+      _.last(Backbone.sync.args)[2].data.should.containEql '-published_at'
