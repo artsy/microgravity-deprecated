@@ -66,3 +66,15 @@ describe 'Artist', ->
       @artist.set image_url: 'cat/bitty/:version.jpg'
       @artist.set image_versions: [ 'four_thirds', 'other' ]
       @artist.defaultImageUrl().should.equal 'cat/bitty/four_thirds.jpg'
+
+  describe '#fetchFilteredArtworks', ->
+
+    it 'fetches the filtered artists artworks', (done) ->
+      @artist.fetchFilteredArtworks
+        data: { sort: 'title' } ,
+        success: (artworks) ->
+          artworks.first().get('title').should.equal 'Blahwork'
+          done()
+      Backbone.sync.args[0][2].success hits: [fabricate('artwork', title: 'Blahwork')]
+      Backbone.sync.args[0][1].url.should.match /// /api/v1/filter/artworks ///
+      Backbone.sync.args[0][2].data.should.equal 'sort=title'

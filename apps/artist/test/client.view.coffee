@@ -38,7 +38,7 @@ describe 'ArtistPageView', ->
   describe '#initialize', ->
 
     it 'renders artworks', ->
-      Backbone.sync.args[0][2].success [
+      Backbone.sync.args[0][2].success hits: [
         fabricate 'artwork', title: "Andy Foobar's Finger Painting"
       ]
       $('body').html().should.containEql "Andy Foobar's Finger Painting"
@@ -64,11 +64,11 @@ describe 'ArtistPageView', ->
 
     it 'fetches the for sale works if that button is clicked', ->
       @view.swapArtworks target: $ "<button class='artist-page-artworks-tab-for-sale'>"
-      _.last(Backbone.sync.args)[2].data['filter[]'].should.containEql 'for_sale'
+      _.last(Backbone.sync.args)[2].data.should.containEql 'filter[]=for_sale'
 
     it 'renders the fetched artworks', ->
       @view.swapArtworks target: $ "<button class='artist-page-artworks-tab-for-sale'>"
-      _.last(Backbone.sync.args)[2].success [fabricate 'artwork', title: 'Foobaraza']
+      _.last(Backbone.sync.args)[2].success hits: [fabricate 'artwork', title: 'Foobaraza']
       $('#artist-page-artworks-list').html().should.containEql 'Foobaraza'
 
   describe '#renderArtworks', ->
@@ -83,8 +83,8 @@ describe 'ArtistPageView', ->
 
     it 'fetches more artworks and adds them to the collection', ->
       @view.seeMoreArtworks()
-      _.last(Backbone.sync.args)[2].data.page.should.be.above 1
-      _.last(Backbone.sync.args)[2].success [fabricate('artwork'), fabricate('artwork')]
+      _.last(Backbone.sync.args)[2].data.should.containEql 'page=2'
+      _.last(Backbone.sync.args)[2].success hits: [fabricate('artwork'), fabricate('artwork')]
       @view.artworks.length.should.be.above 1
 
   describe '#followArtist', ->
@@ -126,16 +126,16 @@ describe 'ArtistPageView', ->
         @view.followArtists.follow.restore()
         location.href.should.containEql "/log_in?redirect-to="
 
-    describe '#resetArtworks', ->
+  describe '#resetArtworks', ->
 
-      it 'fetches the artworks with the params', ->
-        @view.artworkParams.foo = 'bar'
-        @view.resetArtworks()
-        Backbone.sync.args[0][2].data.foo.should.equal 'bar'
+    it 'fetches the artworks with the params', ->
+      @view.artworkParams.sort = 'title'
+      @view.resetArtworks()
+      Backbone.sync.args[0][2].data.should.containEql 'sort=title'
 
-    describe '#sortArtworks', ->
+  describe '#sortArtworks', ->
 
-      it 'sorts the artworks based on the select value', ->
-        @view.$('#artist-page-sort select').val '-published_at'
-        @view.sortArtworks()
-        Backbone.sync.args[0][2].data.sort.should.equal '-published_at'
+    it 'sorts the artworks based on the select value', ->
+      @view.$('#artist-page-sort select').val '-published_at'
+      @view.sortArtworks()
+      Backbone.sync.args[0][2].data.should.containEql '-published_at'
