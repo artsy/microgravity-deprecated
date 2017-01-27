@@ -28,6 +28,7 @@ module.exports = class ArtistPageView extends Backbone.View
     @artworks = new Artworks
     sort = qs.parse(location.search.replace(/^\?/, '')).sort
     filter = qs.parse(location.search.replace(/^\?/, '')).filter
+    @artworkParams.artist_id = @model.id
     @artworkParams.sort = sort if sort
     @artworkParams['filter[]'] = filter if filter
     @artworks.on 'reset add', @renderArtworks
@@ -89,7 +90,7 @@ module.exports = class ArtistPageView extends Backbone.View
 
   resetArtworks: ->
     @$('#artist-page-artworks-list').html "<div class='loading-spinner'></div>"
-    @model.fetchArtworks data: @artworkParams, success: (artworks) =>
+    @model.fetchFilteredArtworks data: @artworkParams, success: (artworks) =>
       @artworks.reset artworks.models
 
   events:
@@ -110,7 +111,7 @@ module.exports = class ArtistPageView extends Backbone.View
   seeMoreArtworks: ->
     @artworkParams.page++
     @$('.artist-page-artwork-see-more').addClass 'loading-spinner'
-    @model.fetchArtworks data: @artworkParams, success: (artworks) =>
+    @model.fetchFilteredArtworks data: @artworkParams, success: (artworks) =>
       @artworks.add artworks.models
       @$('.artist-page-artwork-see-more').removeClass 'loading-spinner'
 
@@ -118,3 +119,4 @@ module.exports = class ArtistPageView extends Backbone.View
     val = @$('#artist-page-sort select').val()
     if val then @artworkParams.sort = val else delete @artworkParams.sort
     @resetArtworks()
+

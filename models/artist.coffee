@@ -1,6 +1,7 @@
 Backbone = require 'backbone'
 sd = require('sharify').data
 Artworks = require '../collections/artworks.coffee'
+FilteredArtworks = require '../collections/filter_artworks.coffee'
 Artists = require '../collections/artists.coffee'
 _ = require 'underscore'
 { Markdown } = require 'artsy-backbone-mixins'
@@ -36,6 +37,10 @@ module.exports = class Artist extends Backbone.Model
   fetchArtworks: (options = {}) ->
     artworks = new Artworks
     artworks.url = @url() + '/artworks'
+    artworks.fetch options
+
+  fetchFilteredArtworks: (options = {}) ->
+    artworks = new FilteredArtworks
     artworks.fetch options
 
   fetchRelatedArtists: (options = {}) ->
