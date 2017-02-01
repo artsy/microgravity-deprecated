@@ -13,9 +13,14 @@
         = artwork.get('date')
     p= artwork.partnerName()
 
-    if artwork.get('sale_message') == 'Contact For Price'
-      p Contact for price
-    else
+    if artwork.get('availability') === 'on hold'
+      if artwork.get('price')
+        p #{artwork.get('price')}, on hold
+      else
+        p On hold
+    else if artwork.get('sale_message') && artwork.get('sale_message').indexOf('Sold') > -1
+      p Sold
+    else if artwork.get('availability') !== 'not for sale'
       p= artwork.saleMessage()
 
     if artwork.get('partner') && artwork.get('partner').type === 'Auction'
@@ -24,3 +29,6 @@
           p.bid-now-link Bid now
         else
           p.bid-now-link Auction closed
+
+    if artwork.get('inquireable')
+      a( href='/artwork/' + artwork.get('id') ) Contact Gallery
