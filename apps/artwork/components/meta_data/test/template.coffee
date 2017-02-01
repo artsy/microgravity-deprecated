@@ -30,7 +30,7 @@ describe 'Artwork metadata templates', ->
 
     it 'display artwork price', ->
       $ = cheerio.load(@html)
-      $('.listed-price').text().should.equal '$4,000'
+      $('.sale_message').text().should.equal '$4,000'
 
   describe 'artwork without sale message', ->
     beforeEach ->
@@ -60,9 +60,10 @@ describe 'Artwork metadata templates', ->
       $('.artwork-meta-data-black__contact-button').hasClass('is-disabled').should.equal false
       $('.artwork-meta-data-black__contact-button').attr('href').should.containEql '/inquiry/skull'
 
-  describe 'no button for artworks that are sold', ->
+  describe 'contact gallery button - sold', ->
     before ->
       @artwork.is_sold = true
+      @artwork.partner = { type: 'Gallery' }
 
       @html = render('inquiry')(
         artwork: @artwork
@@ -70,9 +71,24 @@ describe 'Artwork metadata templates', ->
         asset: (->)
       )
 
-    it 'does not display contact button', ->
+    it 'display contact button', ->
       $ = cheerio.load @html
-      $('.artwork-meta-data-black__contact-button').should.not.exist
+      $('.artwork-meta-data-black__contact-button').should.exist
+      $('.artwork-meta-data-black__contact-button').text().should.equal 'Contact Gallery'
+
+  describe 'buy button', ->
+    before ->
+      @artwork.is_acquireable = true
+
+      @html = render('inquiry')(
+        artwork: @artwork
+        sd: {}
+        asset: (->)
+      )
+
+    it 'display buy button', ->
+      $ = cheerio.load @html
+      $('.artwork-meta-data-black__contact-button').text().should.equal 'Buy'
 
   describe 'series, medium, dimensions, image rights', ->
     before ->
