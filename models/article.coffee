@@ -82,7 +82,7 @@ module.exports = class Article extends Backbone.Model
       "@context": "http://schema.org"
       "@type": "NewsArticle"
       "headline": @get('thumbnail_title')
-      "url": "#{sd.FORCE_URL}" + @href()
+      "url": "#{sd.ARTSY_URL}" + @href()
       "thumbnailUrl": @get('thumbnail_image')
       "dateCreated": @get('published_at')
       "articleSection": if @get('section') then @get('section').get('title') else "Editorial"

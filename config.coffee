@@ -6,22 +6,19 @@
 #
 
 module.exports =
-
   NODE_ENV: 'development'
   CLIENT_ID: 'e750db60ac506978fc70'
   CLIENT_SECRET: '3a33d2085cbd1176153f99781bbce7c6'
   API_URL: 'http://localhost:3000'
-  ARTSY_URL: 'http://localhost:5000' # Desktop url
+  ARTSY_URL: 'https://www.artsy.net'
   APP_URL: 'http://localhost:3003'
   CALENDAR_URL: 'http://localhost:3003' # For redirecting to .ics files
-  ARTSY_URL: 'https://www.artsy.net'
   POSITRON_URL: 'http://writer.artsy.net'
   EUROPA_URL: 'http://europa-production.herokuapp.com'
   PORT: 3003
   S3_KEY: null
   S3_SECRET: null
   APPLICATION_NAME: 'microgravity-staging'
-  NEW_RELIC_LICENSE_KEY: null
   SESSION_SECRET: 'artsyoss'
   SESSION_COOKIE_MAX_AGE: 31536000000
   COOKIE_DOMAIN: null
@@ -30,14 +27,11 @@ module.exports =
   GOOGLE_ANALYTICS_ID: 'UA-12450662-6'
   GOOGLE_MAPS_API_KEY: null
   DEFAULT_CACHE_TIME: 3600
-  HOMEPAGE_ARTWORKS_COUNT: 4
-  HOMEPAGE_LINKS_COUNT: 7
   FACEBOOK_APP_ID: null
   FACEBOOK_APP_SECRET: null
   TWITTER_CONSUMER_KEY: null
   TWITTER_CONSUMER_SECRET: null
   OPENREDIS_URL: null
-  REVEAL_ERRORS: 'production' != process.env['NODE_ENV']
   MAX_SOCKETS: -1
   GOOGLE_SEARCH_KEY: null
   GOOGLE_SEARCH_CX: null
@@ -49,9 +43,7 @@ module.exports =
   MAILCHIMP_KEY: null
   MAILCHIMP_AUCTION_LIST_ID: 'b7b9959ee0'
   SEGMENT_WRITE_KEY: null
-  CDN_URL: null
   API_REQUEST_TIMEOUT: 5000
-  FORCE_URL: 'https://www.artsy.net'
   PREDICTION_URL: 'https://live.artsy.net'
   METAPHYSICS_ENDPOINT: 'https://metaphysics-production.artsy.net'
   DISABLE_IMAGE_PROXY: false
@@ -63,8 +55,6 @@ module.exports =
   SAILTHRU_MASTER_LIST: 'Master List'
   MAX_POLLS_FOR_MAX_BIDS: 20
   ARTSY_EDITORIAL_CHANNEL: '5759e3efb5989e6f98f77993'
-  PC_ARTSY_CHANNEL: '5759e508b5989e6f98f77999'
-  PC_AUCTION_CHANNEL: '5759e4d7b5989e6f98f77997'
   CRITEO_AUCTIONS_ACCOUNT_NUMBER: 28539
   CRITEO_ARTWORKS_ACCOUNT_NUMBER: 35250
   MARKETING_SIGNUP_MODAL_COPY: 'Sign up for early access'
