@@ -68,8 +68,9 @@ module.exports =
   CRITEO_AUCTIONS_ACCOUNT_NUMBER: 28539
   CRITEO_ARTWORKS_ACCOUNT_NUMBER: 35250
   MARKETING_SIGNUP_MODAL_COPY: 'Sign up for early access'
-  MARKETING_SIGNUP_MODAL_IMG: 'http://placekitten.com/200/200'
+  MARKETING_SIGNUP_MODAL_IMG: 'http://lorempixel.com/200/200/sports/'
   MARKETING_SIGNUP_MODAL_SLUG: 'miami'
+  MARKETING_SIGNUP_MODAL_PHOTO_CREDIT: 'Photo by Artsy'
   FAIR_CHANNEL_ID: '5759e4f3b5989e6f98f77998'
 
 # Override any values with env variables if they exist.
