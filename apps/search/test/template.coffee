@@ -5,8 +5,8 @@ path = require 'path'
 fs = require 'fs'
 Backbone = require 'backbone'
 { fabricate } = require 'antigravity'
-SearchResults = require '../../../collections/google_search_results'
-SearchResult = require '../../../models/google_search_result'
+SearchResults = require '../../../collections/search_results'
+SearchResult = require '../../../models/search_result'
 sinon = require 'sinon'
 
 { resolve } = require 'path'
@@ -44,21 +44,19 @@ describe 'Search results template', ->
     beforeEach (done) ->
       @artworks = _.times 2, (i)->
         new SearchResult({
-          link: 'https://artsy.net/artwork/cool-artwork' + i
           title: "Artwork Title | Artist | Artsy"
-          snippet: 'cool artwork snippet'
-          pagemap:
-            metatags: [{'og:type': 'artwork', 'og:description': 'artwork description'}]
-            cse_thumbnail: [{ src: 'imgurl' }]
+          model: 'artwork',
+          display_model: 'Artwork',
+          id: 'cool-artwork' + i,
+          image_url: 'foo.jpg'
         })
       @artists = _.times 3, (i) ->
         new SearchResult({
-          link: 'https://artsy.net/artist/cool-artist' + i
           title: "Artist Name | Artsy"
-          snippet: 'cool artist snippet'
-          pagemap:
-            metatags: [{'og:type': 'artist', 'og:description': 'artist description'}]
-            cse_thumbnail: [{ src: 'imgurl' }]
+          model: 'artist',
+          display_model: 'Artist',
+          id: 'cool-artist' + i,
+          image_url: 'bar.jpg'
         })
 
       @search.add @artworks

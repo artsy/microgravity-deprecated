@@ -2,6 +2,7 @@ fabricate = require('antigravity').fabricate
 rewire = require 'rewire'
 SearchResult = rewire '../../models/search_result.coffee'
 Fair = require '../../models/fair.coffee'
+moment = require 'moment'
 
 describe 'SearchResult', ->
   describe '#initialize', ->
@@ -18,6 +19,10 @@ describe 'SearchResult', ->
         model = new SearchResult(fabricate('profile', model: 'profile'))
         model.get('location').should.equal '/alessandra'
 
+      it 'has a location attribute when it is an article', ->
+        model = new SearchResult(fabricate('article', model: 'article'))
+        model.href().should.containEql '/article/' + model.id
+
     describe '#displayModel', ->
       it 'has a display_model attribute when it is a artwork', ->
         model = new SearchResult(fabricate('artwork', model: 'artwork'))
@@ -31,22 +36,128 @@ describe 'SearchResult', ->
         model = new SearchResult(model: 'gene')
         model.get('display_model').should.equal 'Category'
 
-    describe '#imageUrl', ->
-      it 'has an image_url attribute that is tokenless when logged out', ->
-        model = new SearchResult(fabricate('artwork', model: 'artwork'))
-        model.get('image_url').should.containEql "/api/v1/artwork/#{model.id}/default_image.jpg"
+      it 'has a display_model attribute when it is an article', ->
+        model = new SearchResult(model: 'article')
+        model.get('display_model').should.equal 'Article'
 
-      it 'has an image_url attribute that with the token appened when logged in', ->
-        token = 'token'
-        SearchResult.__set__ 'sd', { ARTSY_XAPP_TOKEN: token }
-        model = new SearchResult(fabricate('artwork', model: 'artwork'))
-        model.get('image_url').should.containEql "/api/v1/artwork/#{model.id}/default_image.jpg?xapp_token=#{token}"
+      it 'has a display_model attribute when it is a profile', ->
+        model = new SearchResult(model: 'profile')
+        model.get('display_model').should.equal 'Gallery'
 
-      it 'uses the passed in XAPP_TOKEN', ->
-        model = new SearchResult(fabricate('artwork', model: 'artwork'))
-        model.imageUrl('token').should.containEql "/api/v1/artwork/#{model.id}/default_image.jpg?xapp_token=token"
+      it 'has a display_model attribute when it an institution profile', ->
+        model = new SearchResult(model: 'profile', owner_type: 'PartnerInstitution')
+        model.get('display_model').should.equal 'Institution'
 
-    describe '#highlightedDisplay', ->
-      it 'highlights the search term in the display attribute and spits back some HTML', ->
-        model = new SearchResult(fabricate('artwork', model: 'artwork'))
-        model.highlightedDisplay('skull').should.equal '<span class="is-highlighted">Skull</span> by Andy Warhol'
+      it 'has a display_model attribute when it an institution seller profile', ->
+        model = new SearchResult(model: 'profile', owner_type: 'PartnerInstitutionalSeller')
+        model.get('display_model').should.equal 'Institution'
+
+  describe '#updateForFair', ->
+    it 'modifies location and display model for fair booths', ->
+      fair = new Fair(fabricate 'fair')
+      modelA = new SearchResult(fabricate('show', model: 'partnershow'))
+      modelB = new SearchResult(fabricate('artist', model: 'artist'))
+
+      modelA.updateForFair(fair)
+      modelB.updateForFair(fair)
+
+      modelA.get('display_model').should.equal 'Booth'
+      modelA.get('location').should.containEql '/show/gagosian-gallery-inez-and-vinoodh'
+      modelB.get('location').should.containEql "/the-armory-show/browse/artist/pablo"
+
+  describe '#formatArticleAbout', ->
+    it 'constructs about based on publish time and excerpt', ->
+      article = fabricate('article',
+        model: 'article',
+        display: 'Foo Article',
+        description: 'Lorem Ipsum.',
+        published_at: new Date("2-2-2014").toISOString())
+
+      result = new SearchResult(article)
+      result.displayModel().should.equal 'Article'
+      result.about().should.equal("Feb 2nd, 2014 ... Lorem Ipsum.")
+
+  describe '#formatEventAbout', ->
+    it 'constructs a human readable event description', ->
+      fair = fabricate('fair',
+        model: 'fair',
+        display: 'Foo Fair',
+        start_at: new Date('10-5-2015').toISOString(),
+        end_at: new Date('10-10-2015').toISOString(),
+        city: 'New York')
+      result = new SearchResult(fair)
+      result.about().should.equal 'Art fair running from Oct 5th to Oct 10th, 2015 in New York'
+
+  describe '#formatShowAbout', ->
+    it 'constructs a show description for a partner show with artists', ->
+      show = fabricate('show',
+        model: 'partnershow'
+        display: 'Foo Exhibition'
+        start_at: new Date('10-5-2015 12:00:00').toISOString()
+        end_at: new Date('10-10-2015 12:00:00').toISOString()
+        artist_names: ['Banksy']
+        address: '401 Broadway'
+        venue: 'Foo Gallery'
+        city: 'New York')
+      result = new SearchResult(show)
+      result.about().should.equal 'Past show featuring works by Banksy at Foo Gallery New York, 401 Broadway Oct. 5th – 10th 2015'
+
+    it 'constructs a show description for a fair booth', ->
+      show = fabricate('show',
+        model: 'partnershow'
+        display: 'Foo Exhibition'
+        start_at: new Date('10-5-2015 12:00:00').toISOString()
+        end_at: new Date('10-10-2015 12:00:00').toISOString()
+        venue: 'Foo Fair'
+        fair_id: 'foo-fair'
+        city: 'New York')
+      result = new SearchResult(show)
+      result.about().should.equal 'Past fair booth at Foo Fair New York Oct. 5th – 10th 2015'
+
+  describe '#about', ->
+    it 'uses a profile description', ->
+      profile = fabricate('profile',
+        model: 'profile',
+        id: 'foo-gallery',
+        display: 'Foo Gallery',
+        description: 'A description of foo gallery'
+      )
+
+      result = new SearchResult(profile)
+      result.about().should.equal 'A description of foo gallery'
+
+  describe '#formatCityAbout', ->
+    it 'uses a standard template', ->
+      result = new SearchResult({ model: 'city', display: 'Gotham', id: 'gotham' })
+      result.about().should.equal 'Browse current exhibitions in Gotham'
+
+  describe '#status', ->
+    it 'correctly detects closed event status', ->
+      show = fabricate('show',
+        model: 'partnershow'
+        start_at: new Date('10-5-2015').toISOString()
+        end_at: new Date('10-10-2015').toISOString()
+      )
+
+      result = new SearchResult(show)
+      result.status().should.equal 'closed'
+
+    it 'correctly detects upcoming event status', ->
+      show = fabricate('show',
+        model: 'partnershow'
+        start_at: moment().add(2, 'days').format()
+        end_at: moment().add(8, 'days').format()
+      )
+
+      result = new SearchResult(show)
+      result.status().should.equal 'upcoming'
+
+    it 'correctly detects running event status', ->
+      show = fabricate('show',
+        model: 'partnershow'
+        start_at: moment().subtract(2, 'days').format()
+        end_at: moment().add(2, 'days').format()
+      )
+
+      result = new SearchResult(show)
+      result.status().should.equal 'running'

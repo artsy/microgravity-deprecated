@@ -1,4 +1,4 @@
-GoogleSearchResults = require '../../collections/google_search_results'
+SearchResults = require '../../collections/search_results'
 removeDiacritics = require('diacritics').remove
 
 module.exports.index = (req, res, next) ->
@@ -7,14 +7,23 @@ module.exports.index = (req, res, next) ->
   term = removeDiacritics req.query.term
   res.locals.sd.term = term
 
-  results = new GoogleSearchResults
+  results = new SearchResults
+  indexes = ['Artwork', 'Artist', 'Article', 'Fair', 'Tag', 'Gene', 'Feature', 'Profile', 'PartnerShow', 'Sale']
+  data = { term: term, size: 10 }
+  data['indexes[]'] = indexes
 
-  results.fetch(data: q: term)
-    .then ->
+  results.fetch
+    data: data
+    cache: true
+    cacheTime: 60
+    success: (results, response, options) ->
       res.locals.sd.RESULTS = results.toJSON()
       res.render 'template',
         mainHeaderSearchBoxValue: term
         referrer: req.query.referrer
-        results: results.moveMatchResultsToTop(term)
-    .catch next
-    .done()
+        results: results.models
+    error: ->
+      res.render 'template',
+        mainHeaderSearchBoxValue: term
+        referrer: req.query.referrer
+        results: []
