@@ -9,6 +9,7 @@ dateMixin = require './mixins/date.coffee'
 Relations = require './mixins/relations/show.coffee'
 AdditionalImage = require './additional_image.coffee'
 { Fetch, Markdown } = require 'artsy-backbone-mixins'
+DateHelpers = require '../components/util/date_helpers.coffee'
 { fetchUntilEnd } = Fetch(sd.API_URL)
 
 module.exports = class Show extends Backbone.Model
@@ -79,6 +80,46 @@ module.exports = class Show extends Backbone.Model
       new FairLocation @get 'fair_location'
     else
       null
+
+  # past / current / upcoming show
+  # featuring works by {artists} on view
+  # at {gallery name} {location} {dates}
+  toPageDescription: ->
+    artistText = @formatArtistText()
+    if artistText
+      artistText = "featuring works by #{artistText}"
+
+    info = _.compact([
+      'at'
+      @partnerName()
+      @get('fair')?.name or ''
+      @location()?.singleLine() or ''
+      @runningDates() or ''
+    ]).join(' ')
+
+    _.compact([
+      @formatLeadHeading()
+      artistText
+      info
+    ]).join(' ')
+
+  runningDates: ->
+    DateHelpers.timespanInWords @get('start_at'), @get('end_at')
+
+  formatArtistText: ->
+    artists = _.compact(@related().artists.pluck 'name')
+    if artists.length > 1
+      artistText = "#{artists[0...(artists.length - 1)].join(', ')} and #{artists[artists.length - 1]}"
+    else if artists.length == 1
+      artistText = "#{artists[0]}"
+
+  formatLeadHeading: ->
+    status =
+      if @running() then 'Current'
+      else if @upcoming() then 'Upcoming'
+      else if @closed() then 'Past'
+    type = if @get('fair') then 'fair booth' else 'show'
+    "#{status} #{type}"
 
   formattedLocation: ->
     if @has('fair_location')

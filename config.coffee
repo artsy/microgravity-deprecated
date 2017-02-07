@@ -33,8 +33,6 @@ module.exports =
   TWITTER_CONSUMER_SECRET: null
   OPENREDIS_URL: null
   MAX_SOCKETS: -1
-  GOOGLE_SEARCH_KEY: null
-  GOOGLE_SEARCH_CX: null
   SECURE_IMAGES_URL: 'https://d1ycxz9plii3tb.cloudfront.net'
   EMBEDLY_KEY: null
   EDITORIAL_ADMINS: 'craig,halley,marina,casey,molly,cab,charles'
