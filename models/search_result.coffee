@@ -95,15 +95,16 @@ module.exports = class SearchResult extends Backbone.Model
       @set location: "#{fair.href()}/browse#{@get('location')}"
 
   status: ->
-    if @get('model') == 'partnershow'
-      if startTime = @get('start_at')
-        if endTime = @get('end_at')
-          if moment() > moment(endTime)
-            'closed'
-          else if moment() > moment(startTime)
-            'running'
-          else
-            'upcoming'
+    return unless @get('model') == 'partnershow'
+    startTime = @get('start_at')
+    endTime = @get('end_at')
+
+    if moment().isAfter(endTime)
+      'closed'
+    else if moment().isAfter(startTime)
+      'running'
+    else
+      'upcoming'
 
   formatCityAbout: ->
     "Browse current exhibitions in #{@get('display')}"

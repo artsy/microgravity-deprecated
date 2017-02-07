@@ -22,36 +22,12 @@ describe 'Search routes', ->
         routes.index req, res, next
 
         Backbone.sync.args[0][0].should.equal 'read'
-        Backbone.sync.args[0][2].data.q.should.equal 'foobAr'
+        Backbone.sync.args[0][2].data.term.should.equal 'foobAr'
 
-        _.defer => _.defer =>
-          res.render.called.should.be.true()
-          next.called.should.be.false()
-
-          done()
+        done()
 
       it 'redirects without query', ->
         req = params: {}, query: {}
         res = render: sinon.stub(), redirect: sinon.stub(), locals: sd: {}
         routes.index req, res
         res.redirect.args[0][0].should.equal '/'
-
-    describe 'error', ->
-      beforeEach ->
-        sinon.stub(Backbone, 'sync').returns Q.reject()
-
-      afterEach ->
-        Backbone.sync.restore()
-
-      it 'doesnt swallow the error', (done) ->
-        req = params: {}, query: term: 'foobar'
-        res = render: sinon.stub(), redirect: sinon.stub(), locals: sd: {}
-        next = sinon.stub()
-
-        routes.index req, res, next
-
-        _.defer => _.defer =>
-          res.render.called.should.be.false()
-          next.called.should.be.true()
-
-          done()
