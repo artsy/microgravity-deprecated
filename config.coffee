@@ -55,10 +55,7 @@ module.exports =
   ARTSY_EDITORIAL_CHANNEL: '5759e3efb5989e6f98f77993'
   CRITEO_AUCTIONS_ACCOUNT_NUMBER: 28539
   CRITEO_ARTWORKS_ACCOUNT_NUMBER: 35250
-  MARKETING_SIGNUP_MODAL_COPY: 'Sign up for early access'
-  MARKETING_SIGNUP_MODAL_IMG: 'http://lorempixel.com/200/200/sports/'
-  MARKETING_SIGNUP_MODAL_SLUG: 'miami'
-  MARKETING_SIGNUP_MODAL_PHOTO_CREDIT: 'Photo by Artsy'
+  MARKETING_SIGNUP_MODALS: '[{"slug":"ca1","copy":"An art collection for every budget","image":"http://files.artsy.net/images/small-modal-interior-a.jpg","photoCredit":"Photo by Emily Johnson"},{"slug":"ca2","copy":"Buy art from the best galleries and auction houses","image":"http://files.artsy.net/images/small-modal-interior-a.jpg","photoCredit":"Photo by Emily Johnson"},{"slug":"ca3","copy":"An art collection for every budget","image":"http://files.artsy.net/images/small-modal-interior-b.jpg","photoCredit":"Photo by Emily Johnson"},{"slug":"ca4","copy":"Buy art from the best galleries and auction houses","image":"http://files.artsy.net/images/small-modal-interior-b.jpg","photoCredit":"Photo by Emily Johnson"}]'
   FAIR_CHANNEL_ID: '5759e4f3b5989e6f98f77998'
 
 # Override any values with env variables if they exist.

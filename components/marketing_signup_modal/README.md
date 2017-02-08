@@ -6,18 +6,13 @@ Adds a marketing popover to certain pages.
 
 ## Usage
 
-This uses config variables to determine where it's applied. Use `heroku config:set` to configure a campaign. e.g. Set `MARKETING_SIGNUP_MODAL_SLUG=miami` to allow the query param ?m-id=miami to be added to any page for a modal to appear.
+This uses a config variable to determine where it's applied. The Marketing Signup Modal supports multiple campaigns using a hardcode stringified JSON object. Use `heroku config:set` to configure a campaign. e.g. Set `MARKETING_SIGNUP_MODALS='[{"slug":"miami","copy":"Sign up for early access","image":"http://placekitten.com/200/200"}, {"slug:":"art-fair","copy":"Get exclusive access","image":"http://placekitten.com/200/200"}]'` to allow the query param ?m-id=miami to be added to any page for a modal to appear.
 
 Examples:
 
-````
-MARKETING_SIGNUP_MODAL_SLUG=miami
-MARKETING_SIGNUP_MODAL_COPY=Sign up for early access
-MARKETING_SIGNUP_MODAL_IMG=http://placekitten.com/200/200
-MARKETING_SIGNUP_MODAL_PHOTO_CREDIT=Photo by Artsy
-````
+`MARKETING_SIGNUP_MODALS='[{"slug":"miami","copy":"Sign up for early access","image":"http://placekitten.com/200/200"}, {"slug:":"art-fair","copy":"Get exclusive access","image":"http://placekitten.com/200/200"}]'`
 
-If this expirment results in a worthwhile amount of collector acquistion then eventually the idea is we will replace this config data with a tool we give Marketing to manage themselves.
+If this experiment results in a worthwhile amount of collector acquistion then eventually the idea is we will replace this config data with a tool we give Marketing to manage themselves.
 
 ## Implementation
 
