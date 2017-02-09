@@ -26,13 +26,11 @@ module.exports = class ArtistPageView extends Backbone.View
   initialize: (options) ->
     @user = options.user
     @artworks = new Artworks
-    sort = qs.parse(location.search.replace(/^\?/, '')).sort
-    filter = qs.parse(location.search.replace(/^\?/, '')).filter
+    queryParams = qs.parse location.search.replace(/^\?/, '')
     @artworkParams.artist_id = @model.id
-    @artworkParams.sort = sort if sort
-    @artworkParams['filter[]'] = filter if filter
+    _.extend @artworkParams, _.pick(queryParams, 'sort', 'for_sale')
     @artworks.on 'reset add', @renderArtworks
-    if @artworkParams['filter[]']?
+    if @artworkParams.for_sale?
       @swapArtworks target: $('.artist-page-artworks-tab').last()
     else
       @swapArtworks target: $('.artist-page-artworks-tab').first()
@@ -58,8 +56,9 @@ module.exports = class ArtistPageView extends Backbone.View
 
   renderArtworks: =>
     @$('#artist-page-sort').show()
-    @$('#artist-page-artworks-list').html artworksTemplate artworkColumns: @artworks.groupByColumnsInOrder @artworkColumnsCount
-    if (@artworks.length >= @model.get('forsale_artworks_count') and @artworkParams['filter[]']?) or
+    @$('#artist-page-artworks-list').html artworksTemplate
+      artworkColumns: @artworks.groupByColumnsInOrder @artworkColumnsCount
+    if (@artworks.length >= @model.get('forsale_artworks_count') and @artworkParams.for_sale?) or
        (@artworks.length >= @model.get('published_artworks_count'))
       @$('.artist-page-artwork-see-more-container').hide()
     else
@@ -67,7 +66,9 @@ module.exports = class ArtistPageView extends Backbone.View
 
     if @artworks.length is 0
       @$('#artist-page-sort').hide()
-      @$('#artist-page-artworks-list').html '<div class="artist-page-artworks-default-text">No available artworks</div>'
+      @$('#artist-page-artworks-list').html(
+        '<div class="artist-page-artworks-default-text">No available artworks</div>'
+      )
 
   renderArticles: ->
     (articles = new Articles).fetch
@@ -103,9 +104,9 @@ module.exports = class ArtistPageView extends Backbone.View
     $(e.target).addClass('artist-page-artworks-tab-active')
     @artworkParams.page = 1
     if $(e.target).hasClass('artist-page-artworks-tab-for-sale')
-      @artworkParams['filter[]'] = 'for_sale'
+      @artworkParams.for_sale = true
     else
-      delete @artworkParams['filter[]']
+      delete @artworkParams.for_sale
     @resetArtworks()
 
   seeMoreArtworks: ->

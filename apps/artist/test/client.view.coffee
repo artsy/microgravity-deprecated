@@ -64,7 +64,7 @@ describe 'ArtistPageView', ->
 
     it 'fetches the for sale works if that button is clicked', ->
       @view.swapArtworks target: $ "<button class='artist-page-artworks-tab-for-sale'>"
-      _.last(Backbone.sync.args)[2].data.should.containEql 'filter[]=for_sale'
+      _.last(Backbone.sync.args)[2].data.should.containEql 'for_sale=true'
 
     it 'renders the fetched artworks', ->
       @view.swapArtworks target: $ "<button class='artist-page-artworks-tab-for-sale'>"
