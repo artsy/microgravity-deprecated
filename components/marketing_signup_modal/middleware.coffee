@@ -5,11 +5,7 @@ module.exports = (req, res, next) ->
   slug = req.query['m-id']
   modalData = _.findWhere(sd.MARKETING_SIGNUP_MODALS, { slug: slug })
 
-  if modalData
-    sd.MARKETING_SIGNUP_MODAL_IMG = modalData.image
-    sd.MARKETING_SIGNUP_MODAL_COPY = modalData.copy
-    sd.MARKETING_SIGNUP_MODAL_SLUG = modalData.slug
-    sd.MARKETING_SIGNUP_MODAL_PHOTO_CREDIT = modalData.photoCredit
+  res.locals.modal = modalData if modalData
 
   loggedOut = not req.user?
 
