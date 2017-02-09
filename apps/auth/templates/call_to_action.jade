@@ -21,18 +21,14 @@ block body
         | need an Artsy account.
     .auth-page-error-message
     nav#auth-call-to-action-tabs
-      if action && redirectTo
-        a.auth-page-cta__signup-tab(
-          href="#{sd.AP.signupPagePath}?action=#{action}&redirect-to=#{redirectTo}"
-          class=sd.CURRENT_PATH.includes('/sign_up') ? 'auth-call-to-action-tabs-active' : ''
-        ) Sign Up
-        a.auth-page-cta__login-tab(
-          href="#{sd.AP.loginPagePath}?action=#{action}&redirect-to=#{redirectTo}"
-          class=sd.CURRENT_PATH.includes('/log_in') ? 'auth-call-to-action-tabs-active' : ''
-        ) Log in
-      else
-        a.auth-page-cta__signup-tab Sign Up
-        a.auth-page-cta__login-tab Log in
+      a.auth-page-cta__signup-tab(
+        href="#{sd.AP.signupPagePath}?action=#{action}" + (redirectTo ? "&redirect-to=#{redirectTo}" : '')
+        class=sd.CURRENT_PATH.includes('/sign_up') ? 'auth-call-to-action-tabs-active' : ''
+      ) Sign Up
+      a.auth-page-cta__login-tab(
+        href="#{sd.AP.loginPagePath}?action=#{action}" + (redirectTo ? "&redirect-to=#{redirectTo}" : '')
+        class=sd.CURRENT_PATH.includes('/log_in') ? 'auth-call-to-action-tabs-active' : ''
+      ) Log in
     ul#auth-call-to-action-forms
       li(class=sd.CURRENT_PATH.includes('/sign_up') ? 'auth-call-to-action-form-active' : '')
         include signup_buttons

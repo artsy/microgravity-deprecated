@@ -36,7 +36,7 @@ describe '#login', ->
       get: (=> @redirectURL)
       query: {}
       body: {}
-      param: (-> false)
+      params: {}
 
     @res = { render: @render = sinon.stub() }
 
@@ -53,7 +53,7 @@ describe '#login', ->
         'redirect-to': @redirectURL
       }
       body: {}
-      param: (-> false)
+      params: {}
 
     @res = { render: @render = sinon.stub() }
 
@@ -68,7 +68,7 @@ describe '#login', ->
     req =
       query: { 'redirect-to': '%2Ffollowing%2Fprofiles' }
       body: {}
-      param: (-> false)
+      params: {}
       get: (-> false)
     res = { render: @render = sinon.stub() }
 
@@ -79,7 +79,7 @@ describe '#login', ->
     req =
       query: { 'redirect-to': 'http://www.iamveryverysorry.com/' }
       body: {}
-      param: (-> false)
+      params: {}
       get: (-> false)
 
     res = { render: @render = sinon.stub() }
@@ -89,22 +89,13 @@ describe '#login', ->
 
 describe '#signUp', ->
   beforeEach ->
-    @req = { session: @session = {}, get: (-> '/auctions/two-x-two'), query: {}, body: {} }
+    @req = { session: {}, get: (-> '/auctions/two-x-two'), query: {}, body: {}, params: {}}
     @res = { render: @render = sinon.stub() }
     sinon.stub Backbone, 'sync'
 
   afterEach ->
     @render.restore?()
     Backbone.sync.restore()
-
-  it 'sets the signupReferrer in the session', ->
-    routes.signUp @req, @res
-    @session.signupReferrer.should.containEql '/auctions/two-x-two'
-
-  it 'sets the action in the session', ->
-    @req.query.action = 'register-for-auction'
-    routes.signUp @req, @res
-    @session.action.should.equal 'register-for-auction'
 
   it 'renders the call_to_action if coming from an action', ->
     @req.query.action = 'register-for-auction'
@@ -129,7 +120,7 @@ describe '#signUp', ->
     @render.args[0][1].redirectTo.should.equal '/auction-registration'
 
   it 'ignores malicious redirects', ->
-    req = query: { 'redirect-to': 'http://www.iamveryverysorry.com/' }, body: {}, session: {}
+    req = query: { 'redirect-to': 'http://www.iamveryverysorry.com/' }, body: {}, session: {}, params: {}
     routes.signUp req, @res
     @render.args[0][1].redirectTo.should.equal '/'
 

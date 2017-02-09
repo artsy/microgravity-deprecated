@@ -7,21 +7,26 @@ qs = require 'querystring'
 { API_URL } = require '../../config'
 sanitizeRedirect = require '../../components/sanitize_redirect'
 
-module.exports.login = (req, res) ->
+redirectUrl = (req) ->
   url = req.body['redirect-to'] or
-    req.query['redirect-to'] or
-    req.param('redirect_uri') or
-    req.get('Referrer') or
-    '/'
+  req.query['redirect-to'] or
+  req.params['redirect_uri'] or
 
+  if (referrer = req.get('Referrer')) && (referrer.indexOf('/log_in') > -1) and (referrer.indexOf('/sign_up') > -1)
+    url ?= req.get('Referrer')
+
+  return if not url
+  sanitizeRedirect(url)
+
+module.exports.login = (req, res) ->
   locals =
-    action: req.query?.action or req.session?.action
-    redirectTo: sanitizeRedirect(url)
-  if req.query.action
-    locals.action = req.query.action
+    redirectTo: redirectUrl(req)
+    action: req.query.action
+
+  if locals.action
     res.render 'call_to_action', locals
   else
-    res.render 'login', action: true, redirectTo: sanitizeRedirect(url)
+    res.render 'login', locals
 
 module.exports.forgotPassword = (req, res) ->
   res.render 'forgot_password'
@@ -38,16 +43,12 @@ module.exports.resetPassword = (req, res) ->
   res.render 'reset_password'
 
 module.exports.signUp = (req, res) ->
-  req.session.signupReferrer ?= req.query['redirect-to'] or req.get('Referrer')
-  req.session.action ?= req.query.action
   locals =
-    redirect: sanitizeRedirect(req.body['redirect-to'] or req.session.signupReferrer or '/')
-    redirectTo: sanitizeRedirect(req.query['redirect-to'] or '/personalize/collect')
-    action: req.query.action or req.session.action
+    redirectTo: redirectUrl(req)
+    action: req.query.action
     error: err?.body.error
     prefill: req.query.prefill
-  if req.query.action
-    locals.action = req.query.action
+  if locals.action
     res.render 'call_to_action', locals
   else if req.query.email
     res.render 'signup_email', locals
