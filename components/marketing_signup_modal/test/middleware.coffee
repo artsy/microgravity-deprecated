@@ -8,7 +8,8 @@ describe 'showMarketingSignupModal', ->
       locals:
         sd:
           APP_URL: 'http://www.artsy.net'
-          MARKETING_SIGNUP_MODAL_SLUG: 'foo'
+          MARKETING_SIGNUP_MODALS: [{slug: "foo", copy: "welcome to artsy", image: "img.jpg", photoCredit: "Photo by Artsy"}]
+        modal: {slug: "foo", copy: "welcome to artsy", image: "img.jpg", photoCredit: "Photo by Artsy"}
     @next = sinon.stub()
 
   it 'shows the modal if coming from a campaign', ->
