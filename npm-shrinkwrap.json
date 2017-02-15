@@ -205,9 +205,9 @@
       "resolved": "git://github.com/artsy/artsy-newrelic.git#e516296fde0f1edf2f41286eadf0267dde850f7a"
     },
     "artsy-passport": {
-      "version": "1.6.0",
+      "version": "1.6.1",
       "from": "artsy-passport@latest",
-      "resolved": "https://registry.npmjs.org/artsy-passport/-/artsy-passport-1.6.0.tgz",
+      "resolved": "https://registry.npmjs.org/artsy-passport/-/artsy-passport-1.6.1.tgz",
       "dependencies": {
         "async": {
           "version": "1.5.2",
