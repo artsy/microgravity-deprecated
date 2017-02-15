@@ -25,7 +25,7 @@
     "bluebird": "^3.4.6",
     "bluebird-q": "^2.1.1",
     "body-parser": "^1.14.1",
-    "bucket-assets": "^0.2.11",
+    "bucket-assets": "^1.0.2",
     "coffee-script": "^1.11.1",
     "cookie-parser": "^1.4.0",
     "cookie-session": "^2.0.0-alpha.1",
