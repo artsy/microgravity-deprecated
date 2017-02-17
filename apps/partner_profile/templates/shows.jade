@@ -9,10 +9,10 @@ mixin show-list(shows)
             h3= show.get('name')
             h4!= show.formattedDateRange()
 
-if currentShows
+if currentShows && currentShows.length
   h1.avant-garde-header-center.partner-profile-large-header Current & Upcoming Shows
-  mixin show-list(currentShows)
+  mixin show-list(currentShows.models)
 
-if pastShows
+if pastShows && pastShows.length
   h1.avant-garde-header-center.partner-profile-large-header Past Shows
-  mixin show-list(pastShows)
+  mixin show-list(pastShows.models)
