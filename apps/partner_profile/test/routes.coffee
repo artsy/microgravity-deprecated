@@ -28,20 +28,29 @@ describe 'Profile page', ->
   describe '#shows', ->
 
     it 'renders the shows page passing on the current shows, upcoming shows and past shows', ->
+      Backbone.sync
+        .onCall 0
+        .yieldsTo 'success', [ fabricate('show', status: 'running', name: 'Foo') ]
+        .returns Promise.resolve [ fabricate('show', status: 'running', name: 'Foo') ]
+      Backbone.sync
+        .onCall 1
+        .yieldsTo 'success', [ fabricate('show', status: 'upcoming', name: 'Meow') ]
+        .returns Promise.resolve [ fabricate('show', status: 'upcoming', name: 'Meow') ]
+      Backbone.sync
+        .onCall 2
+        .yieldsTo 'success', [ fabricate('show', status: 'closed', name: 'Bar') ]
+        .returns Promise.resolve [ fabricate('show', status: 'closed', name: 'Bar') ]
+
+      renderStub = sinon.stub()
       routes.shows(
         { profile: new Profile(fabricate 'profile', name: 'Foobarz', owner_type: 'PartnerGallery') }
-        { render: renderStub = sinon.stub() }
-      )
-      Backbone.sync.args[0][2].success [
-        fabricate('show', status: 'running', name: 'Foo')
-        fabricate('show', status: 'upcoming', name: 'Meow')
-        fabricate('show', status: 'closed', name: 'Bar')
-      ]
-      renderStub.args[0][0].should.equal 'shows_page'
-      renderStub.args[0][1].profile.get('name').should.equal 'Foobarz'
-      renderStub.args[0][1].currentShows[0].get('name').should.equal 'Foo'
-      renderStub.args[0][1].currentShows[1].get('name').should.equal 'Meow'
-      renderStub.args[0][1].pastShows[0].get('name').should.equal 'Bar'
+        { render: renderStub }
+      ).then ->
+        renderStub.args[0][0].should.equal 'shows_page'
+        renderStub.args[0][1].profile.get('name').should.equal 'Foobarz'
+        renderStub.args[0][1].currentShows.models[0].get('name').should.equal 'Foo'
+        renderStub.args[0][1].currentShows.models[1].get('name').should.equal 'Meow'
+        renderStub.args[0][1].pastShows.models[0].get('name').should.equal 'Bar'
 
   describe '#artists', ->
 

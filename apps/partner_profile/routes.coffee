@@ -7,6 +7,7 @@ Profile = require '../../models/profile'
 Articles = require '../../collections/articles'
 Article = require '../../models/article'
 embed = require 'embed-video'
+Q = require 'bluebird-q'
 { stringifyJSONForWeb } = require '../../components/util/json.coffee'
 { resize } = require '../../components/resizer/index.coffee'
 
@@ -86,13 +87,21 @@ module.exports.article = (req, res, next) ->
 
 module.exports.shows = (req, res, next) ->
   return next() unless partner = partnerFromProfile(req)
-  shows = new PartnerShows [], partnerId: req.profile.get('owner').id
-  shows.fetch
-    success: (shows) ->
-      res.render 'shows_page',
-        currentShows: shows.filter (show) -> show.get('status') is 'running' or show.get('status') is 'upcoming'
-        pastShows: shows.where(status: 'closed')
-        profile: req.profile
+  data = (status) ->
+    displayable: true
+    status: status
+    sort: '-start_at'
+    size: 10
+  collection = new PartnerShows [], partnerId: req.profile.get('owner').id
+  Q.all([
+    collection.fetch data: data('running')
+    collection.fetch data: data('upcoming')
+    collection.fetch data: data('closed')
+  ]).spread (running, upcoming, closed) ->
+    res.render 'shows_page',
+      currentShows: new PartnerShows running.concat upcoming
+      pastShows: new PartnerShows closed
+      profile: req.profile
     error: res.backboneError
 
 module.exports.artists = (req, res, next) ->
