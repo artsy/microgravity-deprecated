@@ -1,12 +1,12 @@
 Microgravity
 ===
 
-[Microgravity](https://github.com/artsy/microgravity) is Martsy or the mobile website for Artsy.
+[Microgravity](https://github.com/artsy/microgravity) was Martsy or the mobile website for Artsy.
 
 Meta
 ---
 
-* __State:__ production
+* __State:__ deprecated
 * __Production:__ [https://m.artsy.net/](https://m.artsy.net/) | [Heroku](https://dashboard.heroku.com/apps/microgravity-production/resources)
 * __Staging:__ [https://m-staging.artsy.net/](https://m-staging.artsy.net/) | [Heroku](https://dashboard.heroku.com/apps/microgravity-staging/resources)
 * __GitHub:__ [https://github.com/artsy/microgravity/](https://github.com/artsy/microgravity/)
@@ -19,6 +19,8 @@ History
 -------
 
 Microgravity was started in 2013 and open-sourced in 2016. It provided the test bed for Artsy's [isomorphic JavaScript applications, rendering both the server and client side](http://artsy.github.io/blog/2013/11/30/rendering-on-the-server-and-client-in-node-dot-js).
+
+In 2017, microgravity [was merged into Force](https://github.com/artsy/force/pull/890) effectively deprecating this repo.
 
 Set-Up
 ------
